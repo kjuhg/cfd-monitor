@@ -36,7 +36,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 @keyframes spin{to{transform:rotate(360deg);}}
 /* ── 탭 콘텐츠 ── */
 .tab-wrap{position:fixed;top:var(--hdr);left:0;right:0;bottom:var(--nav);overflow:hidden;}
-.tab-pane{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;display:none;-webkit-overflow-scrolling:touch;}
+.tab-pane{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;display:none;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
 .tab-pane.active{display:block;}
 /* ── 하단 네비 ── */
 #nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav);z-index:100;
@@ -52,13 +52,20 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 #tree-canvas{display:block;width:100%;touch-action:pan-y;}
 /* ── 상세 패널 (바텀 시트) ── */
 #detail{position:fixed;bottom:var(--nav);left:0;right:0;z-index:200;
-  background:var(--bg2);border-top:1px solid var(--b2);border-radius:20px 20px 0 0;
+  background:rgba(22,27,34,0.97);border-top:1px solid var(--b2);
+  border-radius:20px 20px 0 0;
   transform:translateY(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
-  max-height:72vh;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom);}
+  max-height:58vh;overflow-y:auto;
+  padding-bottom:env(safe-area-inset-bottom);
+  backdrop-filter:blur(12px);}
 #detail.open{transform:translateY(0);}
-#det-handle{width:40px;height:4px;border-radius:2px;background:var(--b2);
-  margin:12px auto 0;}
-#det-body{padding:14px 18px 20px;}
+#det-handle-row{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px 4px;}
+#det-handle{width:40px;height:4px;border-radius:2px;background:var(--b2);margin:0 auto;}
+#det-close{width:28px;height:28px;border-radius:50%;border:1px solid var(--b2);
+  background:var(--card);color:var(--mu);font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+#det-body{padding:4px 18px 20px;}
 /* ── 공통 카드 ── */
 .card{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
 .card-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;
@@ -201,7 +208,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 
 <!-- 상세 패널 -->
 <div id="detail">
-  <div id="det-handle"></div>
+  <div id="det-handle-row">
+    <div style="width:28px;"></div>
+    <div id="det-handle"></div>
+    <button id="det-close" onclick="hideDetail()">✕</button>
+  </div>
   <div id="det-body"></div>
 </div>
 
@@ -501,7 +512,6 @@ function switchTab(t){
   document.getElementById('tab-'+t).classList.add('active');
   document.getElementById('nb-'+t).classList.add('active');
   curTab=t;
-  hideDetail();
   if(t==='analysis') renderAnalysis();
 }
 
@@ -783,8 +793,8 @@ function renderTree(){
     if(inChain){col='#F59E0B';w=2;}
     else if(isFOut){col=edgeColor(f,t,pol);w=1.5;}
     else if(selNode===t){col='rgba(88,166,255,0.55)';w=1.2;}
-    else if(selNode){col='rgba(255,255,255,0.04)';w=0.5;}
-    else{col=edgeColor(f,t,pol)+'44';w=0.8;}
+    else if(selNode){col='rgba(255,255,255,0.15)';w=0.8;}
+    else{col=edgeColor(f,t,pol)+'CC';w=1.5;}
     const [sx,sy]=nodeEdgePt(n1,n2.x,n2.y);
     const [ex,ey]=nodeEdgePt(n2,n1.x,n1.y);
     ctx.setLineDash([]);
@@ -921,7 +931,21 @@ function showDetail(nid){
   }
 
   document.getElementById('det-body').innerHTML=html;
-  document.getElementById('detail').classList.add('open');
+  const detEl=document.getElementById('detail');
+  detEl.classList.add('open');
+  // 선택 노드가 패널 위에 보이도록 트리 스크롤 조정
+  if(curTab==='tree'){
+    const cv=document.getElementById('tree-canvas');
+    const rect=cv.getBoundingClientRect();
+    const scale=rect.width/VW;
+    const nd=NODES[nid];
+    const nodeScreenY=nd.y*scale+rect.top;
+    const panelH=window.innerHeight*0.58;
+    const targetScroll=nodeScreenY-window.innerHeight*0.3;
+    if(targetScroll>0){
+      document.getElementById('tab-tree').scrollBy({top:targetScroll-document.getElementById('tab-tree').scrollTop,behavior:'smooth'});
+    }
+  }
 }
 
 function selFromDetail(nid){
@@ -932,7 +956,7 @@ function selFromDetail(nid){
 function hideDetail(){
   document.getElementById('detail').classList.remove('open');
 }
-document.getElementById('det-handle').addEventListener('click',hideDetail);
+document.getElementById('det-handle-row').addEventListener('click',function(e){if(e.target.id==='det-handle'||e.target.id==='det-handle-row')hideDetail();});
 
 // ═══════════════════════════════════════════════════
 //  용어사전
