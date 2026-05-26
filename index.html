@@ -229,8 +229,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 // ═══════════════════════════════════════════════════
 //  데이터 정의
 // ═══════════════════════════════════════════════════
-const VW=780;
-const LY={1:88,2:198,3:305,4:405,5:508,6:612,7:718,8:860};
+const VW=720;
+const LY={1:100,2:230,3:355,4:475,5:595,6:710,7:830,8:960};
 
 const COL={
   cm:{f:'#3A2102',s:'#D28418',t:'#FACA6A'},
@@ -248,37 +248,37 @@ const COL={
 };
 
 const NODES={
-  wti:  {l:'WTI',  s:'유가',      x:58, y:LY[1],w:68,h:38,c:'cm',sh:'rect', af:['ppi','cpi','pce','bei']},
-  ui_wk:{l:'주간실업',s:'수당',   x:188,y:LY[1],w:74,h:38,c:'lb',sh:'rect', af:['nfp','unemp']},
-  ism_m:{l:'ISM제조',s:'PMI',     x:338,y:LY[1],w:72,h:38,c:'lb',sh:'rect', af:['gdp','conf']},
-  ism_s:{l:'ISM서비',s:'PMI',     x:430,y:LY[1],w:72,h:38,c:'lb',sh:'rect', af:['gdp','conf']},
-  retail:{l:'소매판매',s:'소비',  x:566,y:LY[1],w:74,h:38,c:'lb',sh:'rect', af:['gdp','conf']},
-  cu:   {l:'구리',s:'Dr.Cu',      x:668,y:LY[1],w:66,h:38,c:'cm',sh:'rect', af:['gdp','conf']},
-  ppi:  {l:'PPI', s:'생산자',     x:58, y:LY[2],w:68,h:38,c:'if',sh:'rect', af:['cpi']},
-  nfp:  {l:'NFP', s:'비농업고용', x:188,y:LY[2],w:74,h:38,c:'lb',sh:'rect', af:['fomc','unemp']},
-  wage: {l:'임금', s:'시간당',    x:328,y:LY[2],w:66,h:38,c:'lb',sh:'rect', af:['cpi','pce']},
-  unemp:{l:'실업률',s:'',         x:440,y:LY[2],w:72,h:38,c:'lb',sh:'rect', af:['fomc']},
-  conf: {l:'소비자심리',s:'',     x:566,y:LY[2],w:84,h:38,c:'bl',sh:'rect', af:['cpi']},
-  cpi:  {l:'CPI', s:'소비물가',   x:118,y:LY[3],w:74,h:38,c:'if',sh:'rect', af:['fomc']},
-  pce:  {l:'PCE', s:'연준선호',   x:222,y:LY[3],w:74,h:38,c:'if',sh:'rect', af:['fomc']},
-  bei:  {l:'BEI', s:'기대인플',   x:368,y:LY[3],w:76,h:38,c:'if',sh:'rect', af:['tnx','gold']},
-  gdp:  {l:'GDP', s:'성장률',     x:544,y:LY[3],w:72,h:38,c:'bl',sh:'rect', af:['fomc']},
-  fed_sp:{l:'연준발언',s:'의사록',x:100,y:LY[4],w:78,h:38,c:'po',sh:'rect', af:['fomc']},
-  fomc: {l:'FOMC',s:'기준금리',   x:330,y:LY[4],w:86,h:50,c:'po',sh:'diamond',af:['tnx','dxy','qe']},
-  qe:   {l:'QE/QT',s:'대차대조', x:564,y:LY[4],w:84,h:38,c:'po',sh:'rect', af:['tnx','gold']},
-  tnx:  {l:'10Y금리',s:'국채',   x:140,y:LY[5],w:78,h:38,c:'rt',sh:'rect', af:['spr','gold','bond']},
-  dxy:  {l:'DXY', s:'달러',       x:280,y:LY[5],w:70,h:38,c:'dl',sh:'rect', af:['gold','silver']},
-  spr:  {l:'스프레드',s:'장단기', x:412,y:LY[5],w:80,h:38,c:'rt',sh:'rect', af:['gold','bond']},
-  vix:  {l:'VIX', s:'공포',       x:562,y:LY[5],w:66,h:38,c:'fe',sh:'rect', af:['gold','sp500']},
-  cot:  {l:'COT', s:'포지션',     x:90, y:LY[6],w:66,h:36,c:'dm',sh:'rect', af:['gold']},
-  cb_buy:{l:'중앙은행',s:'금매입',x:200,y:LY[6],w:76,h:36,c:'dm',sh:'rect', af:['gold']},
-  etf:  {l:'금ETF',s:'보유량',    x:320,y:LY[6],w:70,h:36,c:'dm',sh:'rect', af:['gold']},
-  cny:  {l:'위안화',s:'USD/CNY',  x:440,y:LY[6],w:76,h:36,c:'dl',sh:'rect', af:['gold']},
-  gold: {l:'금',  s:'XAU/USD',    x:220,y:LY[7],w:70,h:70,c:'rs',sh:'hexagon',af:[]},
-  silver:{l:'은', s:'XAG/USD',    x:375,y:LY[7],w:52,h:52,c:'rs2',sh:'circle',af:[]},
-  sp500:{l:'주식',s:'S&P500',     x:468,y:LY[7],w:54,h:54,c:'eq',sh:'circle',af:[]},
-  bond: {l:'채권',s:'국채',        x:570,y:LY[7],w:52,h:52,c:'rt',sh:'circle',af:[]},
-  re:   {l:'부동산',s:'리츠',      x:665,y:LY[7],w:50,h:50,c:'lb',sh:'circle',af:[]},
+  wti:  {l:'WTI',  s:'유가',      x:55, y:LY[1],w:72,h:44,c:'cm',sh:'rect', af:['ppi','cpi','pce','bei']},
+  ui_wk:{l:'주간실업',s:'수당',   x:170,y:LY[1],w:78,h:44,c:'lb',sh:'rect', af:['nfp','unemp']},
+  ism_m:{l:'ISM제조',s:'PMI',     x:300,y:LY[1],w:76,h:44,c:'lb',sh:'rect', af:['gdp','conf']},
+  ism_s:{l:'ISM서비',s:'PMI',     x:388,y:LY[1],w:76,h:44,c:'lb',sh:'rect', af:['gdp','conf']},
+  retail:{l:'소매판매',s:'소비',  x:510,y:LY[1],w:78,h:44,c:'lb',sh:'rect', af:['gdp','conf']},
+  cu:   {l:'구리',s:'Dr.Cu',      x:614,y:LY[1],w:70,h:44,c:'cm',sh:'rect', af:['gdp','conf']},
+  ppi:  {l:'PPI', s:'생산자',     x:55, y:LY[2],w:72,h:44,c:'if',sh:'rect', af:['cpi']},
+  nfp:  {l:'NFP', s:'비농업고용', x:170,y:LY[2],w:78,h:44,c:'lb',sh:'rect', af:['fomc','unemp']},
+  wage: {l:'임금', s:'시간당',    x:300,y:LY[2],w:70,h:44,c:'lb',sh:'rect', af:['cpi','pce']},
+  unemp:{l:'실업률',s:'',         x:400,y:LY[2],w:76,h:44,c:'lb',sh:'rect', af:['fomc']},
+  conf: {l:'소비자심리',s:'',     x:530,y:LY[2],w:90,h:44,c:'bl',sh:'rect', af:['cpi']},
+  cpi:  {l:'CPI', s:'소비물가',   x:100,y:LY[3],w:78,h:44,c:'if',sh:'rect', af:['fomc']},
+  pce:  {l:'PCE', s:'연준선호',   x:208,y:LY[3],w:78,h:44,c:'if',sh:'rect', af:['fomc']},
+  bei:  {l:'BEI', s:'기대인플',   x:345,y:LY[3],w:80,h:44,c:'if',sh:'rect', af:['tnx','gold']},
+  gdp:  {l:'GDP', s:'성장률',     x:490,y:LY[3],w:76,h:44,c:'bl',sh:'rect', af:['fomc']},
+  fed_sp:{l:'연준발언',s:'의사록',x:90, y:LY[4],w:82,h:44,c:'po',sh:'rect', af:['fomc']},
+  fomc: {l:'FOMC',s:'기준금리',   x:310,y:LY[4],w:90,h:56,c:'po',sh:'diamond',af:['tnx','dxy','qe']},
+  qe:   {l:'QE/QT',s:'대차대조', x:528,y:LY[4],w:88,h:44,c:'po',sh:'rect', af:['tnx','gold']},
+  tnx:  {l:'10Y금리',s:'국채',   x:120,y:LY[5],w:82,h:44,c:'rt',sh:'rect', af:['spr','gold','bond']},
+  dxy:  {l:'DXY', s:'달러',       x:258,y:LY[5],w:74,h:44,c:'dl',sh:'rect', af:['gold','silver']},
+  spr:  {l:'스프레드',s:'장단기', x:390,y:LY[5],w:84,h:44,c:'rt',sh:'rect', af:['gold','bond']},
+  vix:  {l:'VIX', s:'공포',       x:520,y:LY[5],w:70,h:44,c:'fe',sh:'rect', af:['gold','sp500']},
+  cot:  {l:'COT', s:'포지션',     x:80, y:LY[6],w:70,h:42,c:'dm',sh:'rect', af:['gold']},
+  cb_buy:{l:'중앙은행',s:'금매입',x:188,y:LY[6],w:82,h:42,c:'dm',sh:'rect', af:['gold']},
+  etf:  {l:'금ETF',s:'보유량',    x:306,y:LY[6],w:74,h:42,c:'dm',sh:'rect', af:['gold']},
+  cny:  {l:'위안화',s:'USD/CNY',  x:420,y:LY[6],w:80,h:42,c:'dl',sh:'rect', af:['gold']},
+  gold: {l:'금',  s:'XAU/USD',    x:190,y:LY[7],w:78,h:78,c:'rs',sh:'hexagon',af:[]},
+  silver:{l:'은', s:'XAG/USD',    x:340,y:LY[7],w:60,h:60,c:'rs2',sh:'circle',af:[]},
+  sp500:{l:'주식',s:'S&P500',     x:432,y:LY[7],w:62,h:62,c:'eq',sh:'circle',af:[]},
+  bond: {l:'채권',s:'국채',        x:524,y:LY[7],w:58,h:58,c:'rt',sh:'circle',af:[]},
+  re:   {l:'부동산',s:'리츠',      x:614,y:LY[7],w:56,h:56,c:'lb',sh:'circle',af:[]},
 };
 
 const EDGES=[
@@ -723,23 +723,25 @@ function drawNode(ctx,nid,nd,scale){
 
 // 레벨 배경 라벨
 const BAND_INFO=[
-  {by:52,bh:LY[2]-LY[1]-5,lv:'Lv1',desc:'원자재 / 선행 실물'},
-  {by:LY[2]-55,bh:LY[3]-LY[2]+5,lv:'Lv2',desc:'고용 / 생산자물가'},
-  {by:LY[3]-55,bh:LY[4]-LY[3]+5,lv:'Lv3',desc:'인플레이션 / 경제종합'},
-  {by:LY[4]-58,bh:LY[5]-LY[4]+5,lv:'Lv4',desc:'통화정책'},
-  {by:LY[5]-56,bh:LY[6]-LY[5]+5,lv:'Lv5',desc:'시장 지표'},
-  {by:LY[6]-55,bh:LY[7]-LY[6]+5,lv:'Lv6',desc:'수요 / 포지션'},
-  {by:LY[7]-62,bh:160,lv:'Lv7',desc:'자산 가격 결과'},
+  {by:60,          bh:LY[2]-LY[1],   lv:'Lv1',desc:'원자재 / 선행 실물'},
+  {by:LY[2]-60,    bh:LY[3]-LY[2],   lv:'Lv2',desc:'고용 / 생산자물가'},
+  {by:LY[3]-60,    bh:LY[4]-LY[3],   lv:'Lv3',desc:'인플레이션 / 경제종합'},
+  {by:LY[4]-68,    bh:LY[5]-LY[4],   lv:'Lv4',desc:'통화정책'},
+  {by:LY[5]-65,    bh:LY[6]-LY[5],   lv:'Lv5',desc:'시장 지표'},
+  {by:LY[6]-62,    bh:LY[7]-LY[6],   lv:'Lv6',desc:'수요 / 포지션'},
+  {by:LY[7]-70,    bh:140,            lv:'Lv7',desc:'자산 가격 결과'},
 ];
 
 function renderTree(){
   const cv=document.getElementById('tree-canvas');
   const cw=cv.parentElement.clientWidth;
   const scale=cw/VW;
-  const VH=LY[7]+130;
-  const dpr=window.devicePixelRatio||1;
-  cv.width=cw*dpr; cv.height=VH*scale*dpr;
-  cv.style.height=(VH*scale)+'px';
+  const VH=LY[7]+100;
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  cv.width=Math.round(cw*dpr);
+  cv.height=Math.round(VH*scale*dpr);
+  cv.style.width=cw+'px';
+  cv.style.height=Math.round(VH*scale)+'px';
   const ctx=cv.getContext('2d');
   ctx.scale(dpr*scale,dpr*scale);
 
