@@ -36,7 +36,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 @keyframes spin{to{transform:rotate(360deg);}}
 /* ── 탭 콘텐츠 ── */
 .tab-wrap{position:fixed;top:var(--hdr);left:0;right:0;bottom:var(--nav);overflow:hidden;}
-.tab-pane{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;display:none;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
+.tab-pane{position:absolute;inset:0;overflow-y:scroll;overflow-x:hidden;display:none;
+  -webkit-overflow-scrolling:touch;}
 .tab-pane.active{display:block;}
 /* ── 하단 네비 ── */
 #nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav);z-index:100;
@@ -47,54 +48,54 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
   font-family:inherit;font-size:9px;font-weight:500;padding:6px 0;transition:color .15s;}
 .nbtn.active{color:var(--gold);}
 .nbtn .ni{font-size:20px;line-height:1;}
-/* ── 트리 캔버스 ── */
-#tree-wrap{width:100%;overflow-x:hidden;}
-#tree-canvas{display:block;width:100%;touch-action:pan-y;}
-/* ── 상세 패널 (바텀 시트) ── */
-#detail{position:fixed;bottom:var(--nav);left:0;right:0;z-index:200;
-  background:rgba(22,27,34,0.97);border-top:1px solid var(--b2);
-  border-radius:20px 20px 0 0;
-  transform:translateY(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
-  max-height:58vh;overflow-y:auto;
-  padding-bottom:env(safe-area-inset-bottom);
-  backdrop-filter:blur(12px);}
-#detail.open{transform:translateY(0);}
-#det-handle-row{display:flex;align-items:center;justify-content:space-between;
-  padding:10px 16px 4px;}
-#det-handle{width:40px;height:4px;border-radius:2px;background:var(--b2);margin:0 auto;}
-#det-close{width:28px;height:28px;border-radius:50%;border:1px solid var(--b2);
-  background:var(--card);color:var(--mu);font-size:14px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-#det-body{padding:4px 18px 20px;}
+/* ── 트리 ── */
+#tree-wrap{width:100%;position:relative;}
+#tree-canvas{display:block;width:100%;}
+/* ── 상세 패널: 화면 우측 슬라이드인 ── */
+#detail{position:fixed;top:var(--hdr);right:0;bottom:var(--nav);width:100%;z-index:200;
+  pointer-events:none;display:flex;flex-direction:column;justify-content:flex-end;}
+#det-sheet{background:rgba(18,23,32,.96);backdrop-filter:blur(16px);
+  border-top:1px solid var(--b2);border-radius:20px 20px 0 0;
+  max-height:50vh;overflow-y:auto;pointer-events:all;
+  transform:translateY(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);}
+#det-sheet.open{transform:translateY(0);}
+#det-topbar{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px 6px;position:sticky;top:0;
+  background:rgba(18,23,32,.98);z-index:1;}
+#det-handle{width:36px;height:4px;border-radius:2px;background:var(--b2);}
+#det-close{width:26px;height:26px;border-radius:50%;border:1px solid var(--b2);
+  background:var(--card);color:var(--mu);font-size:13px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;}
+#det-body{padding:2px 16px 20px;}
 /* ── 공통 카드 ── */
 .card{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
 .card-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;
-  color:var(--mu);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  color:var(--mu);margin-bottom:8px;}
 /* ── 배너 ── */
 .banner{background:var(--gd);border:1px solid var(--gb);border-radius:12px;
-  padding:12px 16px;margin:10px 14px;display:flex;gap:10px;align-items:flex-start;
+  padding:11px 14px;margin:10px 12px 4px;display:flex;gap:8px;align-items:flex-start;
   font-size:13px;line-height:1.6;}
 /* ── 용어사전 ── */
 .gitem{border-bottom:1px solid var(--b);}
 .gitem:last-child{border:none;}
-.ghdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;}
-.gname{font-size:14px;font-weight:500;}
-.glv{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--b2);color:var(--mu);}
-.gbody{display:none;padding:0 16px 14px;}
+.ghdr{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;cursor:pointer;}
+.gname{font-size:13px;font-weight:500;}
+.glv{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--b2);color:var(--mu);}
+.gbody{display:none;padding:0 14px 13px;}
 .gbody.open{display:block;}
 .gfield{margin-bottom:8px;}
 .gfl{font-size:10px;color:var(--mu);margin-bottom:2px;text-transform:uppercase;letter-spacing:.06em;}
 .gfv{font-size:13px;color:var(--tx);line-height:1.65;}
-.gimpact{padding:8px 12px;border-radius:8px;font-size:12px;line-height:1.6;}
+.gimpact{padding:8px 11px;border-radius:8px;font-size:12px;line-height:1.6;margin-bottom:5px;}
 .gup{background:rgba(63,185,80,.1);color:var(--up);}
 .gdn{background:rgba(248,81,73,.1);color:var(--dn);}
 /* ── 뉴스 ── */
-.nc-wrap{display:flex;gap:6px;padding:10px 14px 0;overflow-x:auto;scrollbar-width:none;}
+.nc-wrap{display:flex;gap:6px;padding:10px 12px 0;overflow-x:auto;scrollbar-width:none;}
 .nc-wrap::-webkit-scrollbar{display:none;}
-.ncat{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;
+.ncat{padding:6px 13px;border-radius:20px;font-size:12px;font-weight:500;
   border:1px solid var(--b2);background:var(--bg2);color:var(--mu);cursor:pointer;white-space:nowrap;}
 .ncat.active{background:var(--gd);color:var(--gold);border-color:var(--gb);}
-.nitem{padding:13px 16px;border-bottom:1px solid var(--b);}
+.nitem{padding:12px 14px;border-bottom:1px solid var(--b);cursor:pointer;}
 .nko{font-size:13px;color:var(--tx);line-height:1.5;margin-bottom:3px;}
 .nen{font-size:11px;color:var(--fa);line-height:1.4;}
 .ntm{font-size:10px;color:var(--fa);margin-top:3px;}
@@ -102,23 +103,22 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 .nbody-detail.open{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .nclb{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
 .nlink{color:var(--bl);font-size:11px;text-decoration:none;display:inline-block;margin-top:5px;}
-/* ── 이벤트 ── */
-.ev-card{background:var(--card);border:1px solid var(--b);border-radius:12px;
-  margin:0 14px 10px;overflow:hidden;}
-.ev-hdr{padding:14px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;}
-.ev-name{font-size:15px;font-weight:500;}
+/* ── 경제이벤트 ── */
+.ev-card{background:var(--card);border:1px solid var(--b);border-radius:12px;margin:0 12px 10px;overflow:hidden;}
+.ev-hdr{padding:13px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;}
+.ev-name{font-size:14px;font-weight:500;}
 .ev-date{font-size:11px;color:var(--mu);margin-top:2px;}
 .ev-vals{font-size:11px;color:var(--mu);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap;}
-.ev-badge{font-size:10px;padding:3px 10px;border-radius:6px;font-weight:500;white-space:nowrap;}
+.ev-badge{font-size:10px;padding:3px 9px;border-radius:6px;font-weight:500;white-space:nowrap;flex-shrink:0;}
 .eb-today{background:rgba(63,185,80,.15);color:var(--up);}
 .eb-near{background:rgba(248,81,73,.15);color:var(--dn);}
 .eb-soon{background:rgba(245,158,11,.15);color:var(--gold);}
 .eb-past{background:rgba(139,148,158,.1);color:var(--mu);}
-.ev-body{display:none;padding:0 16px 16px;border-top:1px solid var(--b);}
+.ev-body{display:none;padding:0 14px 14px;border-top:1px solid var(--b);}
 .ev-body.open{display:block;}
-.ev-desc{font-size:13px;color:var(--mu);line-height:1.7;margin:10px 0 12px;}
-.sc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-.sc{border-radius:8px;padding:10px 12px;}
+.ev-desc{font-size:13px;color:var(--mu);line-height:1.7;margin:10px 0 10px;}
+.sc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
+.sc{border-radius:8px;padding:9px 10px;}
 .sc-hot{background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.2);}
 .sc-cool{background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.2);}
 .sc-mid{background:rgba(139,148,158,.07);border:1px solid var(--b);}
@@ -127,36 +127,38 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 .sc-c{font-size:11px;color:var(--tx);line-height:1.55;}
 /* ── 분석 ── */
 .an-sec{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;
-  color:var(--mu);margin:14px 14px 6px;}
+  color:var(--mu);margin:12px 12px 5px;}
+.an-card{background:var(--card);border:1px solid var(--b);border-radius:12px;
+  margin:0 12px 10px;overflow:hidden;}
 .rrow{display:flex;justify-content:space-between;align-items:center;
-  padding:8px 0;border-bottom:1px solid var(--b);font-size:13px;}
+  padding:9px 14px;border-bottom:1px solid var(--b);font-size:13px;}
 .rrow:last-child{border:none;}
 .rv{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;}
 .sig{display:inline-block;font-size:10px;padding:2px 8px;border-radius:5px;font-weight:500;}
 .sig-buy{background:rgba(63,185,80,.15);color:var(--up);}
 .sig-sell{background:rgba(248,81,73,.15);color:var(--dn);}
 .sig-neu{background:rgba(139,148,158,.1);color:var(--mu);}
-.pbar{height:8px;background:var(--b2);border-radius:4px;margin:6px 0;}
+.pbar{height:7px;background:var(--b2);border-radius:4px;margin:6px 14px;}
 .pfill{height:100%;border-radius:4px;transition:width .4s;}
-.chg-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;}
-.chg-lbl{width:90px;color:var(--mu);flex-shrink:0;}
+.chg-row{display:flex;align-items:center;gap:8px;padding:7px 14px;
+  border-bottom:1px solid var(--b);font-size:12px;}
+.chg-row:last-child{border:none;}
+.chg-lbl{width:85px;color:var(--mu);flex-shrink:0;}
 .chg-bar-w{flex:1;height:5px;background:var(--b2);border-radius:3px;}
 .chg-bar{height:100%;border-radius:3px;}
 /* ── 인과체인 ── */
-.chain{display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:10px 0;}
-.chain-node{font-size:11px;padding:3px 9px;border-radius:10px;font-weight:500;}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:8px 0;}
+.chain-node{font-size:11px;padding:3px 9px;border-radius:10px;font-weight:500;cursor:pointer;}
 .chain-arr{color:var(--mu);font-size:12px;}
 /* ── 스피너 ── */
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--b2);
   border-top-color:var(--gold);border-radius:50%;animation:spin .65s linear infinite;vertical-align:middle;}
 .loading-center{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:12px;padding:60px 20px;color:var(--mu);font-size:13px;}
-/* ── 연결수 뱃지 ── */
-.cnt-badge{position:absolute;top:-6px;right:-6px;width:16px;height:16px;
-  background:var(--bg);border:1px solid var(--b2);border-radius:50%;
-  font-size:9px;display:flex;align-items:center;justify-content:center;color:var(--mu);}
-/* ── 스크롤 상단 패딩 ── */
-.scroll-pad{padding:10px 14px 20px;}
+  gap:12px;padding:50px 20px;color:var(--mu);font-size:13px;}
+/* ── 스켈레톤 ── */
+.skel{background:var(--b2);border-radius:6px;animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.4;}50%{opacity:.8;}}
+.scroll-pad{padding:10px 0 80px;}
 </style>
 </head>
 <body>
@@ -181,6 +183,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
       <span id="banner-txt"><span class="spinner"></span> 데이터 분석 중...</span>
     </div>
     <div id="tree-wrap"><canvas id="tree-canvas"></canvas></div>
+    <div style="height:20px;"></div>
   </div>
 
   <!-- ② 용어사전 -->
@@ -201,19 +204,22 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 
   <!-- ⑤ 분석 -->
   <div id="tab-analysis" class="tab-pane">
-    <div class="scroll-pad" id="analysis-body"></div>
+    <div id="analysis-body" style="padding-bottom:80px;">
+      <div class="loading-center"><div class="spinner"></div>분석 데이터 로딩 중...</div>
+    </div>
   </div>
 
 </div>
 
 <!-- 상세 패널 -->
 <div id="detail">
-  <div id="det-handle-row">
-    <div style="width:28px;"></div>
-    <div id="det-handle"></div>
-    <button id="det-close" onclick="hideDetail()">✕</button>
+  <div id="det-sheet">
+    <div id="det-topbar">
+      <div id="det-handle"></div>
+      <button id="det-close" onclick="hideDetail()">✕</button>
+    </div>
+    <div id="det-body"></div>
   </div>
-  <div id="det-body"></div>
 </div>
 
 <!-- 하단 네비 -->
@@ -513,6 +519,10 @@ function switchTab(t){
   document.getElementById('nb-'+t).classList.add('active');
   curTab=t;
   if(t==='analysis') renderAnalysis();
+  // 트리 외 탭에서는 패널 닫기
+  if(t!=='tree'){
+    document.getElementById('det-sheet').classList.remove('open');
+  }
 }
 
 // ═══════════════════════════════════════════════════
@@ -547,7 +557,10 @@ async function loadIndicators(){
     '업데이트: '+new Date().toLocaleTimeString('ko-KR')+' · 30분 자동';
   renderBanner();
   renderTree();
-  if(curTab==='analysis') renderAnalysis();
+  renderAnalysis(); // 데이터 도착하면 항상 갱신
+  if(curTab==='analysis'){
+    document.getElementById('analysis-body').scrollTop=0;
+  }
 }
 
 // ═══════════════════════════════════════════════════
@@ -842,14 +855,21 @@ function handleTap(cx,cy){
   renderTree();
 }
 
+// 터치: 짧은 탭만 노드 선택, 드래그는 스크롤에 양보
+let _ts={x:0,y:0,t:0};
+document.getElementById('tree-canvas').addEventListener('touchstart',e=>{
+  const t=e.touches[0];
+  _ts={x:t.clientX,y:t.clientY,t:Date.now()};
+},{passive:true});
+document.getElementById('tree-canvas').addEventListener('touchend',e=>{
+  const t=e.changedTouches[0];
+  const dx=Math.abs(t.clientX-_ts.x),dy=Math.abs(t.clientY-_ts.y);
+  const dt=Date.now()-_ts.t;
+  if(dx<10&&dy<10&&dt<300) handleTap(t.clientX,t.clientY);
+},{passive:true});
 document.getElementById('tree-canvas').addEventListener('click',e=>{
   handleTap(e.clientX,e.clientY);
 });
-document.getElementById('tree-canvas').addEventListener('touchstart',e=>{
-  e.preventDefault();
-  const t=e.touches[0];
-  handleTap(t.clientX,t.clientY);
-},{passive:false});
 
 // ═══════════════════════════════════════════════════
 //  상세 패널
@@ -931,21 +951,17 @@ function showDetail(nid){
   }
 
   document.getElementById('det-body').innerHTML=html;
-  const detEl=document.getElementById('detail');
-  detEl.classList.add('open');
-  // 선택 노드가 패널 위에 보이도록 트리 스크롤 조정
-  if(curTab==='tree'){
-    const cv=document.getElementById('tree-canvas');
-    const rect=cv.getBoundingClientRect();
-    const scale=rect.width/VW;
-    const nd=NODES[nid];
-    const nodeScreenY=nd.y*scale+rect.top;
-    const panelH=window.innerHeight*0.58;
-    const targetScroll=nodeScreenY-window.innerHeight*0.3;
-    if(targetScroll>0){
-      document.getElementById('tab-tree').scrollBy({top:targetScroll-document.getElementById('tab-tree').scrollTop,behavior:'smooth'});
-    }
-  }
+  document.getElementById('det-sheet').classList.add('open');
+  // 선택 노드가 패널 위에 보이도록 스크롤
+  const treePane=document.getElementById('tab-tree');
+  const cv2=document.getElementById('tree-canvas');
+  const sc2=cv2.getBoundingClientRect().width/VW;
+  const nd2=NODES[nid];
+  const nodeY=nd2.y*sc2;
+  const panelH=window.innerHeight*0.5;
+  const visibleH=window.innerHeight-52-60-panelH; // hdr+nav+panel
+  const targetTop=nodeY-(visibleH/2);
+  treePane.scrollTo({top:Math.max(0,targetTop),behavior:'smooth'});
 }
 
 function selFromDetail(nid){
@@ -954,9 +970,10 @@ function selFromDetail(nid){
 }
 
 function hideDetail(){
-  document.getElementById('detail').classList.remove('open');
+  document.getElementById('det-sheet').classList.remove('open');
+  selNode=null;chainNodes=null;renderTree();
 }
-document.getElementById('det-handle-row').addEventListener('click',function(e){if(e.target.id==='det-handle'||e.target.id==='det-handle-row')hideDetail();});
+document.getElementById('det-handle').addEventListener('click',hideDetail);
 
 // ═══════════════════════════════════════════════════
 //  용어사전
@@ -1146,10 +1163,16 @@ function toggleEv(i){
 function renderAnalysis(){
   const el=document.getElementById('analysis-body');
   const d=indicators;
+  // 데이터 아직 없으면 스켈레톤
+  const hasData=Object.values(d).some(v=>v?.ok);
+  if(!hasData){
+    el.innerHTML=`<div class="loading-center"><div class="spinner"></div>데이터 수신 중... 잠시만 기다려주세요</div>`;
+    return;
+  }
   let html='';
 
   // 지표 변동 요약
-  html+=`<div class="an-sec">📊 오늘의 지표 변동</div><div class="card">`;
+  html+=`<div class="an-sec">📊 오늘의 지표 변동</div><div class="an-card">`;
   const items=[
     {k:'gold',l:'금 XAU/USD',pre:'$',dec:2},
     {k:'silver',l:'은 XAG/USD',pre:'$',dec:2},
@@ -1176,7 +1199,7 @@ function renderAnalysis(){
   html+='</div>';
 
   // 시나리오 간단 체크
-  html+=`<div class="an-sec">🔮 현재 환경 진단</div><div class="card">`;
+  html+=`<div class="an-sec">🔮 현재 환경 진단</div><div class="an-card">`;
   const checks=[
     {label:'달러 환경',fn:()=>{
       const v=d.dxy;if(!v?.ok)return null;
@@ -1214,16 +1237,16 @@ function renderAnalysis(){
     const ratio=d.gold.price/d.silver.price;
     const rpos=Math.min(100,Math.max(0,((ratio-50)/50*100)));
     const ctx2=ratio>85?'역사적 고점 — 금 고평가':ratio<60?'역사적 저점 — 금 저평가':'역사 평균(65~80) 범위';
-    html+=`<div class="an-sec">⚖️ 금/은 비율</div><div class="card">
+    html+=`<div class="an-sec">⚖️ 금/은 비율</div><div class="an-card">
       <div class="rrow"><span style="color:var(--mu);">금/은 비율 (GSR)</span><span class="rv">${ratio.toFixed(1)}x</span></div>
       <div style="font-size:11px;color:var(--mu);margin-top:4px;margin-bottom:6px;">${ctx2}</div>
       <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--fa);margin-bottom:4px;"><span>50x</span><span>역사평균 70x</span><span>100x</span></div>
-      <div class="pbar"><div class="pfill" style="width:${rpos}%;background:var(--gold);"></div></div>
+      <div class="pbar" style="margin:6px 0;"><div class="pfill" style="width:${rpos}%;background:var(--gold);"></div></div>
     </div>`;
   }
 
   // 변동 순위
-  html+=`<div class="an-sec">🔥 변동 순위</div><div class="card">`;
+  html+=`<div class="an-sec">🔥 변동 순위</div><div class="an-card">`;
   const ranked=items.filter(it=>d[it.k]?.ok).map(it=>{
     const ind=d[it.k];
     return{l:it.l,pct:Math.abs((ind.price-ind.prev)/ind.prev*100),chg:ind.price-ind.prev};
