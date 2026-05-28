@@ -522,7 +522,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 </nav>
 
 <script>
-const APP_VER='v2.7';
+const APP_VER='v2.8';
 // ══════════════════════════════════════════
 // 데이터 정의
 // ══════════════════════════════════════════
@@ -819,16 +819,32 @@ function goTab(t){
 // 데이터 수집
 // ══════════════════════════════════════════
 async function fetchSym(sym){
-  for(const b of['https://query1.finance.yahoo.com','https://query2.finance.yahoo.com']){
+  const urls=[
+    `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=5d`,
+    `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=5d`,
+    `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(sym)}`,
+  ];
+  for(const url of urls){
     try{
-      const r=await fetch(`${b}/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=5d`,
-        {signal:AbortSignal.timeout(8000)});
+      const r=await fetch(url,{signal:AbortSignal.timeout(8000),
+        headers:{'Accept':'application/json'}});
+      if(!r.ok) continue;
       const d=await r.json();
-      const m=d.chart.result[0].meta;
-      if(!m.regularMarketPrice) continue;
-      return{price:m.regularMarketPrice,prev:m.chartPreviousClose||m.regularMarketPrice,
-             hi52:m.fiftyTwoWeekHigh,lo52:m.fiftyTwoWeekLow,ok:true};
-    }catch{}
+      // v8 chart 응답
+      if(d.chart?.result?.[0]){
+        const m=d.chart.result[0].meta;
+        if(!m.regularMarketPrice) continue;
+        return{price:+m.regularMarketPrice,prev:+(m.chartPreviousClose||m.regularMarketPrice),
+               hi52:m.fiftyTwoWeekHigh,lo52:m.fiftyTwoWeekLow,ok:true};
+      }
+      // v7 quote 응답
+      if(d.quoteResponse?.result?.[0]){
+        const q=d.quoteResponse.result[0];
+        if(!q.regularMarketPrice) continue;
+        return{price:+q.regularMarketPrice,prev:+(q.regularMarketPreviousClose||q.regularMarketPrice),
+               hi52:q.fiftyTwoWeekHigh,lo52:q.fiftyTwoWeekLow,ok:true};
+      }
+    }catch(e){ console.warn('[API]',sym,e.message); }
   }
   return{ok:false};
 }
@@ -979,6 +995,48 @@ function updateSelPanel(nid){
   const nd=NODE_MAP[nid]; if(!nd) return;
   const g=GLOSS_DATA.find(x=>x.id===nid)||{};
   const col=COL[nd.c];
+  const d=IND[nid];
+
+  // ── 헤더: 이름 + 현재값 ──────────────────────
+  let nameHtml=`<span style="color:${col.t};">${g.name||nd.lbl}</span>`;
+  if(d?.ok&&!d.derived){
+    const chg=d.price-d.prev;
+    const pct=(chg/d.prev*100).toFixed(2);
+    const cc=chg>=0?'var(--up)':'var(--dn)';
+    const ar=chg>=0?'▲':'▽';
+    const pStr=nid==='tnx'?d.price.toFixed(3)+'%':
+                nid==='dxy'?d.price.toFixed(2):
+                nid==='wti'?'$'+d.price.toFixed(1):
+                d.price.toFixed(2);
+    nameHtml+=` <span style="font-family:monospace;font-size:13px;color:${cc};">${pStr} ${ar}${Math.abs(pct)}%</span>`;
+  }
+  document.getElementById('sel-name').innerHTML=nameHtml;
+
+  // ── 인과체인 ─────────────────────────────────
+  const chain=findChain(nid);
+  let chainHtml='';
+  if(chain&&chain.length>1){
+    chain.forEach((cid,i)=>{
+      const cn=NODE_MAP[cid]||{};
+      const cc2=COL[cn.c]||COL.rs;
+      const e=i<chain.length-1?EDGES.find(e=>e[0]===chain[i]&&e[1]===chain[i+1]):null;
+      const ac=e?(e[2]>0?'var(--up)':'var(--dn)'):'var(--mu)';
+      chainHtml+=`<span class="sc-n" style="background:${cc2.f};color:${cc2.t};"
+        onclick="tapNode('${cid}')">${cn.ico||''} ${cn.lbl||cid}</span>`;
+      if(e) chainHtml+=`<span class="sc-a" style="color:${ac};">${e[2]>0?'→+':'→−'}</span>`;
+    });
+  } else {
+    chainHtml=`<span style="color:var(--mu);font-size:11px;">금과 직접 연결</span>`;
+  }
+  document.getElementById('sel-chain').innerHTML=chainHtml;
+
+  // ── 금 영향 요약 (한줄씩) ───────────────────
+  const bullShort = g.bull ? g.bull.split('→').slice(-2).join('→') : '';
+  const bearShort = g.bear ? g.bear.split('→').slice(-2).join('→') : '';
+  document.getElementById('sel-impact').innerHTML=`
+    <div class="si si-b">🟢 ${bullShort||g.bull||''}</div>
+    <div class="si si-s">🔴 ${bearShort||g.bear||''}</div>`;
+
   document.getElementById('sel-panel').classList.add('show');
   // 이름
   document.getElementById('sel-name').textContent=(g.name||nd.lbl)+' — '+(g.freq||'');
@@ -1105,7 +1163,7 @@ function lsSet(key, val){
 function lsDel(key){try{localStorage.removeItem(key);}catch{}}
 
 // ── 오염 데이터 정리 ───────────────────────────
-const NEWS_DATA_VER = 4; // 이 숫자 올리면 뉴스 캐시 전체 리셋
+const NEWS_DATA_VER = 5; // 이 숫자 올리면 뉴스 캐시 전체 리셋
 function checkDataVersion(){
   const saved = lsGet('n_data_ver', 0);
   if(saved < NEWS_DATA_VER){
