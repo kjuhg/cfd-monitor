@@ -497,7 +497,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 </nav>
 
 <script>
-const APP_VER='v2.2';
+const APP_VER='v2.3';
 // ══════════════════════════════════════════
 // 데이터 정의
 // ══════════════════════════════════════════
@@ -783,7 +783,7 @@ function goTab(t){
   document.getElementById('p-'+t).classList.add('on');
   document.getElementById('nb-'+t).classList.add('on');
   if(t==='an') renderAnalysis();
-  if(t==='news'){renderNewsList();}
+  if(t==='news'){initNews();}
   if(t!=='tree'){
     selId=null;
     document.getElementById('sel-panel').classList.remove('show');
@@ -1233,41 +1233,67 @@ function delay(ms){return new Promise(r=>setTimeout(r,ms));}
 // ── 새 기사 수집 + 저장 ───────────────────────
 async function collectNews(){
   const existing = new Set(Object.values(lsGet('n_idx',{})).flat());
-  let newCount=0;
+  let newCount = 0;
+
   for(const src of NEWS_SOURCES){
-    const items = await fetchRSS(src);
+    let items = [];
+    try{
+      items = await fetchRSS(src);
+      console.log(`[뉴스] ${src.label} (${src.cat}): ${items.length}개`);
+    }catch(e){
+      console.warn(`[뉴스] ${src.label} 실패:`, e);
+      continue;
+    }
+
     for(const it of items){
-      const hash = hashStr(it.url+it.title);
+      if(!it.title || it.title.length < 5) continue;
+      const hash = hashStr(it.url + it.title);
       if(existing.has(hash)) continue;
-      const tags = autoTags(it.title+' '+it.desc);
+
+      const tags = autoTags(it.title + ' ' + (it.desc||''));
+      const pubDate = it.pubDate || '';
+      let dateVal = today();
+      try{ if(pubDate) dateVal = dateStr(new Date(pubDate)); }catch{}
+
       const art = {
         hash,
-        url:      it.url,
-        title:    it.title,
-        title_ko: '',
-        desc:     it.desc,
-        body_en:  '',
-        body_ko:  '',
+        url:        it.url || '#',
+        title:      it.title.trim(),
+        title_ko:   '',
+        desc:       (it.desc||'').trim(),
+        body_en:    '',
+        body_ko:    '',
         tags,
-        source:   it.source,
-        date:     it.pubDate?dateStr(new Date(it.pubDate)):today(),
-        pubDate:  it.pubDate,
+        source:     src.label,
+        date:       dateVal,
+        pubDate,
         fetched_at: Date.now(),
-        status:   'unread',
-        status_at: Date.now(),
+        status:     'unread',
+        status_at:  Date.now(),
         translated: false,
       };
       saveArticle(art);
       existing.add(hash);
       newCount++;
-      // 제목 즉시 번역
-      const ko = await translate(it.title);
-      if(ko){ art.title_ko=ko; lsSet(hash,art); }
-      await delay(300);
+
+      // 제목 번역 (딜레이 없이 빠르게)
+      translate(it.title).then(ko=>{
+        if(ko){
+          const saved = lsGet(hash);
+          if(saved){ saved.title_ko = ko; lsSet(hash, saved); }
+          // 현재 뉴스 탭이 열려있으면 바로 갱신
+          if(document.getElementById('p-news').classList.contains('on')){
+            renderNewsList();
+          }
+        }
+      });
     }
-    await delay(500);
+
+    await delay(300); // 소스 간 딜레이 최소화
   }
+
   lsSet('n_last_fetch', Date.now());
+  console.log(`[뉴스] 총 ${newCount}개 신규 수집`);
   return newCount;
 }
 
@@ -1535,50 +1561,64 @@ function menuAction(action){
 }
 
 // ── 뉴스 초기화 ───────────────────────────────
+let _newsIniting = false;
 async function initNews(){
-  renderNewsList();
-  const last=lsGet('n_last_fetch',0);
-  const age=Date.now()-last;
-  // 30분마다 수집 (첫 실행은 항상)
-  if(age>30*60*1000||last===0){
-    // 로딩 표시
-    const el=document.getElementById('n-list');
-    if(el&&!lsGet('n_idx',null)){
-      el.innerHTML=`<div class="n-empty">
-        <div style="font-size:24px;margin-bottom:8px;">📡</div>
-        뉴스 수집 중...<br>
-        <span style="font-size:11px;color:var(--fa);">Investing.com · Kitco · ForexLive</span>
+  // 로딩 중 표시 (기사 없을 때)
+  const arts = getArticles();
+  if(arts.length === 0){
+    document.getElementById('n-list').innerHTML=`
+      <div class="n-empty">
+        <div style="font-size:28px;margin-bottom:10px;">📡</div>
+        <div style="margin-bottom:6px;">뉴스 수집 중...</div>
+        <div style="font-size:11px;color:var(--fa);">Investing.com · Kitco · ForexLive</div>
+        <div style="margin-top:14px;height:3px;width:120px;margin-left:auto;margin-right:auto;
+          background:var(--gd);border-radius:2px;animation:loading-bar 1.5s ease-in-out infinite;"></div>
       </div>`;
-    }
-    const cnt=await collectNews();
+    renderNewsFilters();
+  } else {
     renderNewsList();
-    if(cnt===0){
-      // 수집 실패 시 안내
-      const el2=document.getElementById('n-list');
-      if(el2&&getArticles().length===0){
-        el2.innerHTML=`<div class="n-empty">
-          <div style="font-size:24px;margin-bottom:8px;">📭</div>
-          뉴스를 가져오지 못했어요.<br>
-          <span style="font-size:11px;color:var(--fa);">네트워크 상태를 확인하거나<br>상단 ↻ 버튼으로 다시 시도해보세요</span><br><br>
-          <button onclick="refreshNews()" style="background:var(--gd);border:1px solid var(--gb);
-            color:var(--gold);padding:8px 18px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;">
-            ↻ 다시 시도
-          </button>
-        </div>`;
+  }
+
+  if(_newsIniting) return;
+  _newsIniting = true;
+
+  const last = lsGet('n_last_fetch', 0);
+  const age  = Date.now() - last;
+  const INTERVAL = 30 * 60 * 1000; // 30분
+
+  if(age > INTERVAL || last === 0){
+    try{
+      const cnt = await collectNews();
+      renderNewsList();
+      if(cnt === 0 && getArticles().length === 0){
+        document.getElementById('n-list').innerHTML=`
+          <div class="n-empty">
+            <div style="font-size:28px;margin-bottom:10px;">📭</div>
+            뉴스를 가져오지 못했어요.<br>
+            <span style="font-size:11px;color:var(--fa);">잠시 후 다시 시도해주세요</span><br><br>
+            <button onclick="_newsIniting=false;initNews();"
+              style="background:var(--gd);border:1px solid var(--gb);color:var(--gold);
+              padding:8px 20px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;margin-top:4px;">
+              ↻ 다시 시도
+            </button>
+          </div>`;
+        renderNewsFilters();
       }
+    }catch(e){
+      console.error('initNews error:', e);
     }
   }
-  // 백그라운드 번역 시작
+
+  _newsIniting = false;
   setTimeout(bgTranslate, 5000);
 }
 
 // 새로고침 시 뉴스도 수집
 const _origRefresh=window.refresh||function(){};
 window.refreshNews=async function(){
-  document.getElementById('hdr-btn').classList.add('spin');
-  await collectNews();
-  document.getElementById('hdr-btn').classList.remove('spin');
-  renderNewsList();
+  _newsIniting = false;
+  lsSet('n_last_fetch', 0); // 강제 재수집
+  await initNews();
 };
 
 
