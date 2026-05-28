@@ -314,19 +314,20 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 .n-swipe-l{left:0;right:auto;background:rgba(248,81,73,.2);}
 .n-swipe-r{background:rgba(255,215,0,.2);}
 
-/* 기사 상세 모달 - z-index 최상위, 헤더 완전 덮음 */
+/* 기사 상세 모달 */
 #n-modal{
   position:fixed;
   top:0;left:0;right:0;bottom:0;
-  z-index:9999;
+  z-index:99999 !important;
   background:var(--bg2);
   display:none;
   flex-direction:column;
+  padding-top:var(--HDR);
 }
 #n-modal.open{display:flex;}
 #n-modal-hdr{
   display:flex;align-items:center;gap:10px;
-  padding:calc(env(safe-area-inset-top) + 10px) 14px 10px;
+  padding:10px 14px;
   background:var(--bg2);
   border-bottom:1px solid var(--b2);
   flex-shrink:0;
@@ -521,7 +522,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 </nav>
 
 <script>
-const APP_VER='v2.6';
+const APP_VER='v2.7';
 // ══════════════════════════════════════════
 // 데이터 정의
 // ══════════════════════════════════════════
@@ -1104,7 +1105,7 @@ function lsSet(key, val){
 function lsDel(key){try{localStorage.removeItem(key);}catch{}}
 
 // ── 오염 데이터 정리 ───────────────────────────
-const NEWS_DATA_VER = 3; // 이 숫자 올리면 뉴스 캐시 전체 리셋
+const NEWS_DATA_VER = 4; // 이 숫자 올리면 뉴스 캐시 전체 리셋
 function checkDataVersion(){
   const saved = lsGet('n_data_ver', 0);
   if(saved < NEWS_DATA_VER){
@@ -1205,11 +1206,26 @@ function autoTags(text){
 async function translate(text){
   if(!text||text.length<4) return '';
   try{
-    const url=`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ko&dt=t&q=${encodeURIComponent(text.slice(0,800))}`;
-    const r=await fetch(url,{signal:AbortSignal.timeout(8000)});
+    const url=`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ko&dt=t&q=${encodeURIComponent(text.slice(0,600))}`;
+    const r=await fetch(url,{signal:AbortSignal.timeout(5000)});
     const d=await r.json();
     return (d[0]||[]).map(s=>s[0]).join('');
   }catch{return '';}
+}
+
+// 병렬 번역 (최대 N개 동시)
+async function translateBatch(texts, concurrency=4){
+  const results = new Array(texts.length).fill('');
+  const queue = texts.map((t,i)=>({t,i}));
+  const workers = Array(Math.min(concurrency, queue.length)).fill(0).map(async ()=>{
+    while(queue.length){
+      const {t,i} = queue.shift();
+      results[i] = await translate(t);
+      await delay(150); // 최소 딜레이
+    }
+  });
+  await Promise.all(workers);
+  return results;
 }
 
 // ── 본문 스크래핑 ──────────────────────────────────
@@ -1337,115 +1353,111 @@ function delay(ms){return new Promise(r=>setTimeout(r,ms));}
 // ── 새 기사 수집 + 저장 ───────────────────────
 async function collectNews(){
   const existing = new Set(Object.values(lsGet('n_idx',{})).flat());
-  let newCount = 0;
+  const newArts = [];
 
-  for(const src of NEWS_SOURCES){
-    let items = [];
-    try{
-      items = await fetchRSS(src);
-      console.log(`[뉴스] ${src.label} (${src.cat}): ${items.length}개`);
-    }catch(e){
-      console.warn(`[뉴스] ${src.label} 실패:`, e);
-      continue;
-    }
+  // 모든 소스 병렬 수집
+  const fetched = await Promise.allSettled(NEWS_SOURCES.map(src=>fetchRSS(src)));
+
+  fetched.forEach((res,i)=>{
+    if(res.status!=='fulfilled') return;
+    const items = res.value;
+    const src = NEWS_SOURCES[i];
+    console.log(`[뉴스] ${src.label}: ${items.length}개`);
 
     for(const it of items){
-      if(!it.title || it.title.length < 5) continue;
-      const hash = hashStr(it.url + it.title);
+      if(!it.title||it.title.length<5) continue;
+      const hash = hashStr(it.url+it.title);
       if(existing.has(hash)) continue;
 
-      const tags = autoTags(it.title + ' ' + (it.desc||''));
-      const pubDate = it.pubDate || '';
+      const tags = autoTags(it.title+' '+(it.desc||''));
       let dateVal = today();
-      try{ if(pubDate) dateVal = dateStr(new Date(pubDate)); }catch{}
+      try{ if(it.pubDate) dateVal = dateStr(new Date(it.pubDate)); }catch{}
 
       const art = {
         hash,
-        url:        it.url || '#',
-        title:      it.title.trim(),
-        title_ko:   '',
-        desc:       (it.desc||'').trim(),
-        body_en:    '',
-        body_ko:    '',
-        desc_ko:    '',
+        url:       it.url||'#',
+        title:     it.title.trim(),
+        title_ko:  '',
+        desc:      (it.desc||'').trim(),
+        body_en:   '',
+        body_ko:   '',
+        desc_ko:   '',
         tags,
-        source:     src.label,
-        date:       dateVal,
-        pubDate,
-        fetched_at: Date.now(),
-        status:     'unread',
-        status_at:  Date.now(),
-        translated: false,
+        source:    src.label,
+        date:      dateVal,
+        pubDate:   it.pubDate||'',
+        fetched_at:Date.now(),
+        status:    'unread',
+        status_at: Date.now(),
+        translated:false,
       };
       saveArticle(art);
       existing.add(hash);
-      newCount++;
-
-      // 제목 번역 (딜레이 없이 빠르게)
-      translate(it.title).then(ko=>{
-        if(ko){
-          const saved = lsGet(hash);
-          if(saved){ saved.title_ko = ko; lsSet(hash, saved); }
-          // 현재 뉴스 탭이 열려있으면 바로 갱신
-          if(document.getElementById('p-news').classList.contains('on')){
-            renderNewsList();
-          }
-        }
-      });
+      newArts.push({hash,art});
     }
+  });
 
-    await delay(300); // 소스 간 딜레이 최소화
+  // 제목 일괄 병렬 번역
+  if(newArts.length>0){
+    const titles = newArts.map(({art})=>art.title);
+    const koTitles = await translateBatch(titles, 5);
+    koTitles.forEach((ko,i)=>{
+      if(ko){ newArts[i].art.title_ko=ko; lsSet(newArts[i].hash, newArts[i].art); }
+    });
+    if(document.getElementById('p-news').classList.contains('on')) renderNewsList();
   }
 
   lsSet('n_last_fetch', Date.now());
-  console.log(`[뉴스] 총 ${newCount}개 신규 수집`);
-  return newCount;
+  console.log(`[뉴스] 신규 ${newArts.length}개 수집 완료`);
+  return newArts.length;
 }
 
-// ── 백그라운드 번역 (desc + 선택적 본문) ──────
+// ── 백그라운드 번역 ────────────────────────────
 let bgTranslating = false;
 async function bgTranslate(){
   if(bgTranslating) return;
   bgTranslating = true;
+
   const idx = lsGet('n_idx',{});
   const hashes = Object.values(idx).flat();
-  for(const hash of hashes){
-    const art = lsGet(hash);
-    if(!art||art.translated||art.status==='hidden') continue;
 
-    // 1. RSS 요약(desc) 번역 - 항상
-    if(art.desc && !art.desc_ko){
-      art.desc_ko = await translate(art.desc);
-      await delay(300);
-    }
+  // 미번역 기사 목록
+  const pending = hashes.map(h=>lsGet(h))
+    .filter(a=>a&&!a.translated&&a.status!=='hidden');
 
-    // 2. 제목 번역 안 됐으면 재시도
-    if(!art.title_ko && art.title){
-      art.title_ko = await translate(art.title);
-      await delay(300);
-    }
+  if(pending.length===0){ bgTranslating=false; return; }
 
-    // 3. 본문 스크래핑 (허용 사이트만)
-    const body_en = await scrapeBody(art.url);
-    if(body_en){
-      art.body_en = body_en;
-      art.body_ko = await translateBody(body_en);
-      await delay(300);
-    }
-
-    art.translated = true;
-    lsSet(hash, art);
-
-    // 현재 열린 모달이 이 기사면 내용 업데이트
-    if(nModalHash === hash && document.getElementById('n-modal').classList.contains('open')){
-      openArticle(hash); // 모달 내용 새로고침
-    }
-    // 뉴스 목록 갱신
-    if(document.getElementById('p-news').classList.contains('on')){
-      renderNewsList();
-    }
-    await delay(400);
+  // 1단계: desc 일괄 번역 (병렬 4개씩)
+  const needDesc = pending.filter(a=>a.desc&&!a.desc_ko);
+  if(needDesc.length>0){
+    const descs = needDesc.map(a=>a.desc);
+    const koDescs = await translateBatch(descs, 4);
+    koDescs.forEach((ko,i)=>{
+      if(ko){ needDesc[i].desc_ko=ko; lsSet(needDesc[i].hash, needDesc[i]); }
+    });
+    if(document.getElementById('p-news').classList.contains('on')) renderNewsList();
   }
+
+  // 2단계: 본문 스크래핑 (허용 사이트만, 순차)
+  for(const art of pending){
+    if(art.status==='hidden') continue;
+    if(!isBotBlocked(art.url)){
+      const body_en = await scrapeBody(art.url);
+      if(body_en && body_en.length>100){
+        art.body_en = body_en;
+        art.body_ko = await translateBody(body_en);
+        await delay(300);
+      }
+    }
+    art.translated = true;
+    lsSet(art.hash, art);
+    // 열린 모달 갱신
+    if(nModalHash===art.hash&&document.getElementById('n-modal').classList.contains('open')){
+      openArticle(art.hash);
+    }
+  }
+
+  if(document.getElementById('p-news').classList.contains('on')) renderNewsList();
   bgTranslating = false;
 }
 
