@@ -90,17 +90,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
   line-height:1;}
 
 /* 레벨간 화살표 */
-.lv-gap{flex-shrink:0;width:18px;display:flex;flex-direction:column;
-  justify-content:center;align-items:center;gap:10px;padding-top:24px;}
-.arr{display:flex;align-items:center;}
-.arr-line{width:11px;height:2px;background:rgba(255,255,255,.25);border-radius:1px;}
-.arr-head{width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid rgba(255,255,255,.25);}
-.arr-line.hl{background:var(--gold);}
-.arr-head.hl{border-left-color:var(--gold);}
-.arr-line.up{background:var(--up);}
-.arr-head.up{border-left-color:var(--up);}
-.arr-line.dn{background:var(--dn);}
-.arr-head.dn{border-left-color:var(--dn);}
+.lv-gap{flex-shrink:0;width:22px;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;padding-top:26px;gap:8px;}
+.lv-gap svg{display:block;flex-shrink:0;}
 
 /* 선택 패널 - 화면 하단 고정 */
 #sel-panel{
@@ -358,6 +350,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 @keyframes loading-bar{0%{width:0;opacity:.5}50%{width:70%;opacity:1}100%{width:100%;opacity:.3}}
 .n-translating{font-size:12px;color:var(--mu);padding:20px;text-align:center;}
 .n-empty{padding:40px 20px;text-align:center;color:var(--mu);font-size:13px;line-height:1.7;}
+.n-empty button{margin-top:8px;cursor:pointer;}
 
 /* 액션 메뉴 */
 #n-action-menu{position:fixed;bottom:0;left:0;right:0;z-index:900;
@@ -888,28 +881,27 @@ function renderTree(){
     if(li<LEVELS.length-1){
       const nextLv=LEVELS[li+1];
       const cnt=Math.max(lv.nodes.length,nextLv.nodes.length);
-      // 선택 노드에서 다음 레벨로 가는 연결 확인
-      let arrCls='';
+      // 색상 결정
+      let col='rgba(255,255,255,0.22)';
       if(selId){
-        const curLvHasSel=lv.nodes.some(n=>n.id===selId);
-        if(curLvHasSel){
-          // 선택 노드 → 다음 레벨로 가는 엣지 있는지
+        const curHasSel=lv.nodes.some(n=>n.id===selId);
+        if(curHasSel){
           const edges=EDGES.filter(([f,t])=>f===selId&&nextLv.nodes.some(n=>n.id===t));
-          if(edges.length){
-            const pol=edges[0][2];
-            arrCls=pol>0?' up':' dn';
-          }
+          if(edges.length) col=edges[0][2]>0?'#3FB950':'#F85149';
         }
-        // 다음 레벨에 선택 노드가 있고, 현재 레벨에서 오는 엣지
-        const nextLvHasSel=nextLv.nodes.some(n=>n.id===selId);
-        if(nextLvHasSel){
+        const nextHasSel=nextLv.nodes.some(n=>n.id===selId);
+        if(nextHasSel){
           const edges=EDGES.filter(([f,t])=>t===selId&&lv.nodes.some(n=>n.id===f));
-          if(edges.length) arrCls=' hl';
+          if(edges.length) col='#F59E0B';
         }
       }
+      // SVG 화살표
       html+=`<div class="lv-gap">`;
       for(let i=0;i<cnt;i++){
-        html+=`<div class="arr"><div class="arr-line${arrCls}"></div><div class="arr-head${arrCls}"></div></div>`;
+        html+=`<svg width="20" height="16" viewBox="0 0 20 16">
+          <line x1="1" y1="8" x2="14" y2="8" stroke="${col}" stroke-width="2" stroke-linecap="round"/>
+          <polyline points="10,4 16,8 10,12" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`;
       }
       html+=`</div>`;
     }
@@ -1029,15 +1021,20 @@ function filterGloss(){renderGloss();}
 // 뉴스 시스템
 // ══════════════════════════════════════════
 
-// RSS 소스 정의
+// RSS 소스 정의 (rss2json 호환 확인된 피드 우선)
 const NEWS_SOURCES = [
-  {url:'https://www.investing.com/rss/news_25.rss',  label:'Investing.com',  cat:'원자재'},
-  {url:'https://www.investing.com/rss/news_1.rss',   label:'Investing.com',  cat:'외환'},
-  {url:'https://www.investing.com/rss/news_14.rss',  label:'Investing.com',  cat:'경제'},
-  {url:'https://www.investing.com/rss/news_285.rss', label:'Investing.com',  cat:'채권'},
-  {url:'https://www.kitco.com/rss/kitcorss.xml',     label:'Kitco News',     cat:'금'},
-  {url:'https://feeds.reuters.com/reuters/businessNews', label:'Reuters',    cat:'경제'},
-  {url:'https://www.forexlive.com/feed/news',        label:'ForexLive',      cat:'외환'},
+  // Investing.com - 카테고리별
+  {url:'https://www.investing.com/rss/news_25.rss',  label:'Investing.com', cat:'원자재'},
+  {url:'https://www.investing.com/rss/news_1.rss',   label:'Investing.com', cat:'외환'},
+  {url:'https://www.investing.com/rss/news_14.rss',  label:'Investing.com', cat:'경제'},
+  {url:'https://www.investing.com/rss/news_285.rss', label:'Investing.com', cat:'채권'},
+  {url:'https://www.investing.com/rss/news_301.rss', label:'Investing.com', cat:'금·은'},
+  // 보조 소스
+  {url:'https://www.kitco.com/rss/kitcorss.xml',         label:'Kitco',     cat:'금'},
+  {url:'https://www.forexlive.com/feed/news',             label:'ForexLive', cat:'외환'},
+  {url:'https://feeds.finance.yahoo.com/rss/2.0/headline?s=GC%3DF&region=US&lang=en-US',
+                                                          label:'Yahoo Finance', cat:'금'},
+  {url:'https://www.fxstreet.com/rss/news',              label:'FXStreet',   cat:'외환'},
 ];
 
 // 태그 키워드 맵
@@ -1196,19 +1193,37 @@ async function translateBody(text){
 
 // ── RSS 수집 ──────────────────────────────────
 async function fetchRSS(src){
+  // 1차: rss2json API
   try{
     const api=`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(src.url)}&count=50`;
-    const r=await fetch(api,{signal:AbortSignal.timeout(12000)});
+    const r=await fetch(api,{signal:AbortSignal.timeout(15000)});
     const d=await r.json();
-    if(d.status!=='ok'||!d.items?.length) return [];
-    return d.items.map(it=>({
-      url:    it.link||'#',
-      title:  (it.title||'').trim(),
-      desc:   (it.description||it.content||'').replace(/<[^>]+>/g,' ').trim().slice(0,300),
-      pubDate:it.pubDate||'',
-      source: src.label,
-    })).filter(it=>it.title.length>8);
-  }catch{return [];}
+    if(d.status==='ok'&&d.items?.length){
+      return d.items.map(it=>({
+        url:    it.link||'#',
+        title:  (it.title||'').trim(),
+        desc:   (it.description||it.content||'').replace(/<[^>]+>/g,' ').trim().slice(0,300),
+        pubDate:it.pubDate||'',
+        source: src.label,
+      })).filter(it=>it.title.length>8);
+    }
+  }catch{}
+  // 2차: allorigins 프록시로 직접 XML 파싱
+  try{
+    const proxy=`https://api.allorigins.win/get?url=${encodeURIComponent(src.url)}`;
+    const r=await fetch(proxy,{signal:AbortSignal.timeout(15000)});
+    const d=await r.json();
+    const xml=d.contents||'';
+    const items=[...xml.matchAll(/<item[^>]*>([\s\S]*?)<\/item>/gi)].map(m=>m[1]);
+    return items.map(item=>{
+      const title=(item.match(/<title>(?:<!\[CDATA\[)?([^\]<]+)/i)||[])[1]?.trim()||'';
+      const link= (item.match(/<link>([^<]+)/i)||item.match(/<guid[^>]*>([^<]+)/i)||[])[1]?.trim()||'#';
+      const desc= (item.match(/<description>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/description>/i)||[])[1]?.replace(/<[^>]+>/g,' ').trim().slice(0,300)||'';
+      const pub=  (item.match(/<pubDate>([^<]+)/i)||[])[1]?.trim()||'';
+      return{url:link,title,desc,pubDate:pub,source:src.label};
+    }).filter(it=>it.title.length>8);
+  }catch{}
+  return [];
 }
 
 function delay(ms){return new Promise(r=>setTimeout(r,ms));}
@@ -1522,13 +1537,37 @@ async function initNews(){
   renderNewsList();
   const last=lsGet('n_last_fetch',0);
   const age=Date.now()-last;
-  // 30분마다 수집
-  if(age>30*60*1000){
-    await collectNews();
+  // 30분마다 수집 (첫 실행은 항상)
+  if(age>30*60*1000||last===0){
+    // 로딩 표시
+    const el=document.getElementById('n-list');
+    if(el&&!lsGet('n_idx',null)){
+      el.innerHTML=`<div class="n-empty">
+        <div style="font-size:24px;margin-bottom:8px;">📡</div>
+        뉴스 수집 중...<br>
+        <span style="font-size:11px;color:var(--fa);">Investing.com · Kitco · ForexLive</span>
+      </div>`;
+    }
+    const cnt=await collectNews();
     renderNewsList();
+    if(cnt===0){
+      // 수집 실패 시 안내
+      const el2=document.getElementById('n-list');
+      if(el2&&getArticles().length===0){
+        el2.innerHTML=`<div class="n-empty">
+          <div style="font-size:24px;margin-bottom:8px;">📭</div>
+          뉴스를 가져오지 못했어요.<br>
+          <span style="font-size:11px;color:var(--fa);">네트워크 상태를 확인하거나<br>상단 ↻ 버튼으로 다시 시도해보세요</span><br><br>
+          <button onclick="refreshNews()" style="background:var(--gd);border:1px solid var(--gb);
+            color:var(--gold);padding:8px 18px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;">
+            ↻ 다시 시도
+          </button>
+        </div>`;
+      }
+    }
   }
   // 백그라운드 번역 시작
-  setTimeout(bgTranslate, 3000);
+  setTimeout(bgTranslate, 5000);
 }
 
 // 새로고침 시 뉴스도 수집
