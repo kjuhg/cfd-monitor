@@ -316,23 +316,25 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 
 /* 기사 상세 모달 */
 #n-modal{position:fixed;inset:0;z-index:800;
-  background:rgba(0,0,0,.85);backdrop-filter:blur(4px);
-  display:none;flex-direction:column;}
+  background:var(--bg);
+  display:none;flex-direction:column;
+  padding-top:env(safe-area-inset-top);}
 #n-modal.open{display:flex;}
-#n-modal-inner{background:var(--bg2);flex:1;overflow-y:auto;
-  margin-top:env(safe-area-inset-top);
-  border-radius:20px 20px 0 0;display:flex;flex-direction:column;}
 #n-modal-hdr{display:flex;align-items:center;gap:10px;
-  padding:14px 16px 10px;border-bottom:1px solid var(--b);
-  position:sticky;top:0;background:var(--bg2);z-index:1;}
-#n-modal-close{width:32px;height:32px;border-radius:50%;border:1px solid var(--b2);
-  background:var(--card);color:var(--mu);font-size:16px;cursor:pointer;
+  padding:10px 14px;border-bottom:1px solid var(--b);
+  background:var(--bg2);flex-shrink:0;position:sticky;top:0;z-index:1;}
+#n-modal-back{width:36px;height:36px;border-radius:50%;border:1px solid var(--b2);
+  background:var(--card);color:var(--tx);font-size:18px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-#n-modal-title{flex:1;font-size:14px;font-weight:500;color:var(--tx);line-height:1.4;}
-#n-modal-actions{display:flex;gap:8px;flex-shrink:0;}
-.n-modal-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--b2);
-  background:var(--card);font-size:16px;cursor:pointer;
+#n-modal-title-wrap{flex:1;min-width:0;}
+#n-modal-src-line{font-size:10px;color:var(--mu);margin-bottom:2px;}
+#n-modal-title{font-size:13px;font-weight:500;color:var(--tx);line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+#n-modal-actions{display:flex;gap:6px;flex-shrink:0;}
+.n-modal-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--b2);
+  background:var(--card);font-size:15px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;}
+#n-modal-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px 40px;}
 #n-modal-body{padding:14px 16px 30px;flex:1;}
 .n-modal-src{font-size:11px;color:var(--mu);margin-bottom:12px;display:flex;gap:8px;align-items:center;}
 .n-modal-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;}
@@ -418,18 +420,18 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 
   <!-- 기사 상세 모달 -->
   <div id="n-modal">
-    <div style="flex:0 0 env(safe-area-inset-top,0px);"></div>
-    <div id="n-modal-inner">
-      <div id="n-modal-hdr">
-        <button id="n-modal-close" onclick="closeModal()">✕</button>
+    <div id="n-modal-hdr">
+      <button id="n-modal-back" onclick="closeModal()">←</button>
+      <div id="n-modal-title-wrap">
+        <div id="n-modal-src-line"></div>
         <div id="n-modal-title"></div>
-        <div id="n-modal-actions">
-          <button class="n-modal-btn" id="n-modal-star" onclick="modalToggleSave()">☆</button>
-          <button class="n-modal-btn" onclick="modalHide()" title="숨김">🚫</button>
-        </div>
       </div>
-      <div id="n-modal-body"></div>
+      <div id="n-modal-actions">
+        <button class="n-modal-btn" id="n-modal-star" onclick="modalToggleSave()">☆</button>
+        <button class="n-modal-btn" onclick="modalHide()" title="숨김">🚫</button>
+      </div>
     </div>
+    <div id="n-modal-body"></div>
   </div>
 
   <!-- 액션 메뉴 -->
@@ -497,7 +499,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 </nav>
 
 <script>
-const APP_VER='v2.3';
+const APP_VER='v2.5';
 // ══════════════════════════════════════════
 // 데이터 정의
 // ══════════════════════════════════════════
@@ -1147,33 +1149,71 @@ async function translate(text){
   }catch{return '';}
 }
 
-// ── 본문 스크래핑 ─────────────────────────────
+// ── 본문 스크래핑 ──────────────────────────────────
+// Investing.com: Cloudflare 봇 차단으로 불가
+// 나머지 소스: allorigins 프록시로 HTML 수신 후 텍스트 추출
+const BOT_BLOCKED = ['investing.com','bloomberg.com','wsj.com','ft.com','seekingalpha.com'];
+
+function isBotBlocked(url){
+  return BOT_BLOCKED.some(d=>url.includes(d));
+}
+
+function extractText(raw){
+  if(!raw||raw.length<200) return '';
+  // 봇 차단 페이지 감지
+  const lower = raw.toLowerCase();
+  if(lower.includes('enable javascript')||lower.includes('enable cookies')||
+     lower.includes('just a moment')||lower.includes('checking your browser')||
+     lower.includes('cloudflare')||lower.includes('access denied')) return '';
+  // 스크립트·스타일 제거
+  let txt = raw
+    .replace(/<script[\s\S]*?<\/script>/gi,'')
+    .replace(/<style[\s\S]*?<\/style>/gi,'')
+    .replace(/<nav[\s\S]*?<\/nav>/gi,'')
+    .replace(/<header[\s\S]*?<\/header>/gi,'')
+    .replace(/<footer[\s\S]*?<\/footer>/gi,'');
+  // article/main 태그 우선 추출
+  const articleMatch = txt.match(/<article[^>]*>([\s\S]*?)<\/article>/i)
+    || txt.match(/<main[^>]*>([\s\S]*?)<\/main>/i)
+    || txt.match(/<div[^>]*class="[^"]*(?:article|content|body)[^"]*"[^>]*>([\s\S]*?)<\/div>/i);
+  if(articleMatch) txt = articleMatch[1];
+  // HTML 태그 제거
+  txt = txt.replace(/<[^>]+>/g,' ')
+    .replace(/&nbsp;/g,' ').replace(/&amp;/g,'&')
+    .replace(/&lt;/g,'<').replace(/&gt;/g,'>')
+    .replace(/&quot;/g,'"').replace(/&#39;/g,"'")
+    .replace(/\s{2,}/g,' ').trim();
+  // 의미있는 문장만 (30자 이상, 600자 이하)
+  const sents = txt.split(/(?<=[.!?])\s+/).filter(s=>s.trim().length>30&&s.length<600);
+  return sents.slice(0,25).join(' ').slice(0,4000);
+}
+
+const PROXIES = [
+  u=>`https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+  u=>`https://corsproxy.io/?${encodeURIComponent(u)}`,
+  u=>`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+];
+
 async function scrapeBody(url){
   if(!url||url==='#') return '';
-  const proxies=[
-    `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
-    `https://corsproxy.io/?${encodeURIComponent(url)}`,
-  ];
-  for(const proxy of proxies){
+  if(isBotBlocked(url)) return ''; // 차단 사이트 제외
+
+  for(const proxyFn of PROXIES){
     try{
-      const r=await fetch(proxy,{signal:AbortSignal.timeout(12000)});
-      const d=await r.json();
-      const raw=d.contents||d.body||'';
-      // 태그 제거 + 텍스트 추출
-      let txt=raw
-        .replace(/<script[\s\S]*?<\/script>/gi,'')
-        .replace(/<style[\s\S]*?<\/style>/gi,'')
-        .replace(/<[^>]+>/g,' ')
-        .replace(/&nbsp;/g,' ')
-        .replace(/&amp;/g,'&')
-        .replace(/&lt;/g,'<')
-        .replace(/&gt;/g,'>')
-        .replace(/\s{2,}/g,' ')
-        .trim();
-      // 의미있는 문장만 추출
-      const sents=txt.split(/[.!?]\s+/).filter(s=>s.length>40&&s.length<500);
-      return sents.slice(0,30).join('. ').slice(0,5000);
-    }catch{}
+      const r = await fetch(proxyFn(url),{signal:AbortSignal.timeout(15000)});
+      let raw = '';
+      const ct = r.headers.get('content-type')||'';
+      if(ct.includes('json')){
+        const d = await r.json();
+        raw = d.contents||d.body||'';
+      } else {
+        raw = await r.text();
+      }
+      const txt = extractText(raw);
+      if(txt.length > 100) return txt; // 성공
+    }catch(e){
+      continue; // 다음 프록시 시도
+    }
   }
   return '';
 }
@@ -1263,6 +1303,7 @@ async function collectNews(){
         desc:       (it.desc||'').trim(),
         body_en:    '',
         body_ko:    '',
+        desc_ko:    '',
         tags,
         source:     src.label,
         date:       dateVal,
@@ -1297,7 +1338,7 @@ async function collectNews(){
   return newCount;
 }
 
-// ── 백그라운드 본문 번역 ──────────────────────
+// ── 백그라운드 번역 (desc + 선택적 본문) ──────
 let bgTranslating = false;
 async function bgTranslate(){
   if(bgTranslating) return;
@@ -1307,15 +1348,38 @@ async function bgTranslate(){
   for(const hash of hashes){
     const art = lsGet(hash);
     if(!art||art.translated||art.status==='hidden') continue;
-    // 본문 스크래핑
-    const body_en = await scrapeBody(art.url);
-    art.body_en = body_en;
-    if(body_en){
-      const body_ko = await translateBody(body_en);
-      art.body_ko = body_ko;
+
+    // 1. RSS 요약(desc) 번역 - 항상
+    if(art.desc && !art.desc_ko){
+      art.desc_ko = await translate(art.desc);
+      await delay(300);
     }
+
+    // 2. 제목 번역 안 됐으면 재시도
+    if(!art.title_ko && art.title){
+      art.title_ko = await translate(art.title);
+      await delay(300);
+    }
+
+    // 3. 본문 스크래핑 (허용 사이트만)
+    const body_en = await scrapeBody(art.url);
+    if(body_en){
+      art.body_en = body_en;
+      art.body_ko = await translateBody(body_en);
+      await delay(300);
+    }
+
     art.translated = true;
     lsSet(hash, art);
+
+    // 현재 열린 모달이 이 기사면 내용 업데이트
+    if(nModalHash === hash && document.getElementById('n-modal').classList.contains('open')){
+      openArticle(hash); // 모달 내용 새로고침
+    }
+    // 뉴스 목록 갱신
+    if(document.getElementById('p-news').classList.contains('on')){
+      renderNewsList();
+    }
     await delay(400);
   }
   bgTranslating = false;
@@ -1485,6 +1549,8 @@ function openArticle(hash){
   // 모달 열기
   const modal=document.getElementById('n-modal');
   modal.classList.add('open');
+  document.getElementById('n-modal-src-line').textContent=
+    art.source + (art.pubDate?' · '+timeAgo(art.pubDate):'');
   document.getElementById('n-modal-title').textContent=art.title_ko||art.title;
   document.getElementById('n-modal-star').textContent=art.status==='saved'?'⭐':'☆';
 
