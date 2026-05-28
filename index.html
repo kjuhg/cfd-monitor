@@ -497,7 +497,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 </nav>
 
 <script>
-const APP_VER='v2.1';
+const APP_VER='v2.2';
 // ══════════════════════════════════════════
 // 데이터 정의
 // ══════════════════════════════════════════
@@ -1197,7 +1197,7 @@ async function translateBody(text){
 async function fetchRSS(src){
   // 1차: rss2json API
   try{
-    const api=`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(src.url)}&count=50`;
+    const api=`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(src.url)}`;
     const r=await fetch(api,{signal:AbortSignal.timeout(15000)});
     const d=await r.json();
     if(d.status==='ok'&&d.items?.length){
