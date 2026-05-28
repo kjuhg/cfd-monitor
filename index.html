@@ -89,26 +89,48 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
   line-height:1;}
 
 /* 레벨간 화살표 */
-.lv-gap{flex-shrink:0;width:14px;display:flex;flex-direction:column;
-  justify-content:center;align-items:center;gap:14px;padding-top:24px;}
+.lv-gap{flex-shrink:0;width:18px;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;gap:10px;padding-top:24px;}
 .arr{display:flex;align-items:center;}
-.arr-line{width:9px;height:1px;background:rgba(255,255,255,.1);}
-.arr-head{width:0;height:0;border-top:3px solid transparent;border-bottom:3px solid transparent;border-left:4px solid rgba(255,255,255,.1);}
+.arr-line{width:11px;height:2px;background:rgba(255,255,255,.25);border-radius:1px;}
+.arr-head{width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid rgba(255,255,255,.25);}
 .arr-line.hl{background:var(--gold);}
 .arr-head.hl{border-left-color:var(--gold);}
+.arr-line.up{background:var(--up);}
+.arr-head.up{border-left-color:var(--up);}
+.arr-line.dn{background:var(--dn);}
+.arr-head.dn{border-left-color:var(--dn);}
 
-/* 선택 패널 */
-#sel-panel{background:var(--card);border-top:1px solid rgba(245,158,11,.3);
-  margin:0;padding:10px 12px 12px;}
-#sel-name{font-size:12px;font-weight:500;color:var(--tx);margin-bottom:5px;}
-#sel-chain{display:flex;align-items:center;gap:3px;flex-wrap:wrap;margin-bottom:6px;}
+/* 선택 패널 - 화면 하단 고정 */
+#sel-panel{
+  position:fixed;bottom:var(--NAV);left:0;right:0;z-index:150;
+  background:rgba(22,27,34,.97);backdrop-filter:blur(12px);
+  border-top:1.5px solid rgba(245,158,11,.4);
+  border-radius:16px 16px 0 0;
+  padding:0;
+  max-height:48vh;overflow-y:auto;
+  transform:translateY(100%);
+  transition:transform .25s cubic-bezier(.4,0,.2,1);
+  -webkit-overflow-scrolling:touch;
+}
+#sel-panel.show{transform:translateY(0);}
+#sel-topbar{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px 6px;position:sticky;top:0;
+  background:rgba(22,27,34,.98);border-bottom:1px solid rgba(255,255,255,.06);}
+#sel-drag{width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.15);}
+#sel-close{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.05);color:var(--mu);font-size:13px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+#sel-inner{padding:8px 14px 16px;}
+#sel-name{font-size:12px;font-weight:500;color:var(--tx);margin-bottom:6px;}
+#sel-chain{display:flex;align-items:center;gap:3px;flex-wrap:wrap;margin-bottom:7px;
+  padding:7px 9px;background:rgba(255,255,255,.04);border-radius:8px;}
 .sc-n{font-size:9px;padding:2px 7px;border-radius:5px;font-weight:500;cursor:pointer;}
-.sc-a{font-size:9px;color:var(--fa);}
+.sc-a{font-size:10px;color:var(--fa);}
 #sel-impact{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
 .si{border-radius:7px;padding:6px 8px;font-size:10px;line-height:1.55;}
 .si-b{background:rgba(63,185,80,.1);color:var(--up);}
 .si-s{background:rgba(248,81,73,.1);color:var(--dn);}
-#sel-panel.hide{display:none;}
 
 /* ── 용어사전 탭 ── */
 .g-search-wrap{padding:8px 12px 5px;}
@@ -261,7 +283,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
     </div>
     <div class="tree-hint">← 좌우 스크롤</div>
     <div id="tree-scroll"></div>
-    <div id="sel-panel" class="hide"></div>
+    <div style="height:16px;"></div>
     <div style="height:16px;"></div>
   </div>
 
@@ -315,6 +337,21 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
     <div style="height:16px;"></div>
   </div>
 
+</div>
+
+<!-- 선택 패널 (body 레벨, fixed) -->
+<div id="sel-panel">
+  <div id="sel-topbar">
+    <div id="sel-drag"></div>
+    <button id="sel-close" onclick="closePanel()">✕</button>
+  </div>
+  <div id="sel-inner">
+    <div id="sel-name"></div>
+    <div style="font-size:9px;color:var(--mu);margin-bottom:4px;">⚡ 인과 체인 → 금까지</div>
+    <div id="sel-chain"></div>
+    <div style="font-size:9px;color:var(--mu);margin-bottom:4px;">금(XAU)에 미치는 영향</div>
+    <div id="sel-impact"></div>
+  </div>
 </div>
 
 <nav id="nav">
@@ -611,6 +648,10 @@ function goTab(t){
   document.getElementById('p-'+t).classList.add('on');
   document.getElementById('nb-'+t).classList.add('on');
   if(t==='an') renderAnalysis();
+  if(t!=='tree'){
+    selId=null;
+    document.getElementById('sel-panel').classList.remove('show');
+  }
 }
 
 // ══════════════════════════════════════════
@@ -703,13 +744,30 @@ function renderTree(){
     });
     html+='</div>';
     if(li<LEVELS.length-1){
-      // 화살표 개수는 레벨의 노드수에 맞게
-      const cnt=Math.max(lv.nodes.length,LEVELS[li+1].nodes.length);
+      const nextLv=LEVELS[li+1];
+      const cnt=Math.max(lv.nodes.length,nextLv.nodes.length);
+      // 선택 노드에서 다음 레벨로 가는 연결 확인
+      let arrCls='';
+      if(selId){
+        const curLvHasSel=lv.nodes.some(n=>n.id===selId);
+        if(curLvHasSel){
+          // 선택 노드 → 다음 레벨로 가는 엣지 있는지
+          const edges=EDGES.filter(([f,t])=>f===selId&&nextLv.nodes.some(n=>n.id===t));
+          if(edges.length){
+            const pol=edges[0][2];
+            arrCls=pol>0?' up':' dn';
+          }
+        }
+        // 다음 레벨에 선택 노드가 있고, 현재 레벨에서 오는 엣지
+        const nextLvHasSel=nextLv.nodes.some(n=>n.id===selId);
+        if(nextLvHasSel){
+          const edges=EDGES.filter(([f,t])=>t===selId&&lv.nodes.some(n=>n.id===f));
+          if(edges.length) arrCls=' hl';
+        }
+      }
       html+=`<div class="lv-gap">`;
       for(let i=0;i<cnt;i++){
-        // 하이라이트: 선택 노드와 연결된 에지
-        const hl=selId&&EDGES.some(([f,t])=>f===selId&&LEVELS[li].nodes.some(n=>n.id===f)&&LEVELS[li+1].nodes.some(n=>n.id===t));
-        html+=`<div class="arr"><div class="arr-line${hl?' hl':''}"></div><div class="arr-head${hl?' hl':''}"></div></div>`;
+        html+=`<div class="arr"><div class="arr-line${arrCls}"></div><div class="arr-head${arrCls}"></div></div>`;
       }
       html+=`</div>`;
     }
@@ -734,24 +792,28 @@ function findChain(startId){
   return null;
 }
 
+function closePanel(){
+  selId=null;
+  document.getElementById('sel-panel').classList.remove('show');
+  renderTree();
+}
 function tapNode(nid){
-  if(selId===nid){selId=null;document.getElementById('sel-panel').classList.add('hide');renderTree();return;}
+  if(selId===nid){closePanel();return;}
   selId=nid;
   renderTree();
   updateSelPanel(nid);
   // 선택 노드 컬럼으로 스크롤
   const lvIdx=LEVELS.findIndex(lv=>lv.nodes.some(n=>n.id===nid));
   const scroll=document.getElementById('tree-scroll');
-  const colW=54+14; // nd width + gap
-  scroll.scrollTo({left:lvIdx*colW*2,behavior:'smooth'});
+  const colW=58;
+  scroll.scrollTo({left:lvIdx*colW*2.5,behavior:'smooth'});
 }
 
 function updateSelPanel(nid){
   const nd=NODE_MAP[nid]; if(!nd) return;
   const g=GLOSS_DATA.find(x=>x.id===nid)||{};
   const col=COL[nd.c];
-  const panel=document.getElementById('sel-panel');
-  panel.classList.remove('hide');
+  document.getElementById('sel-panel').classList.add('show');
   // 이름
   document.getElementById('sel-name').textContent=(g.name||nd.lbl)+' — '+(g.freq||'');
   // 인과체인
