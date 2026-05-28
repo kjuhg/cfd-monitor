@@ -373,7 +373,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
   <div id="hdr-ico">🥇</div>
   <div id="hdr-info">
     <div id="hdr-title">CFD Monitor</div>
-    <div id="hdr-sub">로딩 중...</div>
+    <div id="hdr-sub">로딩 중... <span style="color:var(--fa);">·</span> <span id="hdr-ver"></span></div>
   </div>
   <button id="hdr-btn" onclick="refresh()">↻</button>
 </div>
@@ -497,6 +497,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 </nav>
 
 <script>
+const APP_VER='v2.1';
 // ══════════════════════════════════════════
 // 데이터 정의
 // ══════════════════════════════════════════
@@ -816,8 +817,9 @@ async function loadData(){
   if(IND.tnx?.ok&&IND.irx?.ok)
     IND.spr={price:+(IND.tnx.price-IND.irx.price).toFixed(3),prev:0,ok:true,derived:true};
   btn.classList.remove('spin');
-  document.getElementById('hdr-sub').textContent=
-    '업데이트: '+new Date().toLocaleTimeString('ko-KR')+' · 30분 자동';
+  document.getElementById('hdr-sub').innerHTML=
+    '업데이트: '+new Date().toLocaleTimeString('ko-KR')+' · 30분 자동'
+    +' <span style="color:var(--fa);">· '+APP_VER+'</span>';
   renderBanner();
   renderTree();
   renderAnalysis();
@@ -1759,6 +1761,9 @@ setInterval(loadData,30*60*1000);
 // 초기화
 // ══════════════════════════════════════════
 window.addEventListener('DOMContentLoaded',()=>{
+  // 버전 즉시 표시
+  const verEl=document.getElementById('hdr-ver');
+  if(verEl) verEl.textContent=APP_VER;
   renderTree();
   renderGloss();
   renderEvents();
@@ -1766,8 +1771,27 @@ window.addEventListener('DOMContentLoaded',()=>{
   renderAnalysis(); // 초기 렌더 (데이터 없어도 골격 표시)
   initNews();
   loadData();
-  if('serviceWorker' in navigator)
-    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('./sw.js').then(reg=>{
+      // 새 서비스워커 설치 감지 → 자동 reload
+      reg.addEventListener('updatefound',()=>{
+        const newSW = reg.installing;
+        newSW.addEventListener('statechange',()=>{
+          if(newSW.state==='installed'&&navigator.serviceWorker.controller){
+            // 새 버전 설치됨 → 페이지 새로고침
+            navigator.serviceWorker.addEventListener('controllerchange',()=>{
+              window.location.reload();
+            });
+            newSW.postMessage({type:'SKIP_WAITING'});
+          }
+        });
+      });
+    }).catch(()=>{});
+    // 컨트롤러 변경 시 reload
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{
+      window.location.reload();
+    });
+  }
 });
 window.addEventListener('resize',renderTree);
 </script>

@@ -1,32 +1,33 @@
-const CACHE = 'cfd-v5';
-const ASSETS = ['./index.html', './manifest.json'];
+// 버전 바꾸면 캐시 자동 교체
+const VER = 'cfd-v10';
 
-// 설치: 새 캐시 생성
 self.addEventListener('install', e => {
+  // 즉시 활성화 (기존 SW 대기 없이)
+  self.skipWaiting();
   e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(ASSETS))
+    caches.open(VER).then(c => c.addAll(['./index.html','./manifest.json']))
   );
-  self.skipWaiting(); // 즉시 활성화
 });
 
-// 활성화: 이전 버전 캐시 전부 삭제
 self.addEventListener('activate', e => {
+  // 이전 버전 캐시 전부 삭제
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k=>k!==VER).map(k=>caches.delete(k))))
+      .then(() => self.clients.claim()) // 열린 탭 즉시 접수
   );
-  self.clients.claim(); // 열린 탭에 즉시 적용
 });
 
-// 요청: 네트워크 우선, 실패하면 캐시
+// 네트워크 우선 → 실패 시 캐시
 self.addEventListener('fetch', e => {
+  if(e.request.method !== 'GET') return;
   e.respondWith(
-    fetch(e.request)
+    fetch(e.request, {cache:'no-cache'})
       .then(res => {
-        // 성공하면 캐시도 업데이트
-        const clone = res.clone();
-        caches.open(CACHE).then(c => c.put(e.request, clone));
+        if(res.ok){
+          const clone = res.clone();
+          caches.open(VER).then(c => c.put(e.request, clone));
+        }
         return res;
       })
       .catch(() => caches.match(e.request))
