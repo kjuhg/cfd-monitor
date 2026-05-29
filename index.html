@@ -522,7 +522,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 </nav>
 
 <script>
-const APP_VER='v2.8';
+const APP_VER='v2.9';
 // ══════════════════════════════════════════
 // 데이터 정의
 // ══════════════════════════════════════════
@@ -2015,25 +2015,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   initNews();
   loadData();
   if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('./sw.js').then(reg=>{
-      // 새 서비스워커 설치 감지 → 자동 reload
-      reg.addEventListener('updatefound',()=>{
-        const newSW = reg.installing;
-        newSW.addEventListener('statechange',()=>{
-          if(newSW.state==='installed'&&navigator.serviceWorker.controller){
-            // 새 버전 설치됨 → 페이지 새로고침
-            navigator.serviceWorker.addEventListener('controllerchange',()=>{
-              window.location.reload();
-            });
-            newSW.postMessage({type:'SKIP_WAITING'});
-          }
-        });
-      });
-    }).catch(()=>{});
-    // 컨트롤러 변경 시 reload
-    navigator.serviceWorker.addEventListener('controllerchange',()=>{
-      window.location.reload();
-    });
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
   }
 });
 window.addEventListener('resize',renderTree);

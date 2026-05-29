@@ -1,5 +1,5 @@
 // 버전 바꾸면 캐시 자동 교체
-const VER = 'cfd-v12';
+const VER = 'cfd-v13';
 
 self.addEventListener('install', e => {
   // 즉시 활성화 (기존 SW 대기 없이)
