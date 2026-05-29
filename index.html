@@ -522,7 +522,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 </nav>
 
 <script>
-const APP_VER='v2.9';
+const APP_VER='v3.0';
 // ══════════════════════════════════════════
 // 데이터 정의
 // ══════════════════════════════════════════
@@ -858,9 +858,7 @@ async function loadData(){
   if(IND.tnx?.ok&&IND.irx?.ok)
     IND.spr={price:+(IND.tnx.price-IND.irx.price).toFixed(3),prev:0,ok:true,derived:true};
   btn.classList.remove('spin');
-  document.getElementById('hdr-sub').innerHTML=
-    '업데이트: '+new Date().toLocaleTimeString('ko-KR')+' · 30분 자동'
-    +' <span style="color:var(--fa);">· '+APP_VER+'</span>';
+  document.getElementById('hdr-sub').innerHTML='업데이트: '+new Date().toLocaleTimeString('ko-KR')+' · 30분 자동 <span style="color:var(--fa);">· '+APP_VER+'</span>';
   renderBanner();
   renderTree();
   renderAnalysis();
