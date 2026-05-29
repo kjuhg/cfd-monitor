@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#0D1117">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.json">
 <title>CFD Monitor</title>
 <style>
@@ -19,8 +18,7 @@
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
   font-family:'Apple SD Gothic Neo','Noto Sans KR',system-ui,sans-serif;font-size:14px;}
-
-/* ── 헤더 ── */
+/* 헤더 */
 #hdr{position:fixed;top:0;left:0;right:0;height:var(--HDR);z-index:100;
   background:rgba(13,17,23,.97);backdrop-filter:blur(10px);
   border-bottom:1px solid var(--b2);display:flex;align-items:center;padding:0 14px;gap:9px;}
@@ -34,98 +32,70 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
   display:flex;align-items:center;justify-content:center;}
 #hdr-btn.spin{animation:rot .7s linear infinite;}
 @keyframes rot{to{transform:rotate(360deg);}}
-
-/* ── 탭 콘텐츠 ── */
+/* 탭 */
 .wrap{position:fixed;top:var(--HDR);left:0;right:0;bottom:var(--NAV);overflow:hidden;}
-.pane{position:absolute;inset:0;overflow-y:scroll;overflow-x:hidden;
-  display:none;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;
-  padding-bottom:8px;}
+.pane{position:absolute;inset:0;overflow-y:scroll;overflow-x:hidden;display:none;
+  -webkit-overflow-scrolling:touch;}
 .pane.on{display:block;}
-
-/* ── 하단 네비 ── */
+/* 네비 */
 #nav{position:fixed;bottom:0;left:0;right:0;height:var(--NAV);z-index:999;
   background:rgba(13,17,23,.97);backdrop-filter:blur(10px);
-  border-top:1px solid var(--b2);display:flex;
-  padding-bottom:env(safe-area-inset-bottom);}
+  border-top:1px solid var(--b2);display:flex;}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:2px;border:none;background:transparent;color:var(--mu);
   font-size:9px;font-weight:500;cursor:pointer;font-family:inherit;padding:4px 0;}
 .nb.on{color:var(--gold);}
 .nb-i{font-size:20px;line-height:1.1;}
-
-/* ── 배너 ── */
+/* 배너 */
 .banner{background:var(--gd);border:1px solid var(--gb);border-radius:11px;
   margin:10px 12px 6px;padding:10px 13px;display:flex;gap:8px;align-items:flex-start;
   font-size:12px;line-height:1.6;}
-
-/* ── 트리 탭 ── */
-.tree-hint{font-size:10px;color:var(--fa);padding:4px 12px 2px;
-  display:flex;align-items:center;gap:6px;}
-.tree-hint::before{content:'';flex:1;height:1px;background:var(--b);}
-.tree-hint::after{content:'';flex:1;height:1px;background:var(--b);}
-
-/* 가로 스크롤 트리 */
-#tree-scroll{overflow-x:scroll;overflow-y:visible;
-  display:flex;gap:0;padding:8px 8px 4px;scrollbar-width:none;
-  -webkit-overflow-scrolling:touch;}
+/* 트리 */
+.tree-hint{font-size:10px;color:var(--fa);padding:3px 12px 2px;text-align:center;}
+#tree-scroll{overflow-x:scroll;overflow-y:visible;display:flex;gap:0;
+  padding:8px 8px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
 #tree-scroll::-webkit-scrollbar{display:none;}
-
-.lv-col{flex-shrink:0;display:flex;flex-direction:column;gap:4px;position:relative;}
+.lv-col{flex-shrink:0;display:flex;flex-direction:column;gap:4px;}
 .lv-hdr{font-size:8px;font-weight:600;text-align:center;padding:2px 5px;
-  border-radius:5px;margin-bottom:2px;white-space:nowrap;letter-spacing:.03em;}
-
+  border-radius:5px;margin-bottom:2px;white-space:nowrap;}
 .nd{display:flex;flex-direction:column;align-items:center;gap:1px;
-  padding:4px 3px;border-radius:9px;cursor:pointer;width:44px;
-  transition:background .12s;position:relative;}
-.nd:active{background:rgba(255,255,255,.06);}
+  padding:4px 3px;border-radius:9px;cursor:pointer;width:46px;position:relative;}
 .nd.sel{background:rgba(245,158,11,.12);outline:1.5px solid var(--gold);}
-.nd-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;
-  justify-content:center;font-size:18px;border:1px solid transparent;position:relative;}
-.nd-lbl{font-size:7px;font-weight:500;text-align:center;line-height:1.2;
-  max-width:44px;word-break:keep-all;}
+.nd-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:19px;border:1px solid transparent;position:relative;}
+.nd-lbl{font-size:7px;font-weight:500;text-align:center;line-height:1.2;max-width:46px;}
 .nd-val{font-size:7px;font-family:monospace;text-align:center;}
 .nd-cnt{position:absolute;top:-3px;right:-3px;width:13px;height:13px;
   border-radius:50%;background:var(--bg);border:1px solid rgba(255,255,255,.18);
-  font-size:7px;color:var(--mu);display:flex;align-items:center;justify-content:center;
-  line-height:1;}
-
-/* 레벨간 화살표 */
-.lv-gap{flex-shrink:0;width:22px;display:flex;flex-direction:column;
+  font-size:7px;color:var(--mu);display:flex;align-items:center;justify-content:center;}
+.lv-gap{flex-shrink:0;width:20px;display:flex;flex-direction:column;
   justify-content:center;align-items:center;padding-top:26px;gap:8px;}
-.lv-gap svg{display:block;flex-shrink:0;}
-
-/* 선택 패널 - 화면 하단 고정 */
-#sel-panel{
-  position:fixed;bottom:var(--NAV);left:0;right:0;z-index:500;
-  background:rgba(22,27,34,.97);backdrop-filter:blur(12px);
-  border-top:1.5px solid rgba(245,158,11,.4);
-  border-radius:16px 16px 0 0;
-  padding:0;
-  max-height:48vh;overflow-y:auto;
-  transform:translateY(100%);
-  transition:transform .25s cubic-bezier(.4,0,.2,1);
-  -webkit-overflow-scrolling:touch;
-}
+/* 선택 패널 */
+#sel-panel{position:fixed;bottom:var(--NAV);left:0;right:0;z-index:500;
+  background:rgba(18,23,32,.97);backdrop-filter:blur(12px);
+  border-top:1.5px solid rgba(245,158,11,.4);border-radius:16px 16px 0 0;
+  padding:0;max-height:48vh;overflow-y:auto;
+  transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);}
 #sel-panel.show{transform:translateY(0);}
 #sel-topbar{display:flex;align-items:center;justify-content:space-between;
-  padding:10px 14px 6px;position:sticky;top:0;
-  background:rgba(22,27,34,.98);border-bottom:1px solid rgba(255,255,255,.06);}
+  padding:10px 14px 6px;position:sticky;top:0;background:rgba(18,23,32,.98);}
 #sel-drag{width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.15);}
 #sel-close{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.1);
   background:rgba(255,255,255,.05);color:var(--mu);font-size:13px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  display:flex;align-items:center;justify-content:center;}
 #sel-inner{padding:8px 14px 16px;}
-#sel-name{font-size:12px;font-weight:500;color:var(--tx);margin-bottom:6px;}
+#sel-name{font-size:13px;font-weight:500;color:var(--tx);margin-bottom:6px;}
+#sel-val{font-size:12px;color:var(--mu);margin-bottom:8px;}
+.sel-label{font-size:10px;color:var(--mu);margin-bottom:4px;}
 #sel-chain{display:flex;align-items:center;gap:3px;flex-wrap:wrap;margin-bottom:7px;
   padding:7px 9px;background:rgba(255,255,255,.04);border-radius:8px;}
-.sc-n{font-size:9px;padding:2px 7px;border-radius:5px;font-weight:500;cursor:pointer;}
+.sc-n{font-size:10px;padding:2px 8px;border-radius:5px;font-weight:500;cursor:pointer;}
 .sc-a{font-size:10px;color:var(--fa);}
 #sel-impact{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
-.si{border-radius:7px;padding:6px 8px;font-size:10px;line-height:1.55;}
+.si{border-radius:7px;padding:7px 9px;font-size:11px;line-height:1.55;}
 .si-b{background:rgba(63,185,80,.1);color:var(--up);}
 .si-s{background:rgba(248,81,73,.1);color:var(--dn);}
-
-/* ── 용어사전 탭 ── */
+/* 용어사전 */
 .g-search-wrap{padding:8px 12px 5px;}
 .g-search{background:var(--card);border:1px solid var(--b2);border-radius:9px;
   padding:7px 11px;display:flex;align-items:center;gap:7px;}
@@ -138,53 +108,85 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
   border:1px solid var(--b2);color:var(--mu);white-space:nowrap;
   flex-shrink:0;cursor:pointer;background:transparent;font-family:inherit;}
 .g-cat.on{background:var(--gd);border-color:var(--gb);color:var(--gold);}
-.g-item{padding:10px 12px;border-bottom:1px solid var(--b);cursor:pointer;}
+.g-item{padding:11px 12px;border-bottom:1px solid var(--b);cursor:pointer;}
 .g-top{display:flex;align-items:center;gap:7px;margin-bottom:4px;}
 .g-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;
   justify-content:center;font-size:16px;flex-shrink:0;}
 .g-name{font-size:13px;font-weight:500;color:var(--tx);flex:1;}
-.g-lv{font-size:9px;padding:2px 7px;border-radius:8px;background:var(--b2);color:var(--mu);}
-.g-desc{font-size:11px;color:var(--mu);line-height:1.6;margin-left:37px;margin-bottom:4px;}
-.g-tags{display:flex;gap:4px;flex-wrap:wrap;margin-left:37px;}
-.g-tag{font-size:10px;padding:2px 8px;border-radius:5px;}
-.g-tg{background:rgba(63,185,80,.1);color:var(--up);}
-.g-tr{background:rgba(248,81,73,.1);color:var(--dn);}
-.g-body{display:none;margin-left:37px;margin-top:4px;
-  padding:8px 10px;background:rgba(255,255,255,.03);border-radius:7px;
-  font-size:11px;color:var(--mu);line-height:1.65;}
+.g-badge{font-size:9px;padding:2px 7px;border-radius:8px;background:var(--b2);color:var(--mu);}
+.g-val{font-size:10px;font-family:monospace;margin-left:4px;}
+.g-body{display:none;padding-top:6px;}
 .g-body.on{display:block;}
-
-/* ── 뉴스 탭 ── */
-.n-cats{display:flex;gap:5px;padding:8px 12px 5px;overflow-x:auto;scrollbar-width:none;}
-.n-cats::-webkit-scrollbar{display:none;}
-.n-cat{font-size:10px;padding:5px 12px;border-radius:14px;
-  border:1px solid var(--b2);color:var(--mu);white-space:nowrap;
-  flex-shrink:0;cursor:pointer;background:transparent;font-family:inherit;}
-.n-cat.on{background:var(--gd);border-color:var(--gb);color:var(--gold);}
-.n-pane{display:none;}.n-pane.on{display:block;}
-.n-item{padding:11px 12px;border-bottom:1px solid var(--b);display:flex;gap:9px;cursor:pointer;}
-.n-thumb{width:42px;height:42px;border-radius:9px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;font-size:22px;}
-.n-txt{flex:1;min-width:0;}
-.n-ko{font-size:12px;color:var(--tx);line-height:1.45;margin-bottom:2px;
+.g-desc{font-size:12px;color:var(--mu);line-height:1.65;margin-bottom:7px;margin-left:37px;}
+.g-info{font-size:10px;color:var(--fa);margin-bottom:6px;margin-left:37px;}
+.g-impacts{margin-left:37px;display:flex;flex-direction:column;gap:4px;}
+.g-bull{font-size:11px;padding:5px 9px;border-radius:6px;
+  background:rgba(63,185,80,.1);color:var(--up);line-height:1.5;}
+.g-bear{font-size:11px;padding:5px 9px;border-radius:6px;
+  background:rgba(248,81,73,.1);color:var(--dn);line-height:1.5;}
+/* 뉴스 */
+.n-filterbar{display:flex;gap:5px;padding:8px 12px 4px;overflow-x:auto;scrollbar-width:none;}
+.n-filterbar::-webkit-scrollbar{display:none;}
+.n-fbtn{font-size:10px;padding:4px 11px;border-radius:14px;border:1px solid var(--b2);
+  color:var(--mu);white-space:nowrap;flex-shrink:0;cursor:pointer;
+  background:transparent;font-family:inherit;}
+.n-fbtn.on{background:var(--gd);border-color:var(--gb);color:var(--gold);}
+.n-cnt{font-size:9px;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.1);margin-left:3px;}
+.n-tagbar{display:flex;gap:4px;padding:0 12px 6px;overflow-x:auto;scrollbar-width:none;}
+.n-tagbar::-webkit-scrollbar{display:none;}
+.n-tag-btn{font-size:10px;padding:3px 9px;border-radius:10px;border:1px solid var(--b);
+  color:var(--mu);white-space:nowrap;flex-shrink:0;cursor:pointer;background:var(--bg2);font-family:inherit;}
+.n-tag-btn.on{background:var(--card);border-color:var(--b2);color:var(--tx);}
+.n-divider{font-size:10px;color:var(--mu);padding:6px 12px 3px;
+  border-top:1px solid var(--b);margin-top:2px;}
+.n-row{display:flex;align-items:flex-start;padding:11px 12px;
+  border-bottom:1px solid var(--b);cursor:pointer;gap:8px;
+  transition:background .12s;}
+.n-row.read{opacity:.5;}
+.n-status{width:18px;flex-shrink:0;padding-top:3px;}
+.n-dot{width:7px;height:7px;border-radius:50%;background:var(--bl);}
+.n-star-ico{font-size:12px;color:var(--gold);}
+.n-body{flex:1;min-width:0;}
+.n-ttl{font-size:13px;color:var(--tx);line-height:1.45;margin-bottom:3px;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.n-en{font-size:10px;color:var(--fa);line-height:1.35;
-  display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}
-.n-meta{display:flex;gap:5px;margin-top:3px;align-items:center;}
-.n-tag{font-size:9px;padding:1px 6px;border-radius:4px;background:var(--gd);color:var(--gold);}
-.n-src{font-size:9px;color:var(--mu);}
-.n-tm{font-size:9px;color:var(--fa);}
-.n-detail{display:none;padding:8px 0 4px;border-top:1px solid var(--b);margin-top:8px;}
-.n-detail.on{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.n-dlbl{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
-.n-dtxt{font-size:11px;color:var(--tx);line-height:1.6;}
-.n-link{color:var(--bl);font-size:10px;text-decoration:none;display:inline-block;margin-top:5px;}
-.n-loading{padding:30px;text-align:center;color:var(--mu);font-size:13px;}
-.spin-ico{display:inline-block;animation:rot .7s linear infinite;font-size:20px;}
-
-/* ── 경제이벤트 탭 ── */
-.ev-top{margin:10px 12px 0;}
-.ev-banner{background:var(--gd);border:1px solid var(--gb);border-radius:11px;padding:11px 13px;margin-bottom:8px;}
+.n-ttl.bold{font-weight:500;}
+.n-chips{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:3px;}
+.n-chip{font-size:9px;padding:1px 5px;border-radius:4px;
+  background:rgba(255,255,255,.07);color:var(--mu);}
+.n-meta{font-size:10px;color:var(--fa);}
+.n-empty{padding:50px 20px;text-align:center;color:var(--mu);font-size:13px;line-height:1.8;}
+/* 뉴스 모달 */
+#n-modal{position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;
+  background:var(--bg2);display:none;flex-direction:column;}
+#n-modal.open{display:flex;}
+#n-modal-hdr{display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:var(--bg2);border-bottom:1px solid var(--b2);flex-shrink:0;
+  padding-top:calc(env(safe-area-inset-top,0px) + 10px);}
+#n-modal-back{width:36px;height:36px;border-radius:50%;border:1px solid var(--b2);
+  background:var(--card);color:var(--tx);font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+#n-modal-titles{flex:1;min-width:0;}
+#n-modal-src{font-size:10px;color:var(--mu);margin-bottom:2px;}
+#n-modal-title{font-size:13px;font-weight:500;color:var(--tx);line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+#n-modal-acts{display:flex;gap:6px;flex-shrink:0;}
+.n-act-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--b2);
+  background:var(--card);font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;}
+#n-modal-body{flex:1;overflow-y:auto;padding:14px 16px 40px;-webkit-overflow-scrolling:touch;}
+.n-modal-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+.n-modal-tag{font-size:11px;padding:3px 9px;border-radius:8px;
+  background:var(--card);border:1px solid var(--b2);color:var(--tx);}
+.n-modal-txt{font-size:14px;color:var(--tx);line-height:1.85;}
+.n-modal-en{font-size:12px;color:var(--fa);line-height:1.65;margin-top:14px;
+  padding-top:12px;border-top:1px solid var(--b);}
+.n-modal-en-lbl{font-size:10px;color:var(--mu);text-transform:uppercase;
+  letter-spacing:.06em;margin-bottom:5px;}
+.n-modal-link{display:inline-block;margin-top:14px;font-size:12px;color:var(--bl);text-decoration:none;}
+.n-translating{color:var(--mu);font-size:13px;line-height:1.8;padding:8px 0;}
+/* 이벤트 */
+.ev-banner{background:var(--gd);border:1px solid var(--gb);border-radius:11px;
+  margin:10px 12px;padding:11px 13px;}
 .ev-d-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
 .ev-dday{font-size:22px;font-weight:500;color:var(--gold);font-family:monospace;}
 .ev-nm{font-size:13px;font-weight:500;color:var(--tx);}
@@ -193,14 +195,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 .ev-val{background:rgba(255,255,255,.06);border-radius:7px;padding:5px 6px;text-align:center;}
 .ev-vl{font-size:9px;color:var(--mu);margin-bottom:2px;}
 .ev-vn{font-size:12px;font-weight:500;font-family:monospace;}
-.ev-sc{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;}
-.ev-sc-box{border-radius:7px;padding:6px 7px;}
-.ev-sc-t{font-size:9px;font-weight:500;margin-bottom:3px;}
-.ev-sc-c{font-size:10px;line-height:1.45;color:var(--tx);}
-.ev-lbl{font-size:10px;color:var(--mu);padding:8px 12px 3px;
-  text-transform:uppercase;letter-spacing:.06em;}
+.ev-scs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;}
+.ev-sc{border-radius:7px;padding:6px 7px;}
+.ev-st{font-size:9px;font-weight:500;margin-bottom:3px;}
+.ev-sc-c{font-size:10px;color:var(--tx);line-height:1.45;}
 .ev-list{padding:0 12px;}
-.ev-row{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--b);cursor:pointer;}
+.ev-row{display:flex;align-items:center;gap:9px;padding:9px 0;
+  border-bottom:1px solid var(--b);cursor:pointer;}
 .ev-dt{font-size:9px;color:var(--mu);text-align:center;width:28px;flex-shrink:0;line-height:1.4;}
 .ev-info{flex:1;}
 .ev-rn{font-size:13px;color:var(--tx);}
@@ -210,16 +211,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 .eb-s{background:rgba(245,158,11,.12);color:var(--gold);}
 .eb-p{background:rgba(139,148,158,.08);color:var(--mu);}
 .eb-d{background:rgba(63,185,80,.12);color:var(--up);}
-.ev-body{display:none;padding:8px 0 6px;margin-left:37px;}
+.ev-body{display:none;padding:8px 0 6px;}
 .ev-body.on{display:block;}
 .ev-desc{font-size:11px;color:var(--mu);line-height:1.65;margin-bottom:7px;}
-.ev-sc2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;}
-.ev-s{border-radius:7px;padding:6px 8px;}
-.ev-st{font-size:9px;font-weight:500;margin-bottom:3px;}
-.ev-sc2 .ev-s .ev-st{color:inherit;}
-.ev-sc2 .ev-s p{font-size:10px;color:var(--tx);line-height:1.45;}
-
-/* ── 분석 탭 ── */
+/* 분석 */
 .an-banner{background:var(--card);border:1px solid var(--b);border-radius:11px;
   margin:10px 12px 8px;padding:10px 13px;display:flex;align-items:flex-start;gap:8px;}
 .an-dot{width:9px;height:9px;border-radius:50%;margin-top:3px;flex-shrink:0;}
@@ -228,12 +223,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
   color:var(--mu);padding:4px 12px 5px;}
 .an-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 12px;margin-bottom:8px;}
 .an-c{background:var(--card);border:1px solid var(--b);border-radius:10px;padding:9px 10px;}
-.an-cl{font-size:9px;color:var(--mu);margin-bottom:4px;display:flex;align-items:center;gap:3px;}
+.an-cl{font-size:9px;color:var(--mu);margin-bottom:4px;}
 .an-cv{font-size:16px;font-weight:500;font-family:monospace;}
 .an-cg{font-size:9px;font-family:monospace;margin-top:1px;}
 .an-cm{height:22px;margin-top:5px;border-radius:4px;background:rgba(255,255,255,.04);overflow:hidden;}
 .an-corr-wrap{padding:0 12px;margin-bottom:8px;}
-.an-corr-lbl{font-size:10px;color:var(--mu);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;}
+.an-corr-lbl{font-size:10px;color:var(--mu);margin-bottom:6px;}
 .an-cr{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
 .an-cn{font-size:11px;color:var(--mu);width:75px;flex-shrink:0;}
 .an-cb{flex:1;height:5px;background:var(--b2);border-radius:3px;overflow:hidden;}
@@ -246,259 +241,64 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
 .an-pr{display:flex;justify-content:space-between;align-items:center;}
 .an-pv{font-size:13px;font-weight:500;}
 .an-pd{font-size:10px;color:var(--mu);}
-.an-chg-wrap{padding:0 12px;margin-bottom:10px;}
-.an-chg-lbl{font-size:10px;color:var(--mu);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;}
-.an-chg-row{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
-.an-chg-nm{font-size:11px;color:var(--mu);width:75px;flex-shrink:0;}
-.an-chg-bw{flex:1;height:5px;background:var(--b2);border-radius:3px;overflow:hidden;}
-.an-chg-b{height:100%;border-radius:3px;}
-.an-chg-v{font-size:10px;font-family:monospace;width:50px;text-align:right;flex-shrink:0;}
-
-/* ══════════════════════════════════
-   뉴스 시스템
-══════════════════════════════════ */
-/* 상단 필터 바 */
-.n-filterbar{display:flex;gap:5px;padding:8px 12px 5px;overflow-x:auto;scrollbar-width:none;align-items:center;}
-.n-filterbar::-webkit-scrollbar{display:none;}
-.n-fbtn{font-size:10px;padding:4px 11px;border-radius:14px;border:1px solid var(--b2);
-  color:var(--mu);white-space:nowrap;flex-shrink:0;cursor:pointer;
-  background:transparent;font-family:inherit;transition:all .15s;}
-.n-fbtn.on{background:var(--gd);border-color:var(--gb);color:var(--gold);}
-.n-fbtn.saved-on{background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.35);color:#FFD700;}
-.n-count{font-size:9px;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.1);margin-left:3px;}
-
-/* 태그 필터 */
-.n-tagbar{display:flex;gap:4px;padding:0 12px 6px;overflow-x:auto;scrollbar-width:none;}
-.n-tagbar::-webkit-scrollbar{display:none;}
-.n-tag-btn{font-size:10px;padding:3px 9px;border-radius:10px;border:1px solid var(--b);
-  color:var(--mu);white-space:nowrap;flex-shrink:0;cursor:pointer;
-  background:var(--bg2);font-family:inherit;}
-.n-tag-btn.on{background:var(--card);border-color:var(--b2);color:var(--tx);}
-
-/* 기사 목록 */
-.n-divider{font-size:10px;color:var(--mu);padding:6px 12px 3px;
-  text-transform:uppercase;letter-spacing:.06em;
-  border-top:1px solid var(--b);margin-top:2px;}
-.n-row{display:flex;align-items:center;padding:10px 12px;
-  border-bottom:1px solid var(--b);cursor:pointer;
-  transition:background .12s;position:relative;overflow:hidden;
-  user-select:none;}
-.n-row:active{background:rgba(255,255,255,.04);}
-.n-row.read{opacity:.55;}
-.n-row.hidden-item{display:none;}
-
-/* 상태 아이콘 */
-.n-status{width:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;}
-.n-dot{width:7px;height:7px;border-radius:50%;background:var(--bl);flex-shrink:0;}
-.n-star{color:#FFD700;font-size:12px;}
-
-/* 태그 칩 */
-.n-tags{display:flex;gap:3px;flex-wrap:wrap;margin-top:3px;}
-.n-chip{font-size:9px;padding:1px 5px;border-radius:5px;
-  background:rgba(255,255,255,.07);color:var(--mu);}
-
-/* 기사 제목 */
-.n-title{flex:1;min-width:0;}
-.n-ttl{font-size:13px;color:var(--tx);line-height:1.4;margin-bottom:2px;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.n-ttl.unread{font-weight:500;}
-.n-meta-row{display:flex;align-items:center;gap:5px;}
-.n-src{font-size:10px;color:var(--mu);}
-.n-tm{font-size:10px;color:var(--fa);}
-.n-tl-status{font-size:9px;color:var(--mu);}
-
-/* 스와이프 힌트 */
-.n-swipe-hint{position:absolute;right:0;top:0;bottom:0;width:60px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;pointer-events:none;opacity:0;transition:opacity .15s;}
-.n-swipe-l{left:0;right:auto;background:rgba(248,81,73,.2);}
-.n-swipe-r{background:rgba(255,215,0,.2);}
-
-/* 기사 상세 모달 */
-#n-modal{
-  position:fixed;
-  top:0;left:0;right:0;bottom:0;
-  z-index:99999 !important;
-  background:var(--bg2);
-  display:none;
-  flex-direction:column;
-  padding-top:var(--HDR);
-}
-#n-modal.open{display:flex;}
-#n-modal-hdr{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 14px;
-  background:var(--bg2);
-  border-bottom:1px solid var(--b2);
-  flex-shrink:0;
-}
-#n-modal-back{
-  width:38px;height:38px;border-radius:50%;
-  border:1px solid var(--b2);background:var(--card);
-  color:var(--tx);font-size:20px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;line-height:1;
-}
-#n-modal-title-wrap{flex:1;min-width:0;}
-#n-modal-src-line{font-size:10px;color:var(--mu);margin-bottom:3px;}
-#n-modal-title{
-  font-size:14px;font-weight:500;color:var(--tx);line-height:1.45;
-  display:-webkit-box;-webkit-line-clamp:3;
-  -webkit-box-orient:vertical;overflow:hidden;
-}
-#n-modal-actions{display:flex;gap:6px;flex-shrink:0;}
-.n-modal-btn{
-  width:34px;height:34px;border-radius:50%;
-  border:1px solid var(--b2);background:var(--card);
-  font-size:16px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-}
-#n-modal-body{
-  flex:1;overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  padding:14px 16px 40px;
-}
-#n-modal-body{padding:14px 16px 30px;flex:1;}
-.n-modal-src{font-size:11px;color:var(--mu);margin-bottom:12px;display:flex;gap:8px;align-items:center;}
-.n-modal-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;}
-.n-modal-tag{font-size:11px;padding:3px 9px;border-radius:8px;
-  background:var(--card);border:1px solid var(--b2);color:var(--tx);}
-.n-modal-txt{font-size:14px;color:var(--tx);line-height:1.85;white-space:pre-wrap;}
-.n-modal-orig{margin-top:16px;padding-top:12px;border-top:1px solid var(--b);}
-.n-modal-orig-lbl{font-size:10px;color:var(--mu);text-transform:uppercase;
-  letter-spacing:.06em;margin-bottom:6px;}
-.n-modal-en{font-size:12px;color:var(--fa);line-height:1.65;}
-.n-modal-link{display:inline-block;margin-top:12px;font-size:12px;
-  color:var(--bl);text-decoration:none;}
-.n-loading-bar{height:2px;background:var(--gd);
-  animation:loading-bar 1.5s ease-in-out infinite;}
-@keyframes loading-bar{0%{width:0;opacity:.5}50%{width:70%;opacity:1}100%{width:100%;opacity:.3}}
-.n-translating{font-size:12px;color:var(--mu);padding:20px;text-align:center;}
-.n-empty{padding:40px 20px;text-align:center;color:var(--mu);font-size:13px;line-height:1.7;}
-.n-empty button{margin-top:8px;cursor:pointer;}
-
-/* 액션 메뉴 */
-#n-action-menu{position:fixed;bottom:0;left:0;right:0;z-index:900;
-  background:var(--bg2);border-top:1px solid var(--b2);
-  border-radius:20px 20px 0 0;padding:16px;
-  transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);}
-#n-action-menu.open{transform:translateY(0);}
-.n-menu-title{font-size:13px;color:var(--mu);text-align:center;margin-bottom:14px;}
-.n-menu-item{display:flex;align-items:center;gap:12px;padding:13px 6px;
-  border-bottom:1px solid var(--b);cursor:pointer;font-size:14px;color:var(--tx);}
-.n-menu-item:last-child{border:none;}
-.n-menu-ico{font-size:20px;width:30px;text-align:center;}
-#n-action-overlay{position:fixed;inset:0;z-index:899;display:none;}
-#n-action-overlay.open{display:block;}
+@keyframes spin2{to{transform:rotate(360deg);}}
+.loading-spin{display:inline-block;width:14px;height:14px;border:2px solid var(--b2);
+  border-top-color:var(--gold);border-radius:50%;animation:spin2 .7s linear infinite;vertical-align:middle;}
 </style>
 </head>
 <body>
-
 <div id="hdr">
   <div id="hdr-ico">🥇</div>
   <div id="hdr-info">
     <div id="hdr-title">CFD Monitor</div>
-    <div id="hdr-sub">로딩 중... <span style="color:var(--fa);">·</span> <span id="hdr-ver"></span></div>
+    <div id="hdr-sub">v3.1 · 로딩 중...</div>
   </div>
   <button id="hdr-btn" onclick="refresh()">↻</button>
 </div>
-
 <div class="wrap">
-
-  <!-- ① 트리 -->
+  <!-- 트리 -->
   <div id="p-tree" class="pane on">
-    <div class="banner">
-      <span style="font-size:16px;flex-shrink:0">🔍</span>
-      <span id="bnr-txt">분석 중...</span>
-    </div>
-    <div class="tree-hint">← 좌우 스크롤</div>
+    <div class="banner"><span style="font-size:16px;flex-shrink:0">🔍</span><span id="bnr-txt">분석 중...</span></div>
+    <div class="tree-hint">← 좌우 스크롤 · 노드 탭하면 상세</div>
     <div id="tree-scroll"></div>
-    <div style="height:16px;"></div>
+    <div id="tree-guide" style="margin:10px 12px;background:var(--card);border:1px solid var(--b);border-radius:11px;padding:12px 14px;">
+      <div style="font-size:11px;color:var(--mu);margin-bottom:6px;">📖 트리 사용법</div>
+      <div style="font-size:12px;color:var(--mu);line-height:1.7;">① 좌→우 스크롤: Lv1(원자재) → 결과(자산)<br>② 노드 탭: 인과체인 + 금 영향 표시<br>③ <span style="color:var(--up);">초록 →+</span> 양의 영향 / <span style="color:var(--dn);">빨강 →−</span> 음의 영향</div>
+    </div>
     <div style="height:16px;"></div>
   </div>
-
-  <!-- ② 용어사전 -->
+  <!-- 용어 -->
   <div id="p-gloss" class="pane">
-    <div class="g-search-wrap">
-      <div class="g-search">
-        <span>🔍</span>
-        <input id="g-input" type="search" placeholder="지표 검색..." oninput="filterGloss()">
-      </div>
-    </div>
+    <div class="g-search-wrap"><div class="g-search"><span>🔍</span><input id="g-input" type="search" placeholder="지표 검색..." oninput="renderGloss()"></div></div>
     <div class="g-cats" id="g-cats"></div>
     <div id="g-list"></div>
     <div style="height:16px;"></div>
   </div>
-
-  <!-- ③ 뉴스 -->
+  <!-- 뉴스 -->
   <div id="p-news" class="pane">
-    <!-- 상태 필터 -->
     <div class="n-filterbar" id="n-filterbar"></div>
-    <!-- 태그 필터 -->
     <div class="n-tagbar" id="n-tagbar"></div>
-    <!-- 기사 목록 -->
     <div id="n-list"></div>
-    <div style="height:20px;"></div>
+    <div style="height:16px;"></div>
   </div>
-
-  <!-- 기사 상세 모달 -->
-  <div id="n-modal">
-    <div id="n-modal-hdr">
-      <button id="n-modal-back" onclick="closeModal()">←</button>
-      <div id="n-modal-title-wrap">
-        <div id="n-modal-src-line"></div>
-        <div id="n-modal-title"></div>
-      </div>
-      <div id="n-modal-actions">
-        <button class="n-modal-btn" id="n-modal-star" onclick="modalToggleSave()">☆</button>
-        <button class="n-modal-btn" onclick="modalHide()" title="숨김">🚫</button>
-      </div>
-    </div>
-    <div id="n-modal-body"></div>
-  </div>
-
-  <!-- 액션 메뉴 -->
-  <div id="n-action-overlay" onclick="closeActionMenu()"></div>
-  <div id="n-action-menu">
-    <div class="n-menu-title" id="n-menu-title">기사 관리</div>
-    <div class="n-menu-item" onclick="menuAction('save')"><span class="n-menu-ico">⭐</span>저장하기</div>
-    <div class="n-menu-item" onclick="menuAction('unsave')"><span class="n-menu-ico">☆</span>저장 해제</div>
-    <div class="n-menu-item" onclick="menuAction('unread')"><span class="n-menu-ico">🔵</span>안읽음으로 표시</div>
-    <div class="n-menu-item" onclick="menuAction('hide')"><span class="n-menu-ico">🚫</span>숨기기 (1일 후 삭제)</div>
-    <div class="n-menu-item" onclick="closeActionMenu()" style="color:var(--mu)"><span class="n-menu-ico">✕</span>취소</div>
-  </div>
-
-  <!-- ④ 이벤트 -->
+  <!-- 이벤트 -->
   <div id="p-ev" class="pane">
-    <div class="ev-top" id="ev-banner"></div>
-    <div class="ev-lbl">예정 일정</div>
+    <div id="ev-banner"></div>
+    <div style="font-size:10px;color:var(--mu);padding:6px 12px 3px;text-transform:uppercase;letter-spacing:.06em;">예정 일정</div>
     <div class="ev-list" id="ev-list"></div>
     <div style="height:16px;"></div>
   </div>
-
-  <!-- ⑤ 분석 -->
+  <!-- 분석 -->
   <div id="p-an" class="pane">
-    <div class="an-banner" id="an-banner">
-      <div class="an-dot" id="an-dot"></div>
-      <div class="an-txt" id="an-txt">데이터 로딩 중...</div>
-    </div>
+    <div class="an-banner"><div class="an-dot" id="an-dot" style="background:var(--mu);"></div><div class="an-txt" id="an-txt">데이터 로딩 중...</div></div>
     <div class="an-sec">📊 지표 현황</div>
     <div class="an-grid" id="an-grid"></div>
-    <div class="an-chg-wrap">
-      <div class="an-chg-lbl">🔥 변동 순위</div>
-      <div id="an-chg"></div>
-    </div>
-    <div class="an-corr-wrap">
-      <div class="an-corr-lbl">🔗 금 상관관계 (30일)</div>
-      <div id="an-corr"></div>
-    </div>
+    <div class="an-corr-wrap"><div class="an-corr-lbl">🔗 금 상관관계</div><div id="an-corr"></div></div>
     <div class="an-pos" id="an-pos"></div>
     <div style="height:16px;"></div>
   </div>
-
 </div>
-
-<!-- 선택 패널 (body 레벨, fixed) -->
+<!-- 선택 패널 -->
 <div id="sel-panel">
   <div id="sel-topbar">
     <div id="sel-drag"></div>
@@ -506,27 +306,43 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
   </div>
   <div id="sel-inner">
     <div id="sel-name"></div>
-    <div style="font-size:9px;color:var(--mu);margin-bottom:4px;">⚡ 인과 체인 → 금까지</div>
+    <div id="sel-val"></div>
+    <div class="sel-label">⚡ 인과 체인 → 금까지</div>
     <div id="sel-chain"></div>
-    <div style="font-size:9px;color:var(--mu);margin-bottom:4px;">금(XAU)에 미치는 영향</div>
+    <div class="sel-label" style="margin-top:6px;">금(XAU)에 미치는 영향</div>
     <div id="sel-impact"></div>
   </div>
 </div>
-
+<!-- 뉴스 모달 -->
+<div id="n-modal">
+  <div id="n-modal-hdr">
+    <button id="n-modal-back" onclick="closeModal()">←</button>
+    <div id="n-modal-titles">
+      <div id="n-modal-src"></div>
+      <div id="n-modal-title"></div>
+    </div>
+    <div id="n-modal-acts">
+      <button class="n-act-btn" id="n-modal-star" onclick="modalStar()">☆</button>
+      <button class="n-act-btn" onclick="modalHide()">🚫</button>
+    </div>
+  </div>
+  <div id="n-modal-body"></div>
+</div>
 <nav id="nav">
-  <button class="nb on" onclick="goTab('tree')"   id="nb-tree">  <span class="nb-i">🌐</span>트리</button>
-  <button class="nb"    onclick="goTab('gloss')"  id="nb-gloss"> <span class="nb-i">📖</span>용어</button>
-  <button class="nb"    onclick="goTab('news')"   id="nb-news">  <span class="nb-i">📰</span>뉴스</button>
-  <button class="nb"    onclick="goTab('ev')"     id="nb-ev">    <span class="nb-i">📅</span>이벤트</button>
-  <button class="nb"    onclick="goTab('an')"     id="nb-an">    <span class="nb-i">🔎</span>분석</button>
+  <button class="nb on" onclick="goTab('tree')"  id="nb-tree">  <span class="nb-i">🌐</span>트리</button>
+  <button class="nb"    onclick="goTab('gloss')" id="nb-gloss"> <span class="nb-i">📖</span>용어</button>
+  <button class="nb"    onclick="goTab('news')"  id="nb-news">  <span class="nb-i">📰</span>뉴스</button>
+  <button class="nb"    onclick="goTab('ev')"    id="nb-ev">    <span class="nb-i">📅</span>이벤트</button>
+  <button class="nb"    onclick="goTab('an')"    id="nb-an">    <span class="nb-i">🔎</span>분석</button>
 </nav>
-
 <script>
-const APP_VER='v3.0';
-// ══════════════════════════════════════════
-// 데이터 정의
-// ══════════════════════════════════════════
-const COL={
+'use strict';
+// ═══════════════════════════════════════════
+// 상수
+// ═══════════════════════════════════════════
+const VER = 'v3.1';
+
+const COL = {
   cm:{f:'#3A2102',s:'#D28418',t:'#FAC775'},
   lb:{f:'#023024',s:'#189169',t:'#50C89B'},
   if:{f:'#421507',s:'#CA4C28',t:'#F29673'},
@@ -541,64 +357,55 @@ const COL={
   eq:{f:'#0A1E0D',s:'#38AC48',t:'#78D78E'},
 };
 
-// 레벨 정의 (가로 배치)
-const LEVELS=[
-  {id:'lv1',label:'Lv1 원자재',c:'cm',
-    nodes:[
-      {id:'wti',  ico:'🛢️',lbl:'WTI유가', sym:'CL=F',  c:'cm'},
-      {id:'cu',   ico:'🟡',lbl:'구리',    sym:'HG=F',  c:'cm'},
-      {id:'ism_m',ico:'🏭',lbl:'ISM제조', sym:null,    c:'lb'},
-      {id:'ism_s',ico:'🏪',lbl:'ISM서비', sym:null,    c:'lb'},
-      {id:'retail',ico:'🛒',lbl:'소매판매',sym:null,   c:'lb'},
-    ]},
-  {id:'lv2',label:'Lv2 고용',c:'lb',
-    nodes:[
-      {id:'ui_wk',ico:'📋',lbl:'주간실업', sym:null,   c:'lb'},
-      {id:'nfp',  ico:'👷',lbl:'NFP',      sym:null,   c:'lb'},
-      {id:'wage', ico:'💰',lbl:'임금',     sym:null,   c:'lb'},
-      {id:'unemp',ico:'📉',lbl:'실업률',   sym:null,   c:'lb'},
-    ]},
-  {id:'lv3',label:'Lv3 인플레',c:'if',
-    nodes:[
-      {id:'ppi',ico:'🏭',lbl:'PPI',     sym:null,  c:'if'},
-      {id:'cpi',ico:'📊',lbl:'CPI',     sym:null,  c:'if'},
-      {id:'pce',ico:'📋',lbl:'PCE',     sym:null,  c:'if'},
-      {id:'bei',ico:'🔮',lbl:'BEI',     sym:null,  c:'if'},
-      {id:'gdp',ico:'🌐',lbl:'GDP',     sym:null,  c:'bl'},
-      {id:'conf',ico:'😊',lbl:'소비심리', sym:null, c:'bl'},
-    ]},
-  {id:'lv4',label:'Lv4 통화정책',c:'po',
-    nodes:[
-      {id:'fed_sp',ico:'🎙️',lbl:'연준발언',sym:null, c:'po'},
-      {id:'fomc',  ico:'⚖️',lbl:'FOMC',   sym:null, c:'po',star:true},
-      {id:'qe',    ico:'📜',lbl:'QE/QT',  sym:null, c:'po'},
-    ]},
-  {id:'lv5',label:'Lv5 시장지표',c:'rt',
-    nodes:[
-      {id:'tnx',ico:'📈',lbl:'10Y금리', sym:'^TNX',     c:'rt'},
-      {id:'dxy',ico:'💵',lbl:'DXY달러', sym:'DX-Y.NYB', c:'dl'},
-      {id:'spr',ico:'〰️',lbl:'스프레드',sym:null,       c:'rt'},
-      {id:'vix',ico:'😱',lbl:'VIX',     sym:'^VIX',     c:'fe'},
-    ]},
-  {id:'lv6',label:'Lv6 수요',c:'dm',
-    nodes:[
-      {id:'cot',   ico:'📑',lbl:'COT',   sym:null,    c:'dm'},
-      {id:'cb_buy',ico:'🏦',lbl:'중앙은행',sym:null,  c:'dm'},
-      {id:'etf',   ico:'📦',lbl:'금ETF', sym:null,    c:'dm'},
-      {id:'cny',   ico:'🇨🇳',lbl:'위안화',sym:'CNY=X', c:'dl'},
-    ]},
-  {id:'lv7',label:'결과자산',c:'rs',
-    nodes:[
-      {id:'gold',  ico:'🏅',lbl:'금XAU',  sym:'GC=F', c:'rs', star:true},
-      {id:'silver',ico:'🥈',lbl:'은XAG',  sym:'SI=F', c:'rs2'},
-      {id:'sp500', ico:'📊',lbl:'S&P500', sym:null,   c:'eq'},
-      {id:'bond',  ico:'📄',lbl:'채권',   sym:null,   c:'rt'},
-      {id:'re',    ico:'🏠',lbl:'부동산', sym:null,   c:'lb'},
-    ]},
+const LEVELS = [
+  {id:'lv1',label:'Lv1 원자재',c:'cm',nodes:[
+    {id:'wti',  ico:'🛢️',lbl:'WTI유가', sym:'CL=F',   c:'cm'},
+    {id:'cu',   ico:'🟡',lbl:'구리',    sym:'HG=F',   c:'cm'},
+    {id:'ism_m',ico:'🏭',lbl:'ISM제조', sym:null,     c:'lb'},
+    {id:'ism_s',ico:'🏪',lbl:'ISM서비', sym:null,     c:'lb'},
+    {id:'retail',ico:'🛒',lbl:'소매판매',sym:null,    c:'lb'},
+  ]},
+  {id:'lv2',label:'Lv2 고용',c:'lb',nodes:[
+    {id:'ui_wk',ico:'📋',lbl:'주간실업', sym:null,    c:'lb'},
+    {id:'nfp',  ico:'👷',lbl:'NFP',      sym:null,    c:'lb'},
+    {id:'wage', ico:'💰',lbl:'임금',     sym:null,    c:'lb'},
+    {id:'unemp',ico:'📉',lbl:'실업률',   sym:null,    c:'lb'},
+  ]},
+  {id:'lv3',label:'Lv3 인플레',c:'if',nodes:[
+    {id:'ppi',  ico:'🏭',lbl:'PPI',    sym:null,  c:'if'},
+    {id:'cpi',  ico:'📊',lbl:'CPI',    sym:null,  c:'if'},
+    {id:'pce',  ico:'📋',lbl:'PCE',    sym:null,  c:'if'},
+    {id:'bei',  ico:'🔮',lbl:'BEI',    sym:null,  c:'if'},
+    {id:'gdp',  ico:'🌐',lbl:'GDP',    sym:null,  c:'bl'},
+    {id:'conf', ico:'😊',lbl:'소비심리',sym:null,  c:'bl'},
+  ]},
+  {id:'lv4',label:'Lv4 통화정책',c:'po',nodes:[
+    {id:'fed_sp',ico:'🎙️',lbl:'연준발언',sym:null, c:'po'},
+    {id:'fomc',  ico:'⚖️',lbl:'FOMC',   sym:null, c:'po'},
+    {id:'qe',    ico:'📜',lbl:'QE/QT',  sym:null, c:'po'},
+  ]},
+  {id:'lv5',label:'Lv5 시장지표',c:'rt',nodes:[
+    {id:'tnx', ico:'📈',lbl:'10Y금리', sym:'^TNX',     c:'rt'},
+    {id:'dxy', ico:'💵',lbl:'DXY달러', sym:'DX-Y.NYB', c:'dl'},
+    {id:'spr', ico:'〰️',lbl:'스프레드',sym:null,       c:'rt'},
+    {id:'vix', ico:'😱',lbl:'VIX',     sym:'^VIX',     c:'fe'},
+  ]},
+  {id:'lv6',label:'Lv6 수요',c:'dm',nodes:[
+    {id:'cot',   ico:'📑',lbl:'COT',   sym:null,     c:'dm'},
+    {id:'cb_buy',ico:'🏦',lbl:'중앙은행',sym:null,   c:'dm'},
+    {id:'etf',   ico:'📦',lbl:'금ETF', sym:null,     c:'dm'},
+    {id:'cny',   ico:'🇨🇳',lbl:'위안화',sym:'CNY=X', c:'dl'},
+  ]},
+  {id:'lv7',label:'결과자산',c:'rs',nodes:[
+    {id:'gold',  ico:'🏅',lbl:'금XAU',  sym:'GC=F', c:'rs'},
+    {id:'silver',ico:'🥈',lbl:'은XAG',  sym:'SI=F', c:'rs2'},
+    {id:'sp500', ico:'📊',lbl:'S&P500', sym:null,   c:'eq'},
+    {id:'bond',  ico:'📄',lbl:'채권',   sym:null,   c:'rt'},
+    {id:'re',    ico:'🏠',lbl:'부동산', sym:null,   c:'lb'},
+  ]},
 ];
 
-// 에지: [from, to, polarity]
-const EDGES=[
+const EDGES = [
   ['wti','ppi',1],['wti','cpi',1],['wti','pce',1],['wti','bei',1],
   ['cu','gdp',1],['cu','conf',1],
   ['ism_m','gdp',1],['ism_m','conf',1],
@@ -607,8 +414,7 @@ const EDGES=[
   ['ui_wk','nfp',-1],['ui_wk','unemp',1],
   ['nfp','fomc',1],['nfp','unemp',-1],
   ['wage','cpi',1],['wage','pce',1],
-  ['unemp','fomc',-1],['conf','cpi',1],
-  ['ppi','cpi',1],
+  ['unemp','fomc',-1],['conf','cpi',1],['ppi','cpi',1],
   ['cpi','fomc',1],['pce','fomc',1],
   ['bei','tnx',1],['bei','gold',1],
   ['gdp','fomc',1],['fed_sp','fomc',1],
@@ -622,1401 +428,863 @@ const EDGES=[
   ['fomc','sp500',-1],['fomc','re',-1],
 ];
 
-// 연결수
-const DEG={};
-EDGES.forEach(([f,t])=>{DEG[f]=(DEG[f]||0)+1;DEG[t]=(DEG[t]||0)+1;});
+const DEG = {};
+EDGES.forEach(([f,t]) => { DEG[f]=(DEG[f]||0)+1; DEG[t]=(DEG[t]||0)+1; });
 
-// 노드 ID → 레벨/노드 빠른 조회
-const NODE_MAP={};
-LEVELS.forEach(lv=>lv.nodes.forEach(nd=>{NODE_MAP[nd.id]={...nd,lvId:lv.id};}));
+const NODE_MAP = {};
+LEVELS.forEach(lv => lv.nodes.forEach(nd => { NODE_MAP[nd.id] = {...nd, lvId:lv.id}; }));
 
-// 지표 심볼
-const SYMS={gold:'GC=F',silver:'SI=F',dxy:'DX-Y.NYB',tnx:'^TNX',irx:'^IRX',wti:'CL=F',vix:'^VIX',cu:'HG=F',cny:'CNY=X'};
+const SYMS = {gold:'GC=F',silver:'SI=F',dxy:'DX-Y.NYB',tnx:'^TNX',irx:'^IRX',wti:'CL=F',vix:'^VIX',cu:'HG=F',cny:'CNY=X'};
 
-// 용어사전 데이터
-const GLOSS_DATA=[
-  {id:'wti',  ico:'🛢️',name:'WTI 유가',         lv:'Lv1',freq:'실시간',c:'cm',
-   desc:'OPEC+ 결정, 지정학 위기, EIA 원유재고(매주 수요일)가 주요 변동 요인. 인플레이션 기대의 선행지표.',
-   bull:'고유가 → 인플레이션 기대↑ → 금 헤지 수요↑ → 금↑',
-   bear:'유가 급락 → 인플레이션 기대↓ → 금 헤지 매력↓ → 금↓'},
-  {id:'cu',   ico:'🟡',name:'구리 (Dr.Copper)',  lv:'Lv1',freq:'실시간',c:'cm',
-   desc:'글로벌 경기 선행지표. 구리↑ = 경기 회복 신호. 산업·건설 수요 반영.',
-   bull:'구리↓ → 경기 수축 신호 → 안전자산 수요↑ → 금↑',
-   bear:'구리↑ → 경기 회복 → 위험선호 → 금 안전자산 프리미엄↓'},
-  {id:'ism_m',ico:'🏭',name:'ISM 제조업 PMI',    lv:'Lv1',freq:'월 1회 (월초)',c:'lb',
-   desc:'50 이상=확장, 이하=수축. 구매관리자 설문 기반 경기 선행지표.',
-   bull:'PMI↓ → 경기 수축 → 금리 인하 기대 → 금↑',
-   bear:'PMI↑ → 경기 강세 → 금리 유지 → 금↓'},
-  {id:'ism_s',ico:'🏪',name:'ISM 서비스업 PMI',  lv:'Lv1',freq:'월 1회 (월초)',c:'lb',
-   desc:'미국 GDP의 약 70%를 차지하는 서비스업 경기 지수. 제조업보다 더 중요.',
-   bull:'PMI↓ → 서비스 경기 수축 → 금리 인하 기대 → 금↑',
-   bear:'PMI↑ → 서비스 강세 → 임금·물가 압력 → 금↓'},
-  {id:'retail',ico:'🛒',name:'소매판매',          lv:'Lv1',freq:'월 1회 (중순)',c:'lb',
-   desc:'미국 소비 동향. GDP의 약 70%가 소비이므로 소매판매 감소는 경기 침체 조기 신호.',
-   bull:'소매↓ → 소비 위축 → 경기 침체 우려 → 금↑',
-   bear:'소매↑ → 소비 강세 → 인플레이션 유지 → 금↓'},
-  {id:'ui_wk',ico:'📋',name:'주간 실업수당 청구', lv:'Lv2',freq:'주 1회 (목요일)',c:'lb',
-   desc:'매주 목요일 발표. NFP보다 빠른 고용시장 실시간 모니터링 지표.',
-   bull:'청구 급증 → 고용 악화 → 금리 인하 기대 → 금↑',
-   bear:'청구 감소 → 고용 강세 → 연준 매파 유지 → 금↓'},
-  {id:'nfp',  ico:'👷',name:'NFP 비농업 고용',    lv:'Lv2',freq:'월 1회 (첫째주 금)',c:'lb',
-   desc:'매월 첫 금요일 발표. 연준 양대 책무 중 고용 지표. 실업률·임금과 함께 발표.',
-   bull:'NFP 부진 → 금리 인하 기대 → 달러 약세 → 금↑',
-   bear:'NFP 호조 → 경제 강세 → 금리 유지 → 금↓'},
-  {id:'wage', ico:'💰',name:'평균 시간당 임금',   lv:'Lv2',freq:'월 1회 (NFP와 동시)',c:'lb',
-   desc:'NFP 발표와 함께 공개. 임금 상승은 서비스업 2차 인플레이션을 일으켜 연준이 가장 주시.',
-   bull:'임금↓ → 서비스 물가 압력↓ → 금리 인하 → 금↑',
-   bear:'임금↑ → 서비스 인플레이션 → 금리 유지 → 금↓'},
-  {id:'unemp',ico:'📉',name:'실업률',             lv:'Lv2',freq:'월 1회 (NFP와 동시)',c:'lb',
-   desc:'후행지표. 실업률이 오르기 시작했다면 이미 경기는 식어있음. 연준 최대 고용 목표 기준.',
-   bull:'실업률↑ → 경기 둔화 확인 → 금리 인하 압력 → 금↑',
-   bear:'실업률↓ (완전고용) → 연준 금리 유지 명분 → 금↓'},
-  {id:'ppi',  ico:'🏭',name:'PPI 생산자물가',     lv:'Lv3',freq:'월 1회',c:'if',
-   desc:'공장 출하 단계의 물가. CPI보다 1~2개월 선행하는 인플레이션 선행지표.',
-   bull:'PPI↓ → CPI 하락 예고 → 금리 인하 기대 → 금↑',
-   bear:'PPI↑ → CPI 상승 압력 → 금리 유지 → 금↓'},
-  {id:'cpi',  ico:'📊',name:'CPI 소비자물가',     lv:'Lv3',freq:'월 1회 (두번째주 수요일)',c:'if',
-   desc:'연준 목표 2%. Core CPI(식품·에너지 제외)가 핵심. 발표 당일 금·채권·달러 즉각 반응.',
-   bull:'CPI↓ → 인플레이션 진정 → 금리 인하 기대 → 실질금리↓ → 금↑',
-   bear:'CPI↑ → 인플레이션 지속 → 금리 유지 → 금 기회비용↑ → 금↓'},
-  {id:'pce',  ico:'📋',name:'PCE 개인소비지출물가',lv:'Lv3',freq:'월 1회 (월말)',c:'if',
-   desc:'연준이 공식 목표로 사용하는 인플레이션 지표. CPI보다 더 넓은 품목, 대체재 효과 반영.',
-   bull:'PCE↓ (2% 접근) → 연준 목표 달성 → 금리 인하 명분 → 금↑',
-   bear:'PCE↑ (2% 초과) → 연준 목표 미달 → 금리 유지 → 금↓'},
-  {id:'bei',  ico:'🔮',name:'BEI 기대인플레이션', lv:'Lv3',freq:'실시간',c:'if',
-   desc:'TIPS 스프레드로 산출. 시장이 예상하는 향후 10년 인플레이션 수준.',
-   bull:'BEI↑ → 실질금리↓ → 금 보유 매력↑ → 금↑',
-   bear:'BEI↓ → 실질금리↑ → 금 기회비용↑ → 금↓'},
-  {id:'gdp',  ico:'🌐',name:'GDP 경제성장률',     lv:'Lv3',freq:'분기별',c:'bl',
-   desc:'분기별 발표. 2분기 연속 마이너스 = 기술적 경기침체. 가장 종합적이지만 후행성 강함.',
-   bull:'GDP↓ → 경기 침체 우려 → 금리 인하 압력 → 금↑',
-   bear:'GDP↑ → 경기 과열 우려 → 금리 유지 → 금↓'},
-  {id:'conf', ico:'😊',name:'소비자심리지수',      lv:'Lv3',freq:'월 1회',c:'bl',
-   desc:'향후 경기에 대한 소비자의 기대. 심리가 먼저 꺾이고 실제 소비가 뒤따름.',
-   bull:'심리↓ → 소비 위축 예고 → 경기 침체 우려 → 금↑',
-   bear:'심리↑ → 소비 강세 예고 → 인플레이션 유지 → 금↓'},
-  {id:'fed_sp',ico:'🎙️',name:'연준 발언·의사록',  lv:'Lv4',freq:'수시 (의사록: FOMC 3주 후)',c:'po',
-   desc:'의사록, 위원 연설, 기자회견. FOMC 블랙아웃 기간(직전 10일) 발언 중단.',
-   bull:'비둘기파 발언 증가 → 금리 인하 기대↑ → 금↑',
-   bear:'매파 발언 증가 → 금리 인하 지연 → 금↓'},
-  {id:'fomc', ico:'⚖️',name:'FOMC 기준금리 결정', lv:'Lv4',freq:'연 8회',c:'po',
-   desc:'모든 금리의 기준점. 기준금리 결정 + 의장 기자회견 + 점도표(분기). 시장 최대 이벤트.',
-   bull:'금리 인하 → 실질금리↓ → 금 보유 기회비용↓ → 금↑',
-   bear:'금리 인상/유지 → 실질금리↑ → 금 기회비용↑ → 금↓'},
-  {id:'qe',   ico:'📜',name:'연준 대차대조표 (QE/QT)',lv:'Lv4',freq:'주 1회 (목요일)',c:'po',
-   desc:'양적완화(QE) = 채권 매입 → 유동성 공급. 양적긴축(QT) = 채권 매각 → 유동성 흡수.',
-   bull:'QE(확대) → 시중 유동성↑ → 인플레이션 기대↑ → 금↑',
-   bear:'QT(축소) → 유동성 회수 → 시장 압박 → 금↓'},
-  {id:'tnx',  ico:'📈',name:'미 10년물 국채금리', lv:'Lv5',freq:'실시간',c:'rt',
-   desc:'글로벌 금리의 기준. 실질금리(명목-BEI)와 금은 가장 강한 역상관. 마이너스 실질금리 시 금 강세.',
-   bull:'10년물↓ → 실질금리↓ → 금 보유 기회비용↓ → 금↑',
-   bear:'10년물↑ → 실질금리↑ → 금 기회비용↑ → 금↓'},
-  {id:'dxy',  ico:'💵',name:'달러 인덱스 (DXY)',   lv:'Lv5',freq:'실시간',c:'dl',
-   desc:'유로(57%)·엔(14%)·파운드(12%) 등 6개 통화 대비 달러 가치. 100이 기준점.',
-   bull:'달러↓ → 금 상대가치↑ → 다른 통화 보유자 구매력↑ → 금↑',
-   bear:'달러↑ → 금 상대가치↓ → 금 수요 감소 → 금↓'},
-  {id:'spr',  ico:'〰️',name:'장단기 금리 스프레드',lv:'Lv5',freq:'실시간',c:'rt',
-   desc:'10년물-단기 금리 차이. 역전(단기>장기) = 경기침체 선행지표. 1970년대 이후 모든 침체 예고.',
-   bull:'스프레드 역전 → 경기침체 우려 → 금리 인하 기대 → 금↑',
-   bear:'스프레드 정상화 → 경기 회복 기대 → 위험선호 → 금↓'},
-  {id:'vix',  ico:'😱',name:'VIX 공포지수',       lv:'Lv5',freq:'실시간 (미국장)',c:'fe',
-   desc:'S&P500 옵션 기반 30일 예상 변동성. 역사 평균 19~20. 30↑ = 극단 공포.',
-   bull:'VIX↑ → 안전자산 수요↑ → 금↑',
-   bear:'VIX↓ (15 미만) → 위험선호 → 금 안전자산 프리미엄↓'},
-  {id:'cot',  ico:'📑',name:'COT 금 선물 포지션', lv:'Lv6',freq:'주 1회 (금요일)',c:'dm',
-   desc:'대형 투기세력의 금 롱/숏 포지션. CFTC 발표. Net Long 높으면 과매수 경계.',
-   bull:'Net Long↑ → 기관 금 매수 증가 → 금↑',
-   bear:'Net Short 전환 → 기관 금 매도 → 금↓'},
-  {id:'cb_buy',ico:'🏦',name:'중앙은행 금 매입',   lv:'Lv6',freq:'월/분기별',c:'dm',
-   desc:'각국 중앙은행의 금 보유량 변화. 2022년 이후 중국·러시아·인도 등 신흥국 대규모 매입 지속.',
-   bull:'매입 증가 → 구조적 수요↑ → 금 장기 강세',
-   bear:'매입 감소/매각 → 구조적 수요↓'},
-  {id:'etf',  ico:'📦',name:'금 ETF 보유량',       lv:'Lv6',freq:'일별',c:'dm',
-   desc:'SPDR Gold Shares(GLD) 등 ETF의 금 보유량. 소매·기관 투자자의 금 수요 직접 반영.',
-   bull:'ETF 보유 증가 → 투자 수요↑ → 금↑',
-   bear:'ETF 보유 감소 → 투자 수요↓ → 금↓'},
-  {id:'cny',  ico:'🇨🇳',name:'위안화 (USD/CNY)',   lv:'Lv6',freq:'실시간',c:'dl',
-   desc:'중국은 세계 최대 금 소비국. 위안화 약세 시 중국 내 금 가격 상승 → 수요 위축 우려.',
-   bull:'위안화 강세 → 중국 금 구매력↑ → 수요↑ → 금↑',
-   bear:'위안화 약세 → 중국 금 가격 상승 → 수요 위축 → 금↓'},
-  {id:'gold', ico:'🏅',name:'금 (XAU/USD)',         lv:'결과',freq:'실시간',c:'rs',
-   desc:'위 모든 지표의 복합 결과물. 단기=달러·금리, 중기=인플레이션 기대, 장기=중앙은행 매입·지정학.',
-   bull:'달러↓ + 실질금리↓ + VIX↑ + 중앙은행 매입 = 최강 강세 조합',
-   bear:'달러↑ + 실질금리↑ + VIX↓ + 위험선호 = 약세 조합'},
-  {id:'silver',ico:'🥈',name:'은 (XAG/USD)',        lv:'결과',freq:'실시간',c:'rs2',
-   desc:'금과 동조화 강함. 태양광·전기차 등 산업용 수요도 커서 경기에 더 민감.',
-   bull:'금 강세 + 경기 회복 = 은 더 강하게 상승 (레버리지 효과)',
-   bear:'금 약세 또는 경기 침체 = 은 더 크게 하락'},
-  {id:'sp500',ico:'📊',name:'주식 (S&P 500)',        lv:'결과',freq:'실시간',c:'eq',
-   desc:'금과 보통 역상관. 달러 약세·저금리 환경에서는 동반 상승 가능.',
-   bull:'금리↓ + 경기 회복 = 주식 강세 (금과 반대)',
-   bear:'VIX↑ + 금리↑ = 주식 약세 (금 강세)'},
-  {id:'bond', ico:'📄',name:'채권 (미국 국채)',      lv:'결과',freq:'실시간',c:'rt',
-   desc:'국채와 금은 같은 안전자산. 고인플레이션 환경에서 채권은 실질 손실, 금은 헤지 역할.',
-   bull:'금리↓ → 채권 가격↑ (금과 동반 강세)',
-   bear:'금리↑ → 채권 가격↓'},
-  {id:'re',   ico:'🏠',name:'부동산 (리츠)',         lv:'결과',freq:'실시간',c:'lb',
-   desc:'금리 변화의 영향이 가장 느리게 나타나는 자산. 모기지 금리(10년물 연동) 핵심.',
-   bull:'금리↓ → 모기지 비용↓ → 부동산 수요↑',
-   bear:'금리↑ → 모기지 비용↑ → 주택 수요 위축'},
+const GLOSS_DATA = [
+  {id:'wti',  ico:'🛢️',name:'WTI 유가',         lv:'Lv1',freq:'실시간',src:'Yahoo Finance (CL=F)',c:'cm',
+   desc:'OPEC+ 결정, 지정학 위기, EIA 원유재고(매주 수요일)가 주요 변동 요인. 인플레이션 선행지표.',
+   bull:'고유가 → 인플레이션 기대↑ → 금 헤지 수요↑ → 금↑',bear:'유가 급락 → 인플레이션 기대↓ → 금↓'},
+  {id:'cu',   ico:'🟡',name:'구리 (Dr.Copper)', lv:'Lv1',freq:'실시간',src:'Yahoo Finance (HG=F)',c:'cm',
+   desc:'글로벌 경기 선행지표. 구리↑ = 경기 회복 신호.',
+   bull:'구리↓ → 경기 수축 → 안전자산 수요↑ → 금↑',bear:'구리↑ → 경기 회복 → 위험선호 → 금↓'},
+  {id:'ism_m',ico:'🏭',name:'ISM 제조업 PMI',   lv:'Lv1',freq:'월 1회 (월초)',src:'ISM',c:'lb',
+   desc:'50 이상=확장, 이하=수축. 경기 선행지표.',
+   bull:'PMI↓ → 경기 수축 → 금리 인하 기대 → 금↑',bear:'PMI↑ → 경기 강세 → 금리 유지 → 금↓'},
+  {id:'ism_s',ico:'🏪',name:'ISM 서비스업 PMI', lv:'Lv1',freq:'월 1회 (월초)',src:'ISM',c:'lb',
+   desc:'미국 GDP의 약 70%를 차지하는 서비스업 경기 지수.',
+   bull:'PMI↓ → 서비스 수축 → 금리 인하 기대 → 금↑',bear:'PMI↑ → 서비스 강세 → 금↓'},
+  {id:'retail',ico:'🛒',name:'소매판매',         lv:'Lv1',freq:'월 1회 (중순)',src:'Census Bureau',c:'lb',
+   desc:'미국 소비 동향. GDP의 약 70%가 소비.',
+   bull:'소매↓ → 소비 위축 → 경기 침체 우려 → 금↑',bear:'소매↑ → 소비 강세 → 인플레이션 유지 → 금↓'},
+  {id:'ui_wk',ico:'📋',name:'주간 실업수당 청구',lv:'Lv2',freq:'주 1회 (목요일)',src:'DOL',c:'lb',
+   desc:'매주 목요일 발표. NFP보다 빠른 고용시장 실시간 지표.',
+   bull:'청구 급증 → 고용 악화 → 금리 인하 기대 → 금↑',bear:'청구 감소 → 고용 강세 → 금↓'},
+  {id:'nfp',  ico:'👷',name:'NFP 비농업 고용',   lv:'Lv2',freq:'월 1회 (첫째주 금)',src:'BLS',c:'lb',
+   desc:'매월 첫 금요일 발표. 연준 양대 책무 중 고용 지표.',
+   bull:'NFP 부진 → 금리 인하 기대 → 금↑',bear:'NFP 호조 → 금리 유지 → 금↓'},
+  {id:'wage', ico:'💰',name:'평균 시간당 임금',  lv:'Lv2',freq:'월 1회 (NFP와 동시)',src:'BLS',c:'lb',
+   desc:'임금 상승은 서비스업 2차 인플레이션을 일으켜 연준이 가장 주시.',
+   bull:'임금↓ → 서비스 물가↓ → 금리 인하 → 금↑',bear:'임금↑ → 서비스 인플레이션 → 금↓'},
+  {id:'unemp',ico:'📉',name:'실업률',            lv:'Lv2',freq:'월 1회 (NFP와 동시)',src:'BLS',c:'lb',
+   desc:'후행지표. 연준 최대 고용 목표 기준.',
+   bull:'실업률↑ → 경기 둔화 → 금리 인하 압력 → 금↑',bear:'실업률↓ → 연준 금리 유지 → 금↓'},
+  {id:'ppi',  ico:'🏭',name:'PPI 생산자물가',    lv:'Lv3',freq:'월 1회',src:'BLS',c:'if',
+   desc:'CPI보다 1~2개월 선행하는 인플레이션 선행지표.',
+   bull:'PPI↓ → CPI 하락 예고 → 금리 인하 기대 → 금↑',bear:'PPI↑ → CPI 상승 압력 → 금↓'},
+  {id:'cpi',  ico:'📊',name:'CPI 소비자물가',    lv:'Lv3',freq:'월 1회 (두번째주 수요일)',src:'BLS',c:'if',
+   desc:'연준 목표 2%. Core CPI(식품·에너지 제외)가 핵심.',
+   bull:'CPI↓ → 인플레이션 진정 → 금리 인하 기대 → 금↑',bear:'CPI↑ → 인플레이션 지속 → 금↓'},
+  {id:'pce',  ico:'📋',name:'PCE 개인소비지출',  lv:'Lv3',freq:'월 1회 (월말)',src:'BEA',c:'if',
+   desc:'연준이 공식 목표로 사용하는 인플레이션 지표.',
+   bull:'PCE↓ (2% 접근) → 금리 인하 명분 → 금↑',bear:'PCE↑ (2% 초과) → 금리 유지 → 금↓'},
+  {id:'bei',  ico:'🔮',name:'BEI 기대인플레이션',lv:'Lv3',freq:'실시간',src:'TIPS 스프레드',c:'if',
+   desc:'시장이 예상하는 향후 10년 인플레이션 수준.',
+   bull:'BEI↑ → 실질금리↓ → 금 보유 매력↑ → 금↑',bear:'BEI↓ → 실질금리↑ → 금↓'},
+  {id:'gdp',  ico:'🌐',name:'GDP 경제성장률',    lv:'Lv3',freq:'분기별',src:'BEA',c:'bl',
+   desc:'분기별 발표. 2분기 연속 마이너스 = 기술적 경기침체.',
+   bull:'GDP↓ → 경기 침체 우려 → 금리 인하 압력 → 금↑',bear:'GDP↑ → 경기 과열 → 금리 유지 → 금↓'},
+  {id:'conf', ico:'😊',name:'소비자심리지수',     lv:'Lv3',freq:'월 1회',src:'Conference Board',c:'bl',
+   desc:'향후 경기에 대한 소비자의 기대. 실제 소비에 1~2개월 선행.',
+   bull:'심리↓ → 소비 위축 예고 → 경기 침체 우려 → 금↑',bear:'심리↑ → 소비 강세 예고 → 금↓'},
+  {id:'fed_sp',ico:'🎙️',name:'연준 발언·의사록',lv:'Lv4',freq:'수시',src:'연준 공식',c:'po',
+   desc:'의사록, 위원 연설, 기자회견. FOMC 전 1~2주 발언이 가장 중요.',
+   bull:'비둘기파 발언 증가 → 금리 인하 기대 → 금↑',bear:'매파 발언 증가 → 금리 인하 지연 → 금↓'},
+  {id:'fomc', ico:'⚖️',name:'FOMC 기준금리',     lv:'Lv4',freq:'연 8회',src:'연준',c:'po',
+   desc:'기준금리 결정 + 의장 기자회견 + 점도표. 시장 최대 이벤트.',
+   bull:'금리 인하 → 실질금리↓ → 금 기회비용↓ → 금↑',bear:'금리 인상 → 실질금리↑ → 금↓'},
+  {id:'qe',   ico:'📜',name:'연준 대차대조표',    lv:'Lv4',freq:'주 1회 (목요일)',src:'연준',c:'po',
+   desc:'QE(양적완화) = 채권 매입. QT(양적긴축) = 채권 매각.',
+   bull:'QE 확대 → 유동성↑ → 인플레이션 기대↑ → 금↑',bear:'QT 축소 → 유동성 회수 → 금↓'},
+  {id:'tnx',  ico:'📈',name:'미 10년물 국채금리', lv:'Lv5',freq:'실시간',src:'Yahoo Finance (^TNX)',c:'rt',
+   desc:'글로벌 금리의 기준. 실질금리(명목-BEI)와 금은 가장 강한 역상관.',
+   bull:'10년물↓ → 실질금리↓ → 금 기회비용↓ → 금↑',bear:'10년물↑ → 실질금리↑ → 금↓'},
+  {id:'dxy',  ico:'💵',name:'달러 인덱스 (DXY)',  lv:'Lv5',freq:'실시간',src:'Yahoo Finance',c:'dl',
+   desc:'유로(57%)·엔(14%)·파운드(12%) 등 6개 통화 대비 달러 가치.',
+   bull:'달러↓ → 금 상대가치↑ → 금↑',bear:'달러↑ → 금 상대가치↓ → 금↓'},
+  {id:'spr',  ico:'〰️',name:'장단기 금리 스프레드',lv:'Lv5',freq:'실시간',src:'계산값',c:'rt',
+   desc:'10년물-단기 금리 차이. 역전 = 경기침체 선행지표.',
+   bull:'스프레드 역전 → 경기침체 우려 → 금리 인하 기대 → 금↑',bear:'스프레드 정상화 → 위험선호 → 금↓'},
+  {id:'vix',  ico:'😱',name:'VIX 공포지수',       lv:'Lv5',freq:'실시간 (미국장)',src:'Yahoo Finance (^VIX)',c:'fe',
+   desc:'S&P500 옵션 기반 30일 예상 변동성. 역사 평균 19~20.',
+   bull:'VIX↑ → 안전자산 수요↑ → 금↑',bear:'VIX↓ (15 미만) → 위험선호 → 금 프리미엄↓'},
+  {id:'cot',  ico:'📑',name:'COT 금 선물 포지션', lv:'Lv6',freq:'주 1회 (금요일)',src:'CFTC',c:'dm',
+   desc:'대형 투기세력의 금 롱/숏 포지션.',
+   bull:'Net Long↑ → 기관 매수 증가 → 금↑',bear:'Net Short 전환 → 기관 매도 → 금↓'},
+  {id:'cb_buy',ico:'🏦',name:'중앙은행 금 매입',  lv:'Lv6',freq:'월/분기별',src:'WGC',c:'dm',
+   desc:'각국 중앙은행의 금 보유량 변화.',
+   bull:'매입 증가 → 구조적 수요↑ → 금 장기 강세',bear:'매입 감소/매각 → 수요↓'},
+  {id:'etf',  ico:'📦',name:'금 ETF 보유량',       lv:'Lv6',freq:'일별',src:'SPDR GLD',c:'dm',
+   desc:'SPDR Gold Shares(GLD) 등 ETF의 금 보유량.',
+   bull:'ETF 보유 증가 → 투자 수요↑ → 금↑',bear:'ETF 보유 감소 → 투자 수요↓ → 금↓'},
+  {id:'cny',  ico:'🇨🇳',name:'위안화 (USD/CNY)',  lv:'Lv6',freq:'실시간',src:'Yahoo Finance (CNY=X)',c:'dl',
+   desc:'중국은 세계 최대 금 소비국.',
+   bull:'위안화 강세 → 중국 금 구매력↑ → 금↑',bear:'위안화 약세 → 중국 수요 위축 → 금↓'},
+  {id:'gold', ico:'🏅',name:'금 (XAU/USD)',         lv:'결과',freq:'실시간',src:'Yahoo Finance (GC=F)',c:'rs',
+   desc:'달러·금리·공포·인플레이션의 복합 결과물.',
+   bull:'달러↓ + 실질금리↓ + VIX↑ + 중앙은행 매입 = 최강 강세',bear:'달러↑ + 실질금리↑ + VIX↓ = 약세'},
+  {id:'silver',ico:'🥈',name:'은 (XAG/USD)',        lv:'결과',freq:'실시간',src:'Yahoo Finance (SI=F)',c:'rs2',
+   desc:'금과 동조화 강함. 산업용 수요도 커서 경기에 더 민감.',
+   bull:'금 강세 + 경기 회복 = 은 더 강하게 상승',bear:'금 약세 또는 경기 침체 = 은 더 크게 하락'},
+  {id:'sp500',ico:'📊',name:'주식 (S&P 500)',        lv:'결과',freq:'실시간',src:'Yahoo Finance',c:'eq',
+   desc:'금과 보통 역상관. 저금리 환경에서는 동반 상승 가능.',
+   bull:'금리↓ + 경기 회복 = 주식 강세',bear:'VIX↑ + 금리↑ = 주식 약세 (금 강세)'},
+  {id:'bond', ico:'📄',name:'채권 (미국 국채)',      lv:'결과',freq:'실시간',src:'10년물 연동',c:'rt',
+   desc:'국채와 금은 같은 안전자산.',
+   bull:'금리↓ → 채권 가격↑ (금과 동반 강세)',bear:'금리↑ → 채권 가격↓'},
+  {id:'re',   ico:'🏠',name:'부동산 (리츠)',         lv:'결과',freq:'실시간',src:'모기지 금리 연동',c:'lb',
+   desc:'금리 변화의 영향이 가장 느리게 나타나는 자산.',
+   bull:'금리↓ → 모기지 비용↓ → 부동산 수요↑',bear:'금리↑ → 모기지 비용↑ → 주택 수요 위축'},
 ];
 
-// 경제 이벤트
-const EVENTS=[
-  {name:'CPI',full:'소비자물가지수',date:'2026-05-13',fore:'2.3%',prev:'2.4%',result:'2.3%',
-   desc:'미국 소비자들이 구매하는 상품·서비스의 평균 가격 변화. 연준 목표(2%)의 기준.',
-   hot:'예상 상회 → 인플레이션 지속 → 금리 인하 기대 약화 → 달러 강세·금 하락.',
-   cool:'예상 하회 → 진정세 → 금리 인하 기대 강화 → 달러 약세·금 강세.',
-   inline:'예상 수준 → 시장 반응 제한적.'},
-  {name:'PCE',full:'개인소비지출물가',date:'2026-05-29',fore:'2.2%',prev:'2.3%',result:null,
-   desc:'연준이 가장 선호하는 인플레이션 지표. 연준의 공식 2% 목표 기준.',
-   hot:'예상 상회 → 금리 인하 기대 약화 → 금 하락.',
-   cool:'예상 하회 → 금리 인하 명분 → 실질금리↓ → 금 강세.',
-   inline:'예상 수준 → 방향성 변화 없음.'},
-  {name:'NFP',full:'비농업 고용지수',date:'2026-06-05',fore:'165K',prev:'177K',result:null,
-   desc:'매월 첫 금요일 발표. 농업 외 신규 취업자 수. 미국 고용 건강도의 핵심.',
-   hot:'예상 상회 → 금리 인하 지연 → 달러 강세·금 하락.',
-   cool:'예상 하회 → 금리 인하 기대 → 달러 약세·금 강세.',
-   inline:'예상 수준 → 기존 경로 유지.'},
-  {name:'FOMC',full:'연방공개시장위원회',date:'2026-06-17',fore:'동결 전망',prev:'4.25~4.50%',result:null,
-   desc:'연 8회 개최. 기준금리 결정 + 의장 기자회견 + 점도표(분기). 시장 최대 이벤트.',
-   hot:'매파적 → 금리 인상 시사 → 실질금리↑ → 금 하락.',
-   cool:'비둘기파 → 금리 인하 시사 → 실질금리↓ → 금 강세.',
-   inline:'예상대로 → 기자회견·점도표 변화가 관건.'},
-  {name:'NFP',full:'비농업 고용지수',date:'2026-07-10',fore:'-',prev:'165K',result:null,
-   desc:'매월 첫 금요일 발표.',
-   hot:'강한 고용 → 금리 인하 지연 → 금 하락.',
-   cool:'약한 고용 → 금리 인하 기대 → 금 강세.',
-   inline:'예상 수준 → 기존 경로 유지.'},
-  {name:'FOMC',full:'연방공개시장위원회',date:'2026-07-29',fore:'-',prev:'4.25~4.50%',result:null,
-   desc:'연 8회 개최. 기준금리 결정.',
-   hot:'매파적 → 금 하락.',cool:'비둘기파 → 금 강세.',inline:'기자회견이 관건.'},
-];
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // 상태
-// ══════════════════════════════════════════
-let IND={}, selId=null, curGlossCat='all', newsLoaded={};
-const _ND={};
+// ═══════════════════════════════════════════
+let IND = {};
+let selId = null;
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // 탭 전환
-// ══════════════════════════════════════════
-function goTab(t){
-  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  document.getElementById('p-'+t).classList.add('on');
-  document.getElementById('nb-'+t).classList.add('on');
-  if(t==='an') renderAnalysis();
-  if(t==='news'){initNews();}
-  if(t!=='tree'){
-    selId=null;
-    document.getElementById('sel-panel').classList.remove('show');
-  }
+// ═══════════════════════════════════════════
+function goTab(t) {
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
+  document.getElementById('p-' + t).classList.add('on');
+  document.getElementById('nb-' + t).classList.add('on');
+  if (t === 'an') renderAnalysis();
+  if (t === 'news') initNews();
+  if (t !== 'tree') closePanel();
 }
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // 데이터 수집
-// ══════════════════════════════════════════
-async function fetchSym(sym){
-  const urls=[
-    `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=5d`,
-    `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=5d`,
-    `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(sym)}`,
-  ];
-  for(const url of urls){
-    try{
-      const r=await fetch(url,{signal:AbortSignal.timeout(8000),
-        headers:{'Accept':'application/json'}});
-      if(!r.ok) continue;
-      const d=await r.json();
-      // v8 chart 응답
-      if(d.chart?.result?.[0]){
-        const m=d.chart.result[0].meta;
-        if(!m.regularMarketPrice) continue;
-        return{price:+m.regularMarketPrice,prev:+(m.chartPreviousClose||m.regularMarketPrice),
-               hi52:m.fiftyTwoWeekHigh,lo52:m.fiftyTwoWeekLow,ok:true};
-      }
-      // v7 quote 응답
-      if(d.quoteResponse?.result?.[0]){
-        const q=d.quoteResponse.result[0];
-        if(!q.regularMarketPrice) continue;
-        return{price:+q.regularMarketPrice,prev:+(q.regularMarketPreviousClose||q.regularMarketPrice),
-               hi52:q.fiftyTwoWeekHigh,lo52:q.fiftyTwoWeekLow,ok:true};
-      }
-    }catch(e){ console.warn('[API]',sym,e.message); }
+// ═══════════════════════════════════════════
+async function fetchSym(sym) {
+  const bases = ['https://query1.finance.yahoo.com', 'https://query2.finance.yahoo.com'];
+  for (const base of bases) {
+    try {
+      const url = base + '/v8/finance/chart/' + encodeURIComponent(sym) + '?interval=1d&range=5d';
+      const r = await fetch(url, {signal: AbortSignal.timeout(8000)});
+      if (!r.ok) continue;
+      const d = await r.json();
+      const m = d.chart.result[0].meta;
+      const price = parseFloat(m.regularMarketPrice);
+      const prev  = parseFloat(m.chartPreviousClose || m.regularMarketPrice);
+      if (!price) continue;
+      return {price, prev, hi52: m.fiftyTwoWeekHigh, lo52: m.fiftyTwoWeekLow, ok: true};
+    } catch(e) {}
   }
-  return{ok:false};
+  return {ok: false};
 }
 
-async function loadData(){
-  const btn=document.getElementById('hdr-btn');
+async function loadData() {
+  const btn = document.getElementById('hdr-btn');
   btn.classList.add('spin');
-  const keys=Object.keys(SYMS);
-  const res=await Promise.allSettled(keys.map(k=>fetchSym(SYMS[k])));
-  res.forEach((r,i)=>{IND[keys[i]]=r.status==='fulfilled'?r.value:{ok:false};});
-  if(IND.tnx?.ok&&IND.irx?.ok)
-    IND.spr={price:+(IND.tnx.price-IND.irx.price).toFixed(3),prev:0,ok:true,derived:true};
+  const keys = Object.keys(SYMS);
+  const results = await Promise.allSettled(keys.map(k => fetchSym(SYMS[k])));
+  results.forEach((r, i) => {
+    IND[keys[i]] = r.status === 'fulfilled' ? r.value : {ok: false};
+  });
+  if (IND.tnx && IND.tnx.ok && IND.irx && IND.irx.ok) {
+    IND.spr = {price: +(IND.tnx.price - IND.irx.price).toFixed(3), prev: 0, ok: true, derived: true};
+  }
   btn.classList.remove('spin');
-  document.getElementById('hdr-sub').innerHTML='업데이트: '+new Date().toLocaleTimeString('ko-KR')+' · 30분 자동 <span style="color:var(--fa);">· '+APP_VER+'</span>';
+  const now = new Date().toLocaleTimeString('ko-KR');
+  document.getElementById('hdr-sub').textContent = 'v' + VER + ' · ' + now;
   renderBanner();
   renderTree();
   renderAnalysis();
 }
 
-// ══════════════════════════════════════════
+function refresh() { loadData(); }
+setInterval(loadData, 30 * 60 * 1000);
+
+// ═══════════════════════════════════════════
 // 배너
-// ══════════════════════════════════════════
-function renderBanner(){
-  const d=IND, bull=[], bear=[];
-  if(d.dxy?.ok){const c=d.dxy.price-d.dxy.prev;if(c<-0.3)bull.push('달러↓');else if(c>0.3)bear.push('달러↑');}
-  if(d.tnx?.ok){const c=d.tnx.price-d.tnx.prev;if(c<-0.05)bull.push('금리↓');else if(c>0.05)bear.push('금리↑');}
-  if(d.vix?.ok){if(d.vix.price>22)bull.push('VIX↑');else if(d.vix.price<15)bear.push('저VIX');}
-  if(d.wti?.ok){const c=d.wti.price-d.wti.prev;if(c>2)bull.push('유가↑');else if(c<-2)bear.push('유가↓');}
-  if(d.gold?.ok){const c=d.gold.price-d.gold.prev;if(c>15)bull.push(`금+$${c.toFixed(0)}`);else if(c<-15)bear.push(`금-$${Math.abs(c).toFixed(0)}`);}
-  const sc=bull.length-bear.length;
-  let ico,txt;
-  if(sc>=2){ico='🟢';txt=`매크로 강세 우위 — ${bull.join('·')}${bear.length?' / 경계:'+bear.join('·'):''}`;}
-  else if(sc<=-2){ico='🔴';txt=`매크로 약세 압력 — ${bear.join('·')}${bull.length?' / 지지:'+bull.join('·'):''}` ;}
-  else if(bull.length&&bear.length){ico='🟡';txt=`혼조 — 강세:${bull.join('·')} / 약세:${bear.join('·')}`;}
-  else{ico='⚪';txt='특이 신호 없음 — 중립';}
-  document.getElementById('bnr-txt').textContent=ico+' 오늘의 금 시장: '+txt;
+// ═══════════════════════════════════════════
+function renderBanner() {
+  const bull = [], bear = [];
+  if (IND.dxy && IND.dxy.ok) { const c = IND.dxy.price - IND.dxy.prev; if (c < -0.3) bull.push('달러↓'); else if (c > 0.3) bear.push('달러↑'); }
+  if (IND.tnx && IND.tnx.ok) { const c = IND.tnx.price - IND.tnx.prev; if (c < -0.05) bull.push('금리↓'); else if (c > 0.05) bear.push('금리↑'); }
+  if (IND.vix && IND.vix.ok) { if (IND.vix.price > 22) bull.push('VIX↑'); else if (IND.vix.price < 15) bear.push('저VIX'); }
+  if (IND.wti && IND.wti.ok) { const c = IND.wti.price - IND.wti.prev; if (c > 2) bull.push('유가↑'); else if (c < -2) bear.push('유가↓'); }
+  if (IND.gold && IND.gold.ok) { const c = IND.gold.price - IND.gold.prev; if (c > 15) bull.push('금+$' + c.toFixed(0)); else if (c < -15) bear.push('금-$' + Math.abs(c).toFixed(0)); }
+  const sc = bull.length - bear.length;
+  let ico, txt;
+  if (sc >= 2)       { ico = '🟢'; txt = '매크로 강세 우위 — ' + bull.join('·'); }
+  else if (sc <= -2) { ico = '🔴'; txt = '매크로 약세 압력 — ' + bear.join('·'); }
+  else if (bull.length && bear.length) { ico = '🟡'; txt = '혼조 — 강세:' + bull.join('·') + ' / 약세:' + bear.join('·'); }
+  else               { ico = '⚪'; txt = '특이 신호 없음 — 중립'; }
+  document.getElementById('bnr-txt').textContent = ico + ' 오늘의 금 시장: ' + txt;
 }
 
-// ══════════════════════════════════════════
-// 트리 렌더링
-// ══════════════════════════════════════════
-function nodeColor(nid){
-  const d=IND[nid]; if(!d?.ok||d.derived) return null;
-  return d.price>d.prev?'var(--up)':'var(--dn)';
-}
-
-function renderTree(){
-  const wrap=document.getElementById('tree-scroll');
-  let html='';
-  LEVELS.forEach((lv,li)=>{
-    const col=COL[lv.c];
-    html+=`<div class="lv-col">`;
-    html+=`<div class="lv-hdr" style="background:${col.f};color:${col.t};">${lv.label}</div>`;
-    lv.nodes.forEach(nd=>{
-      const nc=COL[nd.c];
-      const d=IND[nd.id];
-      const isSel=selId===nd.id;
-      const dc=DEG[nd.id]||0;
-      const chg=d?.ok&&!d.derived?d.price-d.prev:null;
-      const chgCol=chg!=null?(chg>=0?'var(--up)':'var(--dn)'):'var(--fa)';
-      const chgTxt=chg!=null?(chg>=0?'▲':'▽')+Math.abs(chg).toFixed(nd.id==='tnx'?3:1):'--';
-      const valTxt=d?.ok&&!d.derived?
-        (nd.id==='tnx'?d.price.toFixed(3)+'%':nd.id==='wti'?'$'+d.price.toFixed(1):d.price.toFixed(1))
-        :'--';
-      const brd=nd.star?`border:1.5px solid var(--gold);`:`border-color:${nc.s};`;
-      html+=`<div class="nd${isSel?' sel':''}" onclick="tapNode('${nd.id}')">
-        <div class="nd-ico" style="background:${nc.f};${brd}">${nd.ico}
-          ${dc>=3?`<div class="nd-cnt">${dc}</div>`:''}
-        </div>
-        <div class="nd-lbl" style="color:${nc.t};">${nd.lbl}</div>
-        <div class="nd-val" style="color:${chgCol};">${valTxt}</div>
-      </div>`;
-    });
-    html+='</div>';
-    if(li<LEVELS.length-1){
-      const nextLv=LEVELS[li+1];
-      const cnt=Math.max(lv.nodes.length,nextLv.nodes.length);
-      // 색상 결정
-      let col='rgba(255,255,255,0.22)';
-      if(selId){
-        const curHasSel=lv.nodes.some(n=>n.id===selId);
-        if(curHasSel){
-          const edges=EDGES.filter(([f,t])=>f===selId&&nextLv.nodes.some(n=>n.id===t));
-          if(edges.length) col=edges[0][2]>0?'#3FB950':'#F85149';
-        }
-        const nextHasSel=nextLv.nodes.some(n=>n.id===selId);
-        if(nextHasSel){
-          const edges=EDGES.filter(([f,t])=>t===selId&&lv.nodes.some(n=>n.id===f));
-          if(edges.length) col='#F59E0B';
-        }
-      }
-      // SVG 화살표
-      html+=`<div class="lv-gap">`;
-      for(let i=0;i<cnt;i++){
-        html+=`<svg width="20" height="16" viewBox="0 0 20 16">
-          <line x1="1" y1="8" x2="14" y2="8" stroke="${col}" stroke-width="2" stroke-linecap="round"/>
-          <polyline points="10,4 16,8 10,12" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>`;
-      }
-      html+=`</div>`;
-    }
-  });
-  wrap.innerHTML=html;
-  if(selId) updateSelPanel(selId);
-}
-
-// BFS 인과체인
-function findChain(startId){
-  if(startId==='gold')return[startId];
-  const q=[[startId]],vis=new Set([startId]);
-  while(q.length){
-    const p=q.shift(),last=p[p.length-1];
-    for(const[f,t]of EDGES){
-      if(f!==last||vis.has(t))continue;
-      const np=[...p,t];
-      if(t==='gold')return np;
-      vis.add(t);q.push(np);
+// ═══════════════════════════════════════════
+// 트리
+// ═══════════════════════════════════════════
+function findChain(startId) {
+  if (startId === 'gold') return ['gold'];
+  const q = [[startId]], vis = new Set([startId]);
+  while (q.length) {
+    const p = q.shift(), last = p[p.length - 1];
+    for (const [f, t] of EDGES) {
+      if (f !== last || vis.has(t)) continue;
+      const np = [...p, t];
+      if (t === 'gold') return np;
+      vis.add(t); q.push(np);
     }
   }
   return null;
 }
 
-function closePanel(){
-  selId=null;
+function fmt(nid, price) {
+  if (nid === 'tnx') return price.toFixed(3) + '%';
+  if (nid === 'wti') return '$' + price.toFixed(1);
+  if (nid === 'dxy') return price.toFixed(2);
+  return price.toFixed(2);
+}
+
+function renderTree() {
+  const wrap = document.getElementById('tree-scroll');
+  let html = '';
+  LEVELS.forEach((lv, li) => {
+    const col = COL[lv.c];
+    html += '<div class="lv-col">';
+    html += '<div class="lv-hdr" style="background:' + col.f + ';color:' + col.t + ';">' + lv.label + '</div>';
+    lv.nodes.forEach(nd => {
+      const nc = COL[nd.c];
+      const d  = IND[nd.id];
+      const isSel = selId === nd.id;
+      const dc = DEG[nd.id] || 0;
+      let valTxt = '--', chgCol = 'var(--fa)', chgTxt = '';
+      if (d && d.ok && !d.derived) {
+        const chg = d.price - d.prev;
+        chgCol = chg >= 0 ? 'var(--up)' : 'var(--dn)';
+        valTxt = fmt(nd.id, d.price);
+        chgTxt = (chg >= 0 ? '▲' : '▽') + Math.abs(chg).toFixed(nd.id === 'tnx' ? 3 : 2);
+      }
+      const star = nd.id === 'fomc' || nd.id === 'gold';
+      const brd = star ? 'border:1.5px solid var(--gold);' : 'border-color:' + nc.s + ';';
+      html += '<div class="nd' + (isSel ? ' sel' : '') + '" onclick="tapNode(\'' + nd.id + '\')">';
+      html += '<div class="nd-ico" style="background:' + nc.f + ';' + brd + '">' + nd.ico;
+      if (dc >= 3) html += '<div class="nd-cnt">' + dc + '</div>';
+      html += '</div>';
+      html += '<div class="nd-lbl" style="color:' + nc.t + ';">' + nd.lbl + '</div>';
+      html += '<div class="nd-val" style="color:' + chgCol + ';">' + valTxt + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    if (li < LEVELS.length - 1) {
+      const nextLv = LEVELS[li + 1];
+      const cnt = Math.max(lv.nodes.length, nextLv.nodes.length);
+      let col2 = 'rgba(255,255,255,0.2)';
+      if (selId) {
+        const curHas = lv.nodes.some(n => n.id === selId);
+        if (curHas) {
+          const e = EDGES.find(([f, t]) => f === selId && nextLv.nodes.some(n => n.id === t));
+          if (e) col2 = e[2] > 0 ? '#3FB950' : '#F85149';
+        }
+        const nextHas = nextLv.nodes.some(n => n.id === selId);
+        if (nextHas) {
+          const e = EDGES.find(([f, t]) => t === selId && lv.nodes.some(n => n.id === f));
+          if (e) col2 = '#F59E0B';
+        }
+      }
+      html += '<div class="lv-gap">';
+      for (let i = 0; i < cnt; i++) {
+        html += '<svg width="20" height="16" viewBox="0 0 20 16">';
+        html += '<line x1="1" y1="8" x2="13" y2="8" stroke="' + col2 + '" stroke-width="2" stroke-linecap="round"/>';
+        html += '<polyline points="9,4 15,8 9,12" fill="none" stroke="' + col2 + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+        html += '</svg>';
+      }
+      html += '</div>';
+    }
+  });
+  wrap.innerHTML = html;
+}
+
+function tapNode(nid) {
+  if (selId === nid) { closePanel(); return; }
+  selId = nid;
+  document.getElementById('tree-guide').style.display = 'none';
+  renderTree();
+  updatePanel(nid);
+  const lvIdx = LEVELS.findIndex(lv => lv.nodes.some(n => n.id === nid));
+  document.getElementById('tree-scroll').scrollTo({left: lvIdx * 130, behavior: 'smooth'});
+}
+
+function closePanel() {
+  selId = null;
   document.getElementById('sel-panel').classList.remove('show');
-  const def=document.getElementById('tree-default');
-  if(def) def.style.display='block';
+  document.getElementById('tree-guide').style.display = '';
   renderTree();
 }
-function tapNode(nid){
-  if(selId===nid){closePanel();return;}
-  selId=nid;
-  renderTree();
-  updateSelPanel(nid);
-  // 기본 카드 숨기기
-  const def=document.getElementById('tree-default');
-  if(def) def.style.display='none';
-  // 선택 노드 컬럼으로 스크롤
-  const lvIdx=LEVELS.findIndex(lv=>lv.nodes.some(n=>n.id===nid));
-  const scroll=document.getElementById('tree-scroll');
-  const colW=58;
-  scroll.scrollTo({left:lvIdx*colW*2.5,behavior:'smooth'});
-}
 
-function updateSelPanel(nid){
-  const nd=NODE_MAP[nid]; if(!nd) return;
-  const g=GLOSS_DATA.find(x=>x.id===nid)||{};
-  const col=COL[nd.c];
-  const d=IND[nid];
-
-  // ── 헤더: 이름 + 현재값 ──────────────────────
-  let nameHtml=`<span style="color:${col.t};">${g.name||nd.lbl}</span>`;
-  if(d?.ok&&!d.derived){
-    const chg=d.price-d.prev;
-    const pct=(chg/d.prev*100).toFixed(2);
-    const cc=chg>=0?'var(--up)':'var(--dn)';
-    const ar=chg>=0?'▲':'▽';
-    const pStr=nid==='tnx'?d.price.toFixed(3)+'%':
-                nid==='dxy'?d.price.toFixed(2):
-                nid==='wti'?'$'+d.price.toFixed(1):
-                d.price.toFixed(2);
-    nameHtml+=` <span style="font-family:monospace;font-size:13px;color:${cc};">${pStr} ${ar}${Math.abs(pct)}%</span>`;
+function updatePanel(nid) {
+  const nd  = NODE_MAP[nid]; if (!nd) return;
+  const g   = GLOSS_DATA.find(x => x.id === nid) || {};
+  const col = COL[nd.c];
+  const d   = IND[nid];
+  // 이름
+  document.getElementById('sel-name').innerHTML = '<span style="color:' + col.t + ';">' + (g.name || nd.lbl) + '</span>';
+  // 현재값
+  let valHtml = '';
+  if (d && d.ok && !d.derived) {
+    const chg = d.price - d.prev;
+    const pct = (chg / d.prev * 100).toFixed(2);
+    const cc  = chg >= 0 ? 'var(--up)' : 'var(--dn)';
+    const ar  = chg >= 0 ? '▲' : '▽';
+    valHtml = '<span style="font-family:monospace;font-size:16px;font-weight:500;">' + fmt(nid, d.price) + '</span> <span style="color:' + cc + ';font-size:12px;">' + ar + Math.abs(pct) + '%</span>';
+  } else {
+    valHtml = '<span style="color:var(--mu);font-size:12px;">' + (g.freq || '실시간 외') + '</span>';
   }
-  document.getElementById('sel-name').innerHTML=nameHtml;
-
-  // ── 인과체인 ─────────────────────────────────
-  const chain=findChain(nid);
-  let chainHtml='';
-  if(chain&&chain.length>1){
-    chain.forEach((cid,i)=>{
-      const cn=NODE_MAP[cid]||{};
-      const cc2=COL[cn.c]||COL.rs;
-      const e=i<chain.length-1?EDGES.find(e=>e[0]===chain[i]&&e[1]===chain[i+1]):null;
-      const ac=e?(e[2]>0?'var(--up)':'var(--dn)'):'var(--mu)';
-      chainHtml+=`<span class="sc-n" style="background:${cc2.f};color:${cc2.t};"
-        onclick="tapNode('${cid}')">${cn.ico||''} ${cn.lbl||cid}</span>`;
-      if(e) chainHtml+=`<span class="sc-a" style="color:${ac};">${e[2]>0?'→+':'→−'}</span>`;
+  document.getElementById('sel-val').innerHTML = valHtml;
+  // 인과체인
+  const chain = findChain(nid);
+  let chainHtml = '';
+  if (chain && chain.length > 1) {
+    chain.forEach((cid, i) => {
+      const cn = NODE_MAP[cid] || {};
+      const cc2 = COL[cn.c] || COL.rs;
+      chainHtml += '<span class="sc-n" style="background:' + cc2.f + ';color:' + cc2.t + ';" onclick="tapNode(\'' + cid + '\')">' + (cn.ico || '') + ' ' + (cn.lbl || cid) + '</span>';
+      if (i < chain.length - 1) {
+        const e = EDGES.find(([f, t]) => f === chain[i] && t === chain[i + 1]);
+        const ac = e ? (e[2] > 0 ? 'var(--up)' : 'var(--dn)') : 'var(--mu)';
+        const sym = e ? (e[2] > 0 ? '→+' : '→−') : '→';
+        chainHtml += '<span class="sc-a" style="color:' + ac + ';">' + sym + '</span>';
+      }
     });
   } else {
-    chainHtml=`<span style="color:var(--mu);font-size:11px;">금과 직접 연결</span>`;
+    chainHtml = '<span style="color:var(--mu);font-size:11px;">금과 직접 연결됨</span>';
   }
-  document.getElementById('sel-chain').innerHTML=chainHtml;
-
-  // ── 금 영향 요약 (한줄씩) ───────────────────
-  const bullShort = g.bull ? g.bull.split('→').slice(-2).join('→') : '';
-  const bearShort = g.bear ? g.bear.split('→').slice(-2).join('→') : '';
-  document.getElementById('sel-impact').innerHTML=`
-    <div class="si si-b">🟢 ${bullShort||g.bull||''}</div>
-    <div class="si si-s">🔴 ${bearShort||g.bear||''}</div>`;
-
-  document.getElementById('sel-panel').classList.add('show');
-  // 이름
-  document.getElementById('sel-name').textContent=(g.name||nd.lbl)+' — '+(g.freq||'');
-  // 인과체인
-  const chain=findChain(nid);
-  let chainHtml='';
-  if(chain&&chain.length>1){
-    chain.forEach((cid,i)=>{
-      const cn=NODE_MAP[cid]||{};
-      const cc=COL[cn.c]||COL.rs;
-      const e=i<chain.length-1?EDGES.find(e=>e[0]===chain[i]&&e[1]===chain[i+1]):null;
-      const ac=e?(e[2]>0?'var(--up)':'var(--dn)'):'var(--mu)';
-      chainHtml+=`<span class="sc-n" style="background:${cc.f};color:${cc.t};" onclick="tapNode('${cid}')">${cn.ico||''} ${cn.lbl||cid}</span>`;
-      if(e) chainHtml+=`<span class="sc-a" style="color:${ac};">→</span>`;
-    });
-  }
-  document.getElementById('sel-chain').innerHTML=chainHtml||`<span style="color:var(--mu);font-size:11px;">체인 없음</span>`;
+  document.getElementById('sel-chain').innerHTML = chainHtml;
   // 영향
-  document.getElementById('sel-impact').innerHTML=
-    `<div class="si si-b">🟢 ${g.bull||'강세 시나리오 없음'}</div>
-     <div class="si si-s">🔴 ${g.bear||'약세 시나리오 없음'}</div>`;
+  document.getElementById('sel-impact').innerHTML =
+    '<div class="si si-b">🟢 ' + (g.bull || '강세 데이터 없음') + '</div>' +
+    '<div class="si si-s">🔴 ' + (g.bear || '약세 데이터 없음') + '</div>';
+  document.getElementById('sel-panel').classList.add('show');
 }
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // 용어사전
-// ══════════════════════════════════════════
-function renderGloss(){
-  const cats=['all','Lv1','Lv2','Lv3','Lv4','Lv5','Lv6','결과'];
-  const catLabels={'all':'전체','Lv1':'Lv1 원자재','Lv2':'Lv2 고용','Lv3':'Lv3 인플레','Lv4':'Lv4 통화정책','Lv5':'Lv5 시장','Lv6':'Lv6 수요','결과':'결과자산'};
-  document.getElementById('g-cats').innerHTML=cats.map(c=>
-    `<button class="g-cat${c===curGlossCat?' on':''}" onclick="setGlossCat('${c}')">${catLabels[c]}</button>`
+// ═══════════════════════════════════════════
+let glossCat = 'all';
+function setGlossCat(c) { glossCat = c; renderGloss(); }
+function toggleGloss(id) { const el = document.getElementById(id); if (el) el.classList.toggle('on'); }
+
+function renderGloss() {
+  const cats = ['all','Lv1','Lv2','Lv3','Lv4','Lv5','Lv6','결과'];
+  const cLabels = {all:'전체',Lv1:'원자재',Lv2:'고용',Lv3:'인플레',Lv4:'통화정책',Lv5:'시장',Lv6:'수요',결과:'결과자산'};
+  document.getElementById('g-cats').innerHTML = cats.map(c =>
+    '<button class="g-cat' + (c === glossCat ? ' on' : '') + '" onclick="setGlossCat(\'' + c + '\')">' + cLabels[c] + '</button>'
   ).join('');
-  const q=(document.getElementById('g-input')||{}).value||'';
-  const items=GLOSS_DATA.filter(it=>{
-    const matchCat=curGlossCat==='all'||it.lv.startsWith(curGlossCat)||it.lv===curGlossCat;
-    const matchQ=!q||it.name.includes(q)||it.lv.includes(q);
-    return matchCat&&matchQ;
+  const q = (document.getElementById('g-input') || {}).value || '';
+  const items = GLOSS_DATA.filter(it => {
+    const mc = glossCat === 'all' || it.lv.startsWith(glossCat) || it.lv === glossCat;
+    const mq = !q || it.name.includes(q) || it.lv.includes(q);
+    return mc && mq;
   });
-  const col=id=>{const nd=NODE_MAP[id];return nd?COL[nd.c]:COL.cm;};
-  document.getElementById('g-list').innerHTML=items.map(it=>{
-    const c=COL[it.c]||COL.cm;
-    return`<div class="g-item" onclick="toggleGloss('gi-${it.id}')">
-      <div class="g-top">
-        <div class="g-ico" style="background:${c.f};">${it.ico}</div>
-        <div class="g-name">${it.name}</div>
-        <div class="g-lv">${it.lv} · ${it.freq}</div>
-      </div>
-      <div class="g-body" id="gi-${it.id}">
-        <div style="margin-bottom:6px;">${it.desc}</div>
-        <div class="g-tags">
-          <span class="g-tag g-tg">🟢 ${it.bull}</span>
-          <span class="g-tag g-tr">🔴 ${it.bear}</span>
-        </div>
-      </div>
-    </div>`;
+  document.getElementById('g-list').innerHTML = items.map(it => {
+    const col = COL[it.c] || COL.cm;
+    const d = IND[it.id];
+    let valBadge = '';
+    if (d && d.ok && !d.derived) {
+      const chg = d.price - d.prev;
+      const cc = chg >= 0 ? 'var(--up)' : 'var(--dn)';
+      valBadge = ' <span class="g-val" style="color:' + cc + ';">' + fmt(it.id, d.price) + (chg >= 0 ? ' ▲' : ' ▽') + '</span>';
+    }
+    return '<div class="g-item" onclick="toggleGloss(\'gi-' + it.id + '\')">' +
+      '<div class="g-top"><div class="g-ico" style="background:' + col.f + ';">' + it.ico + '</div>' +
+      '<div class="g-name">' + it.name + valBadge + '</div>' +
+      '<div class="g-badge">' + it.lv + '</div></div>' +
+      '<div class="g-body" id="gi-' + it.id + '">' +
+      '<div class="g-info">📅 ' + it.freq + ' &nbsp;|&nbsp; 📡 ' + (it.src || '') + '</div>' +
+      '<div class="g-desc">' + it.desc + '</div>' +
+      '<div class="g-impacts">' +
+      '<div class="g-bull">🟢 ' + it.bull + '</div>' +
+      '<div class="g-bear">🔴 ' + it.bear + '</div>' +
+      '</div></div></div>';
   }).join('');
 }
 
-function toggleGloss(id){document.getElementById(id)?.classList.toggle('on');}
-function setGlossCat(c){curGlossCat=c;renderGloss();}
-function filterGloss(){renderGloss();}
-
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // 뉴스
-// ══════════════════════════════════════════
-// ══════════════════════════════════════════
-// 뉴스 시스템
-// ══════════════════════════════════════════
-
-// RSS 소스 정의 (rss2json 호환 확인된 피드 우선)
+// ═══════════════════════════════════════════
 const NEWS_SOURCES = [
-  // Investing.com - 카테고리별
-  {url:'https://www.investing.com/rss/news_25.rss',  label:'Investing.com', cat:'원자재'},
-  {url:'https://www.investing.com/rss/news_1.rss',   label:'Investing.com', cat:'외환'},
-  {url:'https://www.investing.com/rss/news_14.rss',  label:'Investing.com', cat:'경제'},
-  {url:'https://www.investing.com/rss/news_285.rss', label:'Investing.com', cat:'채권'},
-  {url:'https://www.investing.com/rss/news_301.rss', label:'Investing.com', cat:'금·은'},
-  // 보조 소스
-  {url:'https://www.kitco.com/rss/kitcorss.xml',         label:'Kitco',     cat:'금'},
-  {url:'https://www.forexlive.com/feed/news',             label:'ForexLive', cat:'외환'},
-  {url:'https://feeds.finance.yahoo.com/rss/2.0/headline?s=GC%3DF&region=US&lang=en-US',
-                                                          label:'Yahoo Finance', cat:'금'},
-  {url:'https://www.fxstreet.com/rss/news',              label:'FXStreet',   cat:'외환'},
+  {url:'https://www.investing.com/rss/news_25.rss',  label:'Investing.com'},
+  {url:'https://www.investing.com/rss/news_1.rss',   label:'Investing.com'},
+  {url:'https://www.investing.com/rss/news_14.rss',  label:'Investing.com'},
+  {url:'https://www.investing.com/rss/news_285.rss', label:'Investing.com'},
+  {url:'https://www.investing.com/rss/news_301.rss', label:'Investing.com'},
+  {url:'https://www.kitco.com/rss/kitcorss.xml',     label:'Kitco'},
+  {url:'https://www.forexlive.com/feed/news',        label:'ForexLive'},
+  {url:'https://feeds.finance.yahoo.com/rss/2.0/headline?s=GC%3DF&region=US&lang=en-US', label:'Yahoo Finance'},
 ];
 
-// 태그 키워드 맵
 const TAG_RULES = [
-  {tag:'🥇 금',   kw:['gold','xau','bullion','precious metal','금시세','황금']},
-  {tag:'💵 달러', kw:['dollar','dxy','usd','greenback','dollar index','달러']},
-  {tag:'🏦 연준', kw:['fed','fomc','powell','hawkish','dovish','federal reserve','rate cut','rate hike','jerome','기준금리']},
-  {tag:'🛢️ 유가', kw:['oil','wti','crude','brent','opec','barrel','에너지','유가']},
-  {tag:'📊 인플레',kw:['inflation','cpi','pce','prices','deflation','인플레','물가']},
-  {tag:'📈 증시', kw:['stock','s&p','nasdaq','dow','equity','market rally','주식','증시']},
-  {tag:'📄 채권', kw:['bond','treasury','yield','10-year','2-year','채권','금리']},
-  {tag:'🌍 경제', kw:['gdp','economy','growth','recession','unemployment','nfp','경제','성장']},
-  {tag:'🇨🇳 중국', kw:['china','pboc','yuan','cny','chinese','베이징','위안']},
-  {tag:'🥈 은',   kw:['silver','xag','은','귀금속']},
-  {tag:'🏛 중앙은행',kw:['central bank','ecb','boj','boe','rba','중앙은행','유럽중앙은행']},
+  {tag:'🥇 금',    kw:['gold','xau','bullion']},
+  {tag:'💵 달러',  kw:['dollar','dxy','usd']},
+  {tag:'🏦 연준',  kw:['fed','fomc','powell','hawkish','dovish','rate cut','rate hike']},
+  {tag:'🛢️ 유가',  kw:['oil','wti','crude','opec','brent']},
+  {tag:'📊 인플레', kw:['inflation','cpi','pce']},
+  {tag:'📈 증시',  kw:['stock','s&p','nasdaq','equity']},
+  {tag:'📄 채권',  kw:['bond','treasury','yield']},
+  {tag:'🌍 경제',  kw:['gdp','economy','growth','recession']},
+  {tag:'🇨🇳 중국', kw:['china','pboc','yuan']},
+  {tag:'🥈 은',    kw:['silver','xag']},
 ];
 
-const ALL_TAGS = TAG_RULES.map(r=>r.tag);
+const ALL_TAGS = TAG_RULES.map(r => r.tag);
+const EXPIRE = {unread:3*86400000, read:15*86400000, saved:Infinity, hidden:86400000};
+const BOT_BLOCKED = ['investing.com','bloomberg.com','wsj.com','ft.com'];
+const NEWS_DATA_VER = 6;
+const BAD_PATTERNS  = ['JavaScript와 쿠키','Enable JavaScript','enable cookies','Just a moment','Cloudflare','Access Denied','쿠키를 활성화'];
 
-// 상태별 보관 기간 (ms)
-const EXPIRE = {
-  unread: 3  * 86400000,   // 3일
-  read:   15 * 86400000,   // 15일 (저장 안 한 것)
-  saved:  Infinity,        // 영구
-  hidden: 1  * 86400000,   // 1일
-};
+let nFilter = 'unread', nActiveTags = [], nModalHash = null, _newsIniting = false;
 
-// 상태 관리
-let nFilter   = 'unread';   // unread | all | saved | read
-let nActiveTags = [];        // 활성 태그 []
-let nModalHash  = null;      // 현재 열린 기사
-let nMenuHash   = null;      // 액션 메뉴 대상 기사
+function lsGet(k, d=null) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } }
+function lsSet(k, v)      { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+function lsDel(k)         { try { localStorage.removeItem(k); } catch {} }
 
-// ── localStorage 헬퍼 ─────────────────────────
-function lsGet(key, def=null){
-  try{const v=localStorage.getItem(key);return v?JSON.parse(v):def;}catch{return def;}
+function hashStr(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0; return 'n_' + Math.abs(h).toString(36); }
+function dateStr(ts) { return new Date(ts).toISOString().slice(0, 10); }
+function today() { return dateStr(Date.now()); }
+
+function checkDataVer() {
+  const saved = lsGet('n_dv', 0);
+  if (saved < NEWS_DATA_VER) { clearNews(); lsSet('n_dv', NEWS_DATA_VER); }
 }
-function lsSet(key, val){
-  try{localStorage.setItem(key, JSON.stringify(val));}catch(e){console.warn('ls set err',e);}
-}
-function lsDel(key){try{localStorage.removeItem(key);}catch{}}
-
-// ── 오염 데이터 정리 ───────────────────────────
-const NEWS_DATA_VER = 5; // 이 숫자 올리면 뉴스 캐시 전체 리셋
-function checkDataVersion(){
-  const saved = lsGet('n_data_ver', 0);
-  if(saved < NEWS_DATA_VER){
-    console.log('[뉴스] 데이터 버전 업그레이드, 캐시 초기화...');
-    clearNewsCache();
-    lsSet('n_data_ver', NEWS_DATA_VER);
-    lsSet('n_last_fetch', 0);
-  }
-}
-
-function clearNewsCache(){
+function clearNews() {
   const idx = lsGet('n_idx', {});
   Object.values(idx).flat().forEach(h => lsDel(h));
-  lsDel('n_idx');
-  lsDel('n_last_fetch');
+  lsDel('n_idx'); lsDel('n_last');
 }
-
-// 오염된 본문만 선택적 제거 (기존 기사 제목·태그는 유지)
-const BAD_BODY_PATTERNS = [
-  'JavaScript와 쿠키', 'Enable JavaScript', 'enable cookies',
-  'Just a moment', 'Cloudflare', 'Access Denied',
-  'Please wait', 'Security check', '쿠키를 활성화',
-];
-function cleanBadBodies(){
+function cleanBad() {
   const idx = lsGet('n_idx', {});
-  let cleaned = 0;
-  Object.values(idx).flat().forEach(hash => {
-    const art = lsGet(hash);
-    if(!art) return;
-    let changed = false;
-    const isBad = txt => BAD_BODY_PATTERNS.some(p => txt && txt.includes(p));
-    if(isBad(art.body_ko)){ art.body_ko=''; art.body_en=''; art.translated=false; changed=true; }
-    if(isBad(art.desc_ko)){ art.desc_ko=''; changed=true; }
-    if(isBad(art.title_ko)){ art.title_ko=''; changed=true; }
-    if(changed){ lsSet(hash, art); cleaned++; }
+  Object.values(idx).flat().forEach(h => {
+    const a = lsGet(h); if (!a) return;
+    let ch = false;
+    const isBad = t => t && BAD_PATTERNS.some(p => t.includes(p));
+    if (isBad(a.body_ko)) { a.body_ko = ''; a.body_en = ''; a.translated = false; ch = true; }
+    if (isBad(a.desc_ko)) { a.desc_ko = ''; ch = true; }
+    if (ch) lsSet(h, a);
   });
-  if(cleaned>0) console.log(`[뉴스] 오염 데이터 ${cleaned}개 정리`);
 }
-
-// ── 기사 해시 ─────────────────────────────────
-function hashStr(s){
-  let h=0;
-  for(let i=0;i<s.length;i++){h=(Math.imul(31,h)+s.charCodeAt(i))|0;}
-  return 'n_'+Math.abs(h).toString(36);
-}
-
-// ── 날짜 유틸 ─────────────────────────────────
-function dateStr(ts){return new Date(ts).toISOString().slice(0,10);}
-function today(){return dateStr(Date.now());}
-
-// ── 만료 정리 ─────────────────────────────────
-function cleanExpired(){
-  const idx = lsGet('n_idx', {});
-  const now = Date.now();
-  let changed = false;
-  Object.keys(idx).forEach(date=>{
-    idx[date] = idx[date].filter(hash=>{
-      const art = lsGet(hash);
-      if(!art){lsDel(hash);return false;}
-      const exp = EXPIRE[art.status];
-      const age = now - (art.status_at||art.fetched_at||0);
-      if(exp !== Infinity && age > exp){
-        lsDel(hash);changed=true;return false;
-      }
+function cleanExpired() {
+  const idx = lsGet('n_idx', {}); const now = Date.now(); let ch = false;
+  Object.keys(idx).forEach(date => {
+    idx[date] = idx[date].filter(h => {
+      const a = lsGet(h); if (!a) { ch = true; return false; }
+      const exp = EXPIRE[a.status]; const age = now - (a.status_at || a.fetched_at || 0);
+      if (exp !== Infinity && age > exp) { lsDel(h); ch = true; return false; }
       return true;
     });
-    if(!idx[date].length){delete idx[date];changed=true;}
+    if (!idx[date].length) { delete idx[date]; ch = true; }
   });
-  if(changed) lsSet('n_idx', idx);
+  if (ch) lsSet('n_idx', idx);
 }
 
-// ── 기사 저장 ─────────────────────────────────
-function saveArticle(art){
-  const idx = lsGet('n_idx', {});
-  const d   = art.date || today();
-  if(!idx[d]) idx[d] = [];
-  if(!idx[d].includes(art.hash)) idx[d].push(art.hash);
-  lsSet('n_idx', idx);
-  lsSet(art.hash, art);
+function saveArt(a) {
+  const idx = lsGet('n_idx', {}); const d = a.date || today();
+  if (!idx[d]) idx[d] = [];
+  if (!idx[d].includes(a.hash)) idx[d].push(a.hash);
+  lsSet('n_idx', idx); lsSet(a.hash, a);
+}
+function setStatus(h, s) {
+  const a = lsGet(h); if (!a) return;
+  a.status = s; a.status_at = Date.now(); lsSet(h, a);
 }
 
-// ── 기사 상태 변경 ────────────────────────────
-function setStatus(hash, status){
-  const art = lsGet(hash);
-  if(!art) return;
-  art.status    = status;
-  art.status_at = Date.now();
-  lsSet(hash, art);
+function autoTags(txt) {
+  const t = txt.toLowerCase();
+  return TAG_RULES.filter(r => r.kw.some(k => t.includes(k))).map(r => r.tag);
 }
 
-// ── 태그 자동 분석 ────────────────────────────
-function autoTags(text){
-  const t = text.toLowerCase();
-  return TAG_RULES.filter(r=>r.kw.some(k=>t.includes(k))).map(r=>r.tag);
+async function translate(text) {
+  if (!text || text.length < 4) return '';
+  try {
+    const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ko&dt=t&q=' + encodeURIComponent(text.slice(0, 600));
+    const r = await fetch(url, {signal: AbortSignal.timeout(5000)});
+    const d = await r.json();
+    return (d[0] || []).map(s => s[0]).join('');
+  } catch { return ''; }
 }
 
-// ── 번역 ──────────────────────────────────────
-async function translate(text){
-  if(!text||text.length<4) return '';
-  try{
-    const url=`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ko&dt=t&q=${encodeURIComponent(text.slice(0,600))}`;
-    const r=await fetch(url,{signal:AbortSignal.timeout(5000)});
-    const d=await r.json();
-    return (d[0]||[]).map(s=>s[0]).join('');
-  }catch{return '';}
+async function fetchRSS(src) {
+  try {
+    const api = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(src.url);
+    const r = await fetch(api, {signal: AbortSignal.timeout(12000)});
+    const d = await r.json();
+    if (d.status !== 'ok' || !d.items || !d.items.length) return [];
+    return d.items.map(it => ({
+      url:     it.link || '#',
+      title:   (it.title || '').trim(),
+      desc:    (it.description || it.content || '').replace(/<[^>]+>/g, ' ').trim().slice(0, 300),
+      pubDate: it.pubDate || '',
+      source:  src.label,
+    })).filter(it => it.title.length > 8);
+  } catch { return []; }
 }
 
-// 병렬 번역 (최대 N개 동시)
-async function translateBatch(texts, concurrency=4){
-  const results = new Array(texts.length).fill('');
-  const queue = texts.map((t,i)=>({t,i}));
-  const workers = Array(Math.min(concurrency, queue.length)).fill(0).map(async ()=>{
-    while(queue.length){
-      const {t,i} = queue.shift();
-      results[i] = await translate(t);
-      await delay(150); // 최소 딜레이
-    }
-  });
-  await Promise.all(workers);
-  return results;
-}
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-// ── 본문 스크래핑 ──────────────────────────────────
-// Investing.com: Cloudflare 봇 차단으로 불가
-// 나머지 소스: allorigins 프록시로 HTML 수신 후 텍스트 추출
-const BOT_BLOCKED = ['investing.com','bloomberg.com','wsj.com','ft.com','seekingalpha.com'];
-
-function isBotBlocked(url){
-  return BOT_BLOCKED.some(d=>url.includes(d));
-}
-
-function extractText(raw){
-  if(!raw||raw.length<200) return '';
-  // 봇 차단 페이지 감지
-  const lower = raw.toLowerCase();
-  const botSigns = ['enable javascript','enable cookies','just a moment',
-    'checking your browser','cloudflare','access denied',
-    'javascript와 쿠키','쿠키를 활성화','security check','please wait'];
-  if(botSigns.some(s=>lower.includes(s))) return '';
-  // 스크립트·스타일 제거
-  let txt = raw
-    .replace(/<script[\s\S]*?<\/script>/gi,'')
-    .replace(/<style[\s\S]*?<\/style>/gi,'')
-    .replace(/<nav[\s\S]*?<\/nav>/gi,'')
-    .replace(/<header[\s\S]*?<\/header>/gi,'')
-    .replace(/<footer[\s\S]*?<\/footer>/gi,'');
-  // article/main 태그 우선 추출
-  const articleMatch = txt.match(/<article[^>]*>([\s\S]*?)<\/article>/i)
-    || txt.match(/<main[^>]*>([\s\S]*?)<\/main>/i)
-    || txt.match(/<div[^>]*class="[^"]*(?:article|content|body)[^"]*"[^>]*>([\s\S]*?)<\/div>/i);
-  if(articleMatch) txt = articleMatch[1];
-  // HTML 태그 제거
-  txt = txt.replace(/<[^>]+>/g,' ')
-    .replace(/&nbsp;/g,' ').replace(/&amp;/g,'&')
-    .replace(/&lt;/g,'<').replace(/&gt;/g,'>')
-    .replace(/&quot;/g,'"').replace(/&#39;/g,"'")
-    .replace(/\s{2,}/g,' ').trim();
-  // 의미있는 문장만 (30자 이상, 600자 이하)
-  const sents = txt.split(/(?<=[.!?])\s+/).filter(s=>s.trim().length>30&&s.length<600);
-  return sents.slice(0,25).join(' ').slice(0,4000);
-}
-
-const PROXIES = [
-  u=>`https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
-  u=>`https://corsproxy.io/?${encodeURIComponent(u)}`,
-  u=>`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
-];
-
-async function scrapeBody(url){
-  if(!url||url==='#') return '';
-  if(isBotBlocked(url)) return ''; // 차단 사이트 제외
-
-  for(const proxyFn of PROXIES){
-    try{
-      const r = await fetch(proxyFn(url),{signal:AbortSignal.timeout(15000)});
-      let raw = '';
-      const ct = r.headers.get('content-type')||'';
-      if(ct.includes('json')){
-        const d = await r.json();
-        raw = d.contents||d.body||'';
-      } else {
-        raw = await r.text();
-      }
-      const txt = extractText(raw);
-      if(txt.length > 100) return txt; // 성공
-    }catch(e){
-      continue; // 다음 프록시 시도
-    }
-  }
-  return '';
-}
-
-// ── 본문 번역 (청크 분할) ─────────────────────
-async function translateBody(text){
-  if(!text) return '';
-  const CHUNK=700;
-  const chunks=[];
-  for(let i=0;i<text.length;i+=CHUNK) chunks.push(text.slice(i,i+CHUNK));
-  const results=[];
-  for(const chunk of chunks){
-    const ko=await translate(chunk);
-    results.push(ko||chunk);
-    await delay(300);
-  }
-  return results.join(' ');
-}
-
-// ── RSS 수집 ──────────────────────────────────
-async function fetchRSS(src){
-  // 1차: rss2json API
-  try{
-    const api=`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(src.url)}`;
-    const r=await fetch(api,{signal:AbortSignal.timeout(15000)});
-    const d=await r.json();
-    if(d.status==='ok'&&d.items?.length){
-      return d.items.map(it=>({
-        url:    it.link||'#',
-        title:  (it.title||'').trim(),
-        desc:   (it.description||it.content||'').replace(/<[^>]+>/g,' ').trim().slice(0,300),
-        pubDate:it.pubDate||'',
-        source: src.label,
-      })).filter(it=>it.title.length>8);
-    }
-  }catch{}
-  // 2차: allorigins 프록시로 직접 XML 파싱
-  try{
-    const proxy=`https://api.allorigins.win/get?url=${encodeURIComponent(src.url)}`;
-    const r=await fetch(proxy,{signal:AbortSignal.timeout(15000)});
-    const d=await r.json();
-    const xml=d.contents||'';
-    const items=[...xml.matchAll(/<item[^>]*>([\s\S]*?)<\/item>/gi)].map(m=>m[1]);
-    return items.map(item=>{
-      const title=(item.match(/<title>(?:<!\[CDATA\[)?([^\]<]+)/i)||[])[1]?.trim()||'';
-      const link= (item.match(/<link>([^<]+)/i)||item.match(/<guid[^>]*>([^<]+)/i)||[])[1]?.trim()||'#';
-      const desc= (item.match(/<description>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/description>/i)||[])[1]?.replace(/<[^>]+>/g,' ').trim().slice(0,300)||'';
-      const pub=  (item.match(/<pubDate>([^<]+)/i)||[])[1]?.trim()||'';
-      return{url:link,title,desc,pubDate:pub,source:src.label};
-    }).filter(it=>it.title.length>8);
-  }catch{}
-  return [];
-}
-
-function delay(ms){return new Promise(r=>setTimeout(r,ms));}
-
-// ── 새 기사 수집 + 저장 ───────────────────────
-async function collectNews(){
-  const existing = new Set(Object.values(lsGet('n_idx',{})).flat());
+async function collectNews() {
+  const existing = new Set(Object.values(lsGet('n_idx', {})).flat());
   const newArts = [];
-
-  // 모든 소스 병렬 수집
-  const fetched = await Promise.allSettled(NEWS_SOURCES.map(src=>fetchRSS(src)));
-
-  fetched.forEach((res,i)=>{
-    if(res.status!=='fulfilled') return;
-    const items = res.value;
+  const fetched = await Promise.allSettled(NEWS_SOURCES.map(src => fetchRSS(src)));
+  fetched.forEach((res, i) => {
+    if (res.status !== 'fulfilled') return;
     const src = NEWS_SOURCES[i];
-    console.log(`[뉴스] ${src.label}: ${items.length}개`);
-
-    for(const it of items){
-      if(!it.title||it.title.length<5) continue;
-      const hash = hashStr(it.url+it.title);
-      if(existing.has(hash)) continue;
-
-      const tags = autoTags(it.title+' '+(it.desc||''));
+    res.value.forEach(it => {
+      const hash = hashStr(it.url + it.title);
+      if (existing.has(hash)) return;
       let dateVal = today();
-      try{ if(it.pubDate) dateVal = dateStr(new Date(it.pubDate)); }catch{}
-
-      const art = {
-        hash,
-        url:       it.url||'#',
-        title:     it.title.trim(),
-        title_ko:  '',
-        desc:      (it.desc||'').trim(),
-        body_en:   '',
-        body_ko:   '',
-        desc_ko:   '',
-        tags,
-        source:    src.label,
-        date:      dateVal,
-        pubDate:   it.pubDate||'',
-        fetched_at:Date.now(),
-        status:    'unread',
-        status_at: Date.now(),
-        translated:false,
+      try { if (it.pubDate) dateVal = dateStr(new Date(it.pubDate)); } catch {}
+      const a = {
+        hash, url: it.url, title: it.title.trim(), title_ko: '',
+        desc: it.desc, desc_ko: '', body_en: '', body_ko: '',
+        tags: autoTags(it.title + ' ' + it.desc),
+        source: src.label, date: dateVal, pubDate: it.pubDate,
+        fetched_at: Date.now(), status: 'unread', status_at: Date.now(), translated: false,
       };
-      saveArticle(art);
-      existing.add(hash);
-      newArts.push({hash,art});
-    }
-  });
-
-  // 제목 일괄 병렬 번역
-  if(newArts.length>0){
-    const titles = newArts.map(({art})=>art.title);
-    const koTitles = await translateBatch(titles, 5);
-    koTitles.forEach((ko,i)=>{
-      if(ko){ newArts[i].art.title_ko=ko; lsSet(newArts[i].hash, newArts[i].art); }
+      saveArt(a); existing.add(hash); newArts.push(a);
     });
-    if(document.getElementById('p-news').classList.contains('on')) renderNewsList();
+  });
+  // 병렬 제목 번역
+  const BATCH = 5;
+  for (let i = 0; i < newArts.length; i += BATCH) {
+    const batch = newArts.slice(i, i + BATCH);
+    await Promise.all(batch.map(async a => {
+      const ko = await translate(a.title);
+      if (ko) { a.title_ko = ko; lsSet(a.hash, a); }
+    }));
+    if (document.getElementById('p-news').classList.contains('on')) renderNewsList();
+    await delay(200);
   }
-
-  lsSet('n_last_fetch', Date.now());
-  console.log(`[뉴스] 신규 ${newArts.length}개 수집 완료`);
+  lsSet('n_last', Date.now());
   return newArts.length;
 }
 
-// ── 백그라운드 번역 ────────────────────────────
-let bgTranslating = false;
-async function bgTranslate(){
-  if(bgTranslating) return;
-  bgTranslating = true;
-
-  const idx = lsGet('n_idx',{});
+let bgRunning = false;
+async function bgTranslate() {
+  if (bgRunning) return; bgRunning = true;
+  const idx = lsGet('n_idx', {});
   const hashes = Object.values(idx).flat();
-
-  // 미번역 기사 목록
-  const pending = hashes.map(h=>lsGet(h))
-    .filter(a=>a&&!a.translated&&a.status!=='hidden');
-
-  if(pending.length===0){ bgTranslating=false; return; }
-
-  // 1단계: desc 일괄 번역 (병렬 4개씩)
-  const needDesc = pending.filter(a=>a.desc&&!a.desc_ko);
-  if(needDesc.length>0){
-    const descs = needDesc.map(a=>a.desc);
-    const koDescs = await translateBatch(descs, 4);
-    koDescs.forEach((ko,i)=>{
-      if(ko){ needDesc[i].desc_ko=ko; lsSet(needDesc[i].hash, needDesc[i]); }
-    });
-    if(document.getElementById('p-news').classList.contains('on')) renderNewsList();
+  // desc 번역
+  const needDesc = hashes.map(h => lsGet(h)).filter(a => a && !a.translated && a.desc && !a.desc_ko && a.status !== 'hidden');
+  for (let i = 0; i < needDesc.length; i += 4) {
+    const batch = needDesc.slice(i, i + 4);
+    await Promise.all(batch.map(async a => {
+      a.desc_ko = await translate(a.desc);
+      lsSet(a.hash, a);
+    }));
+    await delay(300);
   }
-
-  // 2단계: 본문 스크래핑 (허용 사이트만, 순차)
-  for(const art of pending){
-    if(art.status==='hidden') continue;
-    if(!isBotBlocked(art.url)){
-      const body_en = await scrapeBody(art.url);
-      if(body_en && body_en.length>100){
-        art.body_en = body_en;
-        art.body_ko = await translateBody(body_en);
-        await delay(300);
-      }
+  // 본문 스크래핑 (허용 사이트)
+  for (const h of hashes) {
+    const a = lsGet(h);
+    if (!a || a.translated || a.status === 'hidden') continue;
+    if (!BOT_BLOCKED.some(d => a.url.includes(d))) {
+      try {
+        const proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(a.url);
+        const r = await fetch(proxy, {signal: AbortSignal.timeout(12000)});
+        const d = await r.json();
+        const raw = d.contents || '';
+        const lower = raw.toLowerCase();
+        const blocked = BAD_PATTERNS.some(p => lower.includes(p.toLowerCase()));
+        if (!blocked && raw.length > 500) {
+          let txt = raw.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/\s{2,}/g,' ').trim();
+          const sents = txt.split(/(?<=[.!?])\s+/).filter(s => s.length > 40 && s.length < 500);
+          const body_en = sents.slice(0, 20).join(' ').slice(0, 3000);
+          if (body_en.length > 100) {
+            a.body_en = body_en;
+            // 청크 번역
+            const chunks = [];
+            for (let ci = 0; ci < body_en.length; ci += 600) chunks.push(body_en.slice(ci, ci + 600));
+            const parts = [];
+            for (const chunk of chunks) { parts.push(await translate(chunk)); await delay(200); }
+            a.body_ko = parts.join(' ');
+          }
+        }
+      } catch {}
     }
-    art.translated = true;
-    lsSet(art.hash, art);
-    // 열린 모달 갱신
-    if(nModalHash===art.hash&&document.getElementById('n-modal').classList.contains('open')){
-      openArticle(art.hash);
-    }
+    a.translated = true; lsSet(a.hash, a);
+    if (nModalHash === a.hash && document.getElementById('n-modal').classList.contains('open')) openArticle(a.hash);
+    await delay(300);
   }
-
-  if(document.getElementById('p-news').classList.contains('on')) renderNewsList();
-  bgTranslating = false;
+  if (document.getElementById('p-news').classList.contains('on')) renderNewsList();
+  bgRunning = false;
 }
 
-// ── 기사 목록 가져오기 ────────────────────────
-function getArticles(){
+function getCounts() {
   cleanExpired();
-  const idx = lsGet('n_idx',{});
-  const dates = Object.keys(idx).sort().reverse();
-  let arts = [];
-  for(const d of dates){
-    for(const hash of idx[d]){
-      const art = lsGet(hash);
-      if(art) arts.push(art);
-    }
-  }
-  // 상태 필터
-  if(nFilter==='unread') arts=arts.filter(a=>a.status==='unread');
-  else if(nFilter==='saved') arts=arts.filter(a=>a.status==='saved');
-  else if(nFilter==='read') arts=arts.filter(a=>a.status==='read');
-  // 숨김은 항상 제외
-  arts=arts.filter(a=>a.status!=='hidden');
-  // 태그 필터
-  if(nActiveTags.length>0)
-    arts=arts.filter(a=>nActiveTags.every(t=>a.tags.includes(t)));
-  return arts;
-}
-
-// ── 상태 카운트 ───────────────────────────────
-function getCounts(){
-  cleanExpired();
-  const idx = lsGet('n_idx',{});
-  const all = Object.values(idx).flat().map(h=>lsGet(h)).filter(Boolean);
+  const all = Object.values(lsGet('n_idx', {})).flat().map(h => lsGet(h)).filter(Boolean);
   return {
-    unread: all.filter(a=>a.status==='unread').length,
-    read:   all.filter(a=>a.status==='read').length,
-    saved:  all.filter(a=>a.status==='saved').length,
-    all:    all.filter(a=>a.status!=='hidden').length,
+    unread: all.filter(a => a.status === 'unread').length,
+    read:   all.filter(a => a.status === 'read').length,
+    saved:  all.filter(a => a.status === 'saved').length,
+    all:    all.filter(a => a.status !== 'hidden').length,
   };
 }
 
-// ── 필터 렌더링 ───────────────────────────────
-function renderNewsFilters(){
+function getArticles() {
+  cleanExpired();
+  const idx = lsGet('n_idx', {});
+  let arts = Object.keys(idx).sort().reverse().flatMap(d => idx[d].map(h => lsGet(h)).filter(Boolean));
+  arts = arts.filter(a => a.status !== 'hidden');
+  if (nFilter === 'unread') arts = arts.filter(a => a.status === 'unread');
+  else if (nFilter === 'saved') arts = arts.filter(a => a.status === 'saved');
+  else if (nFilter === 'read') arts = arts.filter(a => a.status === 'read');
+  if (nActiveTags.length) arts = arts.filter(a => nActiveTags.every(t => a.tags.includes(t)));
+  return arts;
+}
+
+function timeAgo(s) {
+  if (!s) return '';
+  const m = (Date.now() - new Date(s)) / 60000;
+  if (m < 1) return '방금'; if (m < 60) return Math.floor(m) + '분 전';
+  if (m < 1440) return Math.floor(m / 60) + '시간 전'; return Math.floor(m / 1440) + '일 전';
+}
+
+function renderNewsFilters() {
   const c = getCounts();
-  const filters=[
-    {id:'unread',label:'🔵 안읽음', count:c.unread},
-    {id:'all',   label:'전체',      count:c.all},
-    {id:'saved', label:'⭐ 저장됨', count:c.saved},
-    {id:'read',  label:'읽음',      count:c.read},
+  const filters = [
+    {id:'unread',lbl:'🔵 안읽음', cnt:c.unread},
+    {id:'all',   lbl:'전체',      cnt:c.all},
+    {id:'saved', lbl:'⭐ 저장됨', cnt:c.saved},
+    {id:'read',  lbl:'읽음',      cnt:c.read},
   ];
-  document.getElementById('n-filterbar').innerHTML=
-    filters.map(f=>`<button class="n-fbtn${nFilter===f.id?' on':''}" onclick="setNFilter('${f.id}')">
-      ${f.label}<span class="n-count">${f.count}</span>
-    </button>`).join('');
-
-  // 태그 필터
-  document.getElementById('n-tagbar').innerHTML=
-    ALL_TAGS.map(t=>`<button class="n-tag-btn${nActiveTags.includes(t)?' on':''}"
-      onclick="toggleNTag('${t}')">${t}</button>`).join('');
+  document.getElementById('n-filterbar').innerHTML = filters.map(f =>
+    '<button class="n-fbtn' + (nFilter === f.id ? ' on' : '') + '" onclick="setNFilter(\'' + f.id + '\')">' + f.lbl + '<span class="n-cnt">' + f.cnt + '</span></button>'
+  ).join('');
+  document.getElementById('n-tagbar').innerHTML = ALL_TAGS.map(t =>
+    '<button class="n-tag-btn' + (nActiveTags.includes(t) ? ' on' : '') + '" onclick="toggleNTag(\'' + t.replace(/'/g,"\\'") + '\')">' + t + '</button>'
+  ).join('');
 }
 
-// ── 목록 렌더링 ───────────────────────────────
-function timeAgo(s){
-  if(!s)return'';
-  const m=(Date.now()-new Date(s))/60000;
-  if(m<1)return'방금';if(m<60)return Math.floor(m)+'분 전';
-  if(m<1440)return Math.floor(m/60)+'시간 전';return Math.floor(m/1440)+'일 전';
-}
-
-function renderNewsList(){
-  renderNewsFilters();
-  const arts = getArticles();
-  const el = document.getElementById('n-list');
-  if(!arts.length){
-    el.innerHTML=`<div class="n-empty">
-      ${nFilter==='unread'?'📭 안읽은 기사가 없어요.<br><br>아래 탭의 새로고침(↻)으로<br>뉴스를 수집해보세요.':
-        nFilter==='saved'?'⭐ 저장한 기사가 없어요.':'기사가 없어요.'}
-    </div>`;
-    return;
-  }
-  // 날짜별 그룹
-  const byDate={};
-  arts.forEach(a=>{
-    if(!byDate[a.date]) byDate[a.date]=[]; byDate[a.date].push(a);
-  });
-  const dates=Object.keys(byDate).sort().reverse();
-  let html='';
-  const todayStr=today();
-  dates.forEach(d=>{
-    const lbl=d===todayStr?'오늘':d.slice(5).replace('-','/');
-    html+=`<div class="n-divider">${lbl} · ${byDate[d].length}건</div>`;
-    byDate[d].forEach(art=>{
-      const isSaved=art.status==='saved';
-      const isRead=art.status==='read';
-      const statusIco=isSaved?'<span class="n-star">⭐</span>':
-                      !isRead?'<span class="n-dot"></span>':'';
-      const tagHtml=art.tags.slice(0,3).map(t=>`<span class="n-chip">${t}</span>`).join('');
-      html+=`<div class="n-row${isRead&&!isSaved?' read':''}"
-        data-hash="${art.hash}"
-        onclick="openArticle('${art.hash}')"
-        oncontextmenu="openMenu('${art.hash}',event)">
-        <div class="n-status">${statusIco}</div>
-        <div class="n-title">
-          <div class="n-ttl${!isRead?' unread':''}">${art.title_ko||art.title}</div>
-          <div class="n-tags">${tagHtml}</div>
-          <div class="n-meta-row">
-            <span class="n-src">${art.source}</span>
-            <span class="n-tm">· ${timeAgo(art.pubDate)}</span>
-            ${art.translated?'':'<span class="n-tl-status">· 번역중</span>'}
-          </div>
-        </div>
-      </div>`;
-    });
-  });
-  el.innerHTML=html;
-  // 스와이프 이벤트 등록
-  el.querySelectorAll('.n-row').forEach(row=>addSwipe(row));
-}
-
-// ── 스와이프 ──────────────────────────────────
-function addSwipe(el){
-  let sx=0,sy=0,st=0;
-  el.addEventListener('touchstart',e=>{
-    sx=e.touches[0].clientX;sy=e.touches[0].clientY;st=Date.now();
-  },{passive:true});
-  el.addEventListener('touchend',e=>{
-    const dx=e.changedTouches[0].clientX-sx;
-    const dy=e.changedTouches[0].clientY-sy;
-    const dt=Date.now()-st;
-    if(Math.abs(dx)<Math.abs(dy)*1.5||Math.abs(dx)<40) return;
-    if(dt>400) return;
-    const hash=el.dataset.hash;
-    if(dx<-40){
-      // 왼쪽: 숨기기
-      el.style.transform=`translateX(-100%)`;
-      el.style.opacity='0';
-      el.style.transition='transform .25s,opacity .25s';
-      setTimeout(()=>{setStatus(hash,'hidden');renderNewsList();},250);
-    } else if(dx>40){
-      // 오른쪽: 저장/해제
-      const art=lsGet(hash);
-      if(!art)return;
-      const ns=art.status==='saved'?'read':'saved';
-      el.style.transform=`translateX(30px)`;
-      el.style.transition='transform .15s';
-      setTimeout(()=>{el.style.transform='';setStatus(hash,ns);renderNewsList();},150);
-    }
-  },{passive:true});
-}
-
-// ── 필터 변경 ─────────────────────────────────
-function setNFilter(f){nFilter=f;renderNewsList();}
-function toggleNTag(t){
-  if(nActiveTags.includes(t)) nActiveTags=nActiveTags.filter(x=>x!==t);
+function setNFilter(f) { nFilter = f; renderNewsList(); }
+function toggleNTag(t) {
+  if (nActiveTags.includes(t)) nActiveTags = nActiveTags.filter(x => x !== t);
   else nActiveTags.push(t);
   renderNewsList();
 }
 
-// ── 기사 열기 ─────────────────────────────────
-function openArticle(hash){
-  const art=lsGet(hash);
-  if(!art)return;
-  nModalHash=hash;
-  // 읽음 처리
-  if(art.status==='unread'){setStatus(hash,'read');}
-  // 모달 열기
-  const modal=document.getElementById('n-modal');
-  modal.classList.add('open');
-  document.getElementById('n-modal-src-line').textContent=
-    art.source + (art.pubDate?' · '+timeAgo(art.pubDate):'');
-  document.getElementById('n-modal-title').textContent=art.title_ko||art.title;
-  document.getElementById('n-modal-star').textContent=art.status==='saved'?'⭐':'☆';
-
-  const body=document.getElementById('n-modal-body');
-  const tagHtml=(art.tags||[]).map(t=>`<span class="n-modal-tag">${t}</span>`).join('');
-  body.innerHTML=`
-    <div class="n-modal-src">
-      <span>${art.source}</span>·<span>${timeAgo(art.pubDate)}</span>
-    </div>
-    ${tagHtml?`<div class="n-modal-tags">${tagHtml}</div>`:''}
-    ${art.body_ko
-      ?`<div class="n-modal-txt">${art.body_ko}</div>
-        ${art.body_en?`<div class="n-modal-orig">
-          <div class="n-modal-orig-lbl">원문 (English)</div>
-          <div class="n-modal-en">${art.body_en.slice(0,1000)}</div>
-        </div>`:''}
-        <a class="n-modal-link" href="${art.url}" target="_blank">원문 기사 열기 →</a>`
-      :`<div class="n-translating">
-          <div class="n-loading-bar" style="margin-bottom:12px;border-radius:2px;"></div>
-          본문 번역 중...<br>
-          <span style="font-size:11px;color:var(--fa);">백그라운드에서 번역 완료 후 다시 열면 전체 내용이 표시됩니다</span><br><br>
-          ${art.desc?`<div style="font-size:13px;color:var(--mu);line-height:1.7;margin-top:8px;">${art.desc}</div>`:''}
-          <a class="n-modal-link" href="${art.url}" target="_blank">원문 기사 열기 →</a>
-        </div>`}`;
-  renderNewsList();
-}
-
-function closeModal(){
-  document.getElementById('n-modal').classList.remove('open');
-  nModalHash=null;
-}
-
-function modalToggleSave(){
-  if(!nModalHash)return;
-  const art=lsGet(nModalHash);
-  if(!art)return;
-  const ns=art.status==='saved'?'read':'saved';
-  setStatus(nModalHash,ns);
-  document.getElementById('n-modal-star').textContent=ns==='saved'?'⭐':'☆';
-  renderNewsList();
-}
-
-function modalHide(){
-  if(!nModalHash)return;
-  setStatus(nModalHash,'hidden');
-  closeModal();
-  renderNewsList();
-}
-
-// ── 액션 메뉴 (길게 누르기 대신 contextmenu) ──
-function openMenu(hash,e){
-  e&&e.preventDefault();
-  nMenuHash=hash;
-  const art=lsGet(hash);
-  document.getElementById('n-menu-title').textContent=
-    art?(art.title_ko||art.title).slice(0,30)+'...':'기사 관리';
-  document.getElementById('n-action-menu').classList.add('open');
-  document.getElementById('n-action-overlay').classList.add('open');
-}
-function closeActionMenu(){
-  document.getElementById('n-action-menu').classList.remove('open');
-  document.getElementById('n-action-overlay').classList.remove('open');
-}
-function menuAction(action){
-  if(!nMenuHash)return;
-  const art=lsGet(nMenuHash);
-  if(!art)return;
-  if(action==='save')    setStatus(nMenuHash,'saved');
-  if(action==='unsave')  setStatus(nMenuHash,'read');
-  if(action==='unread')  setStatus(nMenuHash,'unread');
-  if(action==='hide')    setStatus(nMenuHash,'hidden');
-  closeActionMenu();
-  renderNewsList();
-}
-
-// ── 뉴스 초기화 ───────────────────────────────
-let _newsIniting = false;
-async function initNews(){
-  // 로딩 중 표시 (기사 없을 때)
+function renderNewsList() {
+  renderNewsFilters();
   const arts = getArticles();
-  if(arts.length === 0){
-    document.getElementById('n-list').innerHTML=`
-      <div class="n-empty">
-        <div style="font-size:28px;margin-bottom:10px;">📡</div>
-        <div style="margin-bottom:6px;">뉴스 수집 중...</div>
-        <div style="font-size:11px;color:var(--fa);">Investing.com · Kitco · ForexLive</div>
-        <div style="margin-top:14px;height:3px;width:120px;margin-left:auto;margin-right:auto;
-          background:var(--gd);border-radius:2px;animation:loading-bar 1.5s ease-in-out infinite;"></div>
-      </div>`;
-    renderNewsFilters();
-  } else {
-    renderNewsList();
+  const el = document.getElementById('n-list');
+  if (!arts.length) {
+    el.innerHTML = '<div class="n-empty">' + (nFilter === 'unread' ? '📭 안읽은 기사가 없어요.<br><br>상단 ↻ 버튼으로 뉴스를 수집해보세요.' : nFilter === 'saved' ? '⭐ 저장한 기사가 없어요.' : '기사가 없어요.') + '</div>';
+    return;
   }
+  const byDate = {};
+  arts.forEach(a => { if (!byDate[a.date]) byDate[a.date] = []; byDate[a.date].push(a); });
+  const todayStr = today();
+  let html = '';
+  Object.keys(byDate).sort().reverse().forEach(d => {
+    const lbl = d === todayStr ? '오늘' : d.slice(5).replace('-', '/');
+    html += '<div class="n-divider">' + lbl + ' · ' + byDate[d].length + '건</div>';
+    byDate[d].forEach(a => {
+      const isSaved = a.status === 'saved', isRead = a.status === 'read';
+      const statusHtml = isSaved ? '<span class="n-star-ico">⭐</span>' : !isRead ? '<div class="n-dot"></div>' : '';
+      const chips = (a.tags || []).slice(0, 3).map(t => '<span class="n-chip">' + t + '</span>').join('');
+      html += '<div class="n-row' + (isRead && !isSaved ? ' read' : '') + '" onclick="openArticle(\'' + a.hash + '\')">';
+      html += '<div class="n-status">' + statusHtml + '</div>';
+      html += '<div class="n-body">';
+      html += '<div class="n-ttl' + (!isRead ? ' bold' : '') + '">' + (a.title_ko || a.title) + '</div>';
+      if (chips) html += '<div class="n-chips">' + chips + '</div>';
+      html += '<div class="n-meta">' + a.source + ' · ' + timeAgo(a.pubDate) + (!a.translated ? ' · <span class="loading-spin"></span>' : '') + '</div>';
+      html += '</div></div>';
+    });
+  });
+  el.innerHTML = html;
+  // 스와이프
+  el.querySelectorAll('.n-row').forEach((row, i) => {
+    const art = arts[i]; if (!art) return;
+    let sx = 0, st = 0;
+    row.addEventListener('touchstart', e => { sx = e.touches[0].clientX; st = Date.now(); }, {passive:true});
+    row.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - sx; const dt = Date.now() - st;
+      if (Math.abs(dx) < 50 || dt > 400) return;
+      if (dx < -50) { setStatus(art.hash, 'hidden'); renderNewsList(); }
+      else if (dx > 50) { setStatus(art.hash, art.status === 'saved' ? 'read' : 'saved'); renderNewsList(); }
+    }, {passive:true});
+  });
+}
 
-  if(_newsIniting) return;
+function openArticle(hash) {
+  const a = lsGet(hash); if (!a) return;
+  nModalHash = hash;
+  if (a.status === 'unread') setStatus(hash, 'read');
+  document.getElementById('n-modal').classList.add('open');
+  document.getElementById('n-modal-src').textContent = a.source + ' · ' + timeAgo(a.pubDate);
+  document.getElementById('n-modal-title').textContent = a.title_ko || a.title;
+  document.getElementById('n-modal-star').textContent = a.status === 'saved' ? '⭐' : '☆';
+  const tags = (a.tags || []).map(t => '<span class="n-modal-tag">' + t + '</span>').join('');
+  const koContent = a.body_ko || a.desc_ko || '';
+  const enContent = a.body_en || a.desc || '';
+  let bodyHtml = tags ? '<div class="n-modal-tags">' + tags + '</div>' : '';
+  if (koContent.length > 10) {
+    bodyHtml += '<div class="n-modal-txt">' + koContent + '</div>';
+    if (enContent) bodyHtml += '<div class="n-modal-en"><div class="n-modal-en-lbl">원문 (English)</div>' + enContent.slice(0, 800) + '</div>';
+  } else if (!a.translated) {
+    bodyHtml += '<div class="n-translating"><span class="loading-spin"></span> 번역 진행 중...<br><br>' + (enContent || '') + '</div>';
+  } else {
+    bodyHtml += '<div class="n-translating">' + (enContent || '내용 없음') + '</div>';
+  }
+  bodyHtml += '<a class="n-modal-link" href="' + a.url + '" target="_blank">원문 기사 열기 →</a>';
+  document.getElementById('n-modal-body').innerHTML = bodyHtml;
+  renderNewsList();
+}
+
+function closeModal() { document.getElementById('n-modal').classList.remove('open'); nModalHash = null; }
+function modalStar() {
+  if (!nModalHash) return;
+  const a = lsGet(nModalHash); if (!a) return;
+  const ns = a.status === 'saved' ? 'read' : 'saved';
+  setStatus(nModalHash, ns);
+  document.getElementById('n-modal-star').textContent = ns === 'saved' ? '⭐' : '☆';
+  renderNewsList();
+}
+function modalHide() { if (nModalHash) { setStatus(nModalHash, 'hidden'); closeModal(); renderNewsList(); } }
+
+async function initNews() {
+  renderNewsList();
+  if (_newsIniting) return;
   _newsIniting = true;
-
-  const last = lsGet('n_last_fetch', 0);
-  const age  = Date.now() - last;
-  const INTERVAL = 30 * 60 * 1000; // 30분
-
-  if(age > INTERVAL || last === 0){
-    try{
-      const cnt = await collectNews();
-      renderNewsList();
-      if(cnt === 0 && getArticles().length === 0){
-        document.getElementById('n-list').innerHTML=`
-          <div class="n-empty">
-            <div style="font-size:28px;margin-bottom:10px;">📭</div>
-            뉴스를 가져오지 못했어요.<br>
-            <span style="font-size:11px;color:var(--fa);">잠시 후 다시 시도해주세요</span><br><br>
-            <button onclick="_newsIniting=false;initNews();"
-              style="background:var(--gd);border:1px solid var(--gb);color:var(--gold);
-              padding:8px 20px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;margin-top:4px;">
-              ↻ 다시 시도
-            </button>
-          </div>`;
-        renderNewsFilters();
-      }
-    }catch(e){
-      console.error('initNews error:', e);
+  const last = lsGet('n_last', 0);
+  if (Date.now() - last > 30 * 60 * 1000 || last === 0) {
+    if (getArticles().length === 0) {
+      document.getElementById('n-list').innerHTML = '<div class="n-empty">📡 뉴스 수집 중...<br><span style="font-size:11px;color:var(--fa);">Investing.com · Kitco · ForexLive</span></div>';
+    }
+    await collectNews();
+    renderNewsList();
+    if (getArticles().length === 0) {
+      document.getElementById('n-list').innerHTML = '<div class="n-empty">📭 뉴스를 가져오지 못했어요.<br><button onclick="_newsIniting=false;initNews();" style="margin-top:10px;background:var(--gd);border:1px solid var(--gb);color:var(--gold);padding:8px 18px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;">↻ 다시 시도</button></div>';
     }
   }
-
   _newsIniting = false;
   setTimeout(bgTranslate, 5000);
 }
 
-// 새로고침 시 뉴스도 수집
-const _origRefresh=window.refresh||function(){};
-window.refreshNews=async function(){
-  _newsIniting = false;
-  lsSet('n_last_fetch', 0); // 강제 재수집
-  await initNews();
-};
-
-
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // 경제 이벤트
-// ══════════════════════════════════════════
-const DAY=['일','월','화','수','목','금','토'];
-function renderEvents(){
-  const today=new Date();today.setHours(0,0,0,0);
-  const sorted=[...EVENTS].sort((a,b)=>new Date(a.date)-new Date(b.date));
-  // 배너: 가장 가까운 미래 이벤트
-  const next=sorted.find(ev=>new Date(ev.date)>=today&&!ev.result);
-  if(next){
-    const d=new Date(next.date);
-    const diff=Math.round((d-today)/86400000);
-    document.getElementById('ev-banner').innerHTML=`
-      <div class="ev-banner">
-        <div class="ev-d-row">
-          <div class="ev-dday">D-${diff}</div>
-          <div>
-            <div class="ev-nm">${next.name} ${next.full}</div>
-            <div class="ev-sb">${next.date.slice(5,7)}/${next.date.slice(8,10)} (${DAY[d.getDay()]}) · ${next.full.includes('FOMC')?'연 8회':'월 1회'}</div>
-          </div>
-        </div>
-        <div class="ev-vals">
-          <div class="ev-val"><div class="ev-vl">예상</div><div class="ev-vn" style="color:var(--gold);">${next.fore}</div></div>
-          <div class="ev-val"><div class="ev-vl">이전</div><div class="ev-vn">${next.prev}</div></div>
-          <div class="ev-val"><div class="ev-vl">상태</div><div class="ev-vn" style="color:var(--up);">대기 중</div></div>
-        </div>
-        <div class="ev-sc">
-          <div class="ev-sc-box" style="background:rgba(248,81,73,.1);">
-            <div class="ev-sc-t" style="color:var(--dn);">🔥 상회</div>
-            <div class="ev-sc-c">${next.hot}</div>
-          </div>
-          <div class="ev-sc-box" style="background:rgba(63,185,80,.1);">
-            <div class="ev-sc-t" style="color:var(--up);">❄️ 하회</div>
-            <div class="ev-sc-c">${next.cool}</div>
-          </div>
-          <div class="ev-sc-box" style="background:rgba(139,148,158,.07);">
-            <div class="ev-sc-t" style="color:var(--mu);">➡️ 부합</div>
-            <div class="ev-sc-c">${next.inline}</div>
-          </div>
-        </div>
-      </div>`;
+// ═══════════════════════════════════════════
+const EVENTS = [
+  {name:'CPI',full:'소비자물가지수',date:'2026-05-13',fore:'2.3%',prev:'2.4%',result:'2.3%',
+   desc:'미국 소비자들이 구매하는 상품·서비스의 평균 가격 변화.',
+   hot:'예상 상회 → 금리 인하 기대 약화 → 금 하락.',cool:'예상 하회 → 금 강세.',inline:'예상 수준 → 반응 제한.'},
+  {name:'PCE',full:'개인소비지출물가',date:'2026-05-29',fore:'2.2%',prev:'2.3%',result:null,
+   desc:'연준이 공식 목표로 사용하는 인플레이션 지표.',
+   hot:'예상 상회 → 금 하락.',cool:'예상 하회 → 금 강세.',inline:'방향성 변화 없음.'},
+  {name:'NFP',full:'비농업 고용지수',date:'2026-06-05',fore:'165K',prev:'177K',result:null,
+   desc:'매월 첫 금요일 발표. 미국 고용 건강도의 핵심.',
+   hot:'강한 고용 → 금리 인하 지연 → 금 하락.',cool:'약한 고용 → 금 강세.',inline:'기존 경로 유지.'},
+  {name:'FOMC',full:'연방공개시장위원회',date:'2026-06-17',fore:'동결 전망',prev:'4.25~4.50%',result:null,
+   desc:'연 8회 개최. 기준금리 결정 + 의장 기자회견 + 점도표.',
+   hot:'매파 → 금 하락.',cool:'비둘기 → 금 강세.',inline:'기자회견·점도표가 관건.'},
+];
+
+function renderEvents() {
+  const today2 = new Date(); today2.setHours(0,0,0,0);
+  const DAY = ['일','월','화','수','목','금','토'];
+  const sorted = [...EVENTS].sort((a,b) => new Date(a.date) - new Date(b.date));
+  const next = sorted.find(ev => new Date(ev.date) >= today2 && !ev.result);
+  if (next) {
+    const d = new Date(next.date); const diff = Math.round((d - today2) / 86400000);
+    document.getElementById('ev-banner').innerHTML =
+      '<div class="ev-banner"><div class="ev-d-row"><div class="ev-dday">D-' + diff + '</div><div><div class="ev-nm">' + next.name + ' ' + next.full + '</div><div class="ev-sb">' + next.date.slice(5,7) + '/' + next.date.slice(8,10) + ' (' + DAY[d.getDay()] + ')</div></div></div>' +
+      '<div class="ev-vals"><div class="ev-val"><div class="ev-vl">예상</div><div class="ev-vn" style="color:var(--gold);">' + next.fore + '</div></div><div class="ev-val"><div class="ev-vl">이전</div><div class="ev-vn">' + next.prev + '</div></div><div class="ev-val"><div class="ev-vl">상태</div><div class="ev-vn" style="color:var(--up);">대기</div></div></div>' +
+      '<div class="ev-scs"><div class="ev-sc" style="background:rgba(248,81,73,.1);"><div class="ev-st" style="color:var(--dn);">🔥 상회</div><div class="ev-sc-c">' + next.hot + '</div></div><div class="ev-sc" style="background:rgba(63,185,80,.1);"><div class="ev-st" style="color:var(--up);">❄️ 하회</div><div class="ev-sc-c">' + next.cool + '</div></div><div class="ev-sc" style="background:rgba(255,255,255,.05);"><div class="ev-st" style="color:var(--mu);">➡️ 부합</div><div class="ev-sc-c">' + next.inline + '</div></div></div></div>';
   }
-  // 목록
-  document.getElementById('ev-list').innerHTML=sorted.map((ev,i)=>{
-    const d=new Date(ev.date);
-    const diff=Math.round((d-today)/86400000);
-    let bc='eb-s',bt=`D-${diff}`;
-    if(diff===0){bc='eb-s';bt='TODAY';}
-    else if(diff<0){bc='eb-p';bt=`${Math.abs(diff)}일 전`;}
-    else if(diff<=3){bc='eb-n';}
-    if(ev.result){bc='eb-d';bt='완료';}
-    return`<div class="ev-row" onclick="toggleEv('evb-${i}')">
-      <div class="ev-dt">${ev.date.slice(5,7)}/${ev.date.slice(8,10)}<br>${DAY[d.getDay()]}</div>
-      <div class="ev-info">
-        <div class="ev-rn">${ev.name} <span style="color:var(--mu);font-size:11px;">${ev.full}</span></div>
-        <div class="ev-rs">예상 ${ev.fore} · 이전 ${ev.prev}${ev.result?' · 결과 <b style="color:var(--gold)">'+ev.result+'</b>':''}</div>
-        <div class="ev-body" id="evb-${i}">
-          <div class="ev-desc">${ev.desc}</div>
-          <div class="ev-sc2">
-            <div class="ev-s" style="background:rgba(248,81,73,.08);"><div class="ev-st" style="color:var(--dn);">🔥 상회</div><p>${ev.hot}</p></div>
-            <div class="ev-s" style="background:rgba(63,185,80,.08);"><div class="ev-st" style="color:var(--up);">❄️ 하회</div><p>${ev.cool}</p></div>
-            <div class="ev-s" style="background:rgba(255,255,255,.04);"><div class="ev-st" style="color:var(--mu);">➡️ 부합</div><p>${ev.inline}</p></div>
-          </div>
-        </div>
-      </div>
-      <span class="ev-bd ${bc}">${bt}</span>
-    </div>`;
+  document.getElementById('ev-list').innerHTML = sorted.map((ev, i) => {
+    const d = new Date(ev.date); const diff = Math.round((d - today2) / 86400000);
+    let bc = 'eb-s', bt = 'D-' + diff;
+    if (diff <= 0) bc = 'eb-p', bt = Math.abs(diff) + '일 전';
+    else if (diff <= 3) bc = 'eb-n';
+    if (ev.result) { bc = 'eb-d'; bt = '완료'; }
+    return '<div class="ev-row" onclick="toggleEv(\'evb-' + i + '\')">' +
+      '<div class="ev-dt">' + ev.date.slice(5,7) + '/' + ev.date.slice(8,10) + '<br>' + DAY[d.getDay()] + '</div>' +
+      '<div class="ev-info"><div class="ev-rn">' + ev.name + ' <span style="color:var(--mu);font-size:11px;">' + ev.full + '</span></div>' +
+      '<div class="ev-rs">예상 ' + ev.fore + ' · 이전 ' + ev.prev + (ev.result ? ' · 결과 <b style="color:var(--gold)">' + ev.result + '</b>' : '') + '</div>' +
+      '<div class="ev-body" id="evb-' + i + '"><div class="ev-desc">' + ev.desc + '</div></div></div>' +
+      '<span class="ev-bd ' + bc + '">' + bt + '</span></div>';
   }).join('');
 }
 
-function toggleEv(id){document.getElementById(id)?.classList.toggle('on');}
+function toggleEv(id) { const el = document.getElementById(id); if (el) el.classList.toggle('on'); }
 
-// ══════════════════════════════════════════
-// 분석 탭
-// ══════════════════════════════════════════
-function renderAnalysis(){
-  const d=IND;
-  const has=Object.values(d).some(v=>v?.ok);
-  // 배너
-  const bull=[],bear=[];
-  if(d.dxy?.ok){const c=d.dxy.price-d.dxy.prev;if(c<-0.3)bull.push('달러↓');else if(c>0.3)bear.push('달러↑');}
-  if(d.tnx?.ok){const c=d.tnx.price-d.tnx.prev;if(c<-0.05)bull.push('금리↓');else if(c>0.05)bear.push('금리↑');}
-  if(d.vix?.ok){if(d.vix.price>22)bull.push('VIX↑');else if(d.vix.price<15)bear.push('저VIX');}
-  if(d.wti?.ok){const c=d.wti.price-d.wti.prev;if(c>2)bull.push('유가↑');else if(c<-2)bear.push('유가↓');}
-  const sc=bull.length-bear.length;
-  let dotCol,sig;
-  if(sc>=2){dotCol='#3FB950';sig=`강세 우위 — ${bull.join('·')}`;}
-  else if(sc<=-2){dotCol='#F85149';sig=`약세 압력 — ${bear.join('·')}`;}
-  else if(bull.length&&bear.length){dotCol='#F59E0B';sig=`혼조 — 강세:${bull.join('·')} / 약세:${bear.join('·')}`;}
-  else{dotCol='#8B949E';sig='특이 신호 없음 — 중립';}
-  document.getElementById('an-dot').style.background=dotCol;
-  document.getElementById('an-txt').textContent=sig;
+// ═══════════════════════════════════════════
+// 분석
+// ═══════════════════════════════════════════
+function renderAnalysis() {
+  const d = IND;
+  const bull = [], bear = [];
+  if (d.dxy && d.dxy.ok) { const c = d.dxy.price - d.dxy.prev; if (c < -0.3) bull.push('달러↓'); else if (c > 0.3) bear.push('달러↑'); }
+  if (d.tnx && d.tnx.ok) { const c = d.tnx.price - d.tnx.prev; if (c < -0.05) bull.push('금리↓'); else if (c > 0.05) bear.push('금리↑'); }
+  if (d.vix && d.vix.ok) { if (d.vix.price > 22) bull.push('VIX↑'); else if (d.vix.price < 15) bear.push('저VIX'); }
+  if (d.wti && d.wti.ok) { const c = d.wti.price - d.wti.prev; if (c > 2) bull.push('유가↑'); else if (c < -2) bear.push('유가↓'); }
+  const sc = bull.length - bear.length;
+  let dotCol = '#8B949E', sig = '특이 신호 없음 — 중립';
+  if (sc >= 2)       { dotCol = '#3FB950'; sig = '강세 우위 — ' + bull.join('·'); }
+  else if (sc <= -2) { dotCol = '#F85149'; sig = '약세 압력 — ' + bear.join('·'); }
+  else if (bull.length && bear.length) { dotCol = '#F59E0B'; sig = '혼조 — ' + bull.join('·') + ' / ' + bear.join('·'); }
+  document.getElementById('an-dot').style.background = dotCol;
+  document.getElementById('an-txt').textContent = sig;
 
-  // 지표 그리드
-  const CARDS=[
-    {k:'gold', lbl:'🏅 금 XAU/USD',   dec:1,pre:'$'},
-    {k:'silver',lbl:'🥈 은 XAG/USD',  dec:2,pre:'$'},
-    {k:'dxy',  lbl:'💵 DXY 달러',     dec:2,pre:''},
-    {k:'tnx',  lbl:'📈 10Y 금리',     dec:3,pre:'',suf:'%'},
-    {k:'wti',  lbl:'🛢️ WTI 유가',     dec:1,pre:'$'},
-    {k:'vix',  lbl:'😱 VIX 공포',     dec:2,pre:''},
+  const CARDS = [
+    {k:'gold', lbl:'🏅 금 XAU/USD', dec:1},
+    {k:'silver',lbl:'🥈 은 XAG/USD', dec:2},
+    {k:'dxy',  lbl:'💵 DXY 달러',   dec:2},
+    {k:'tnx',  lbl:'📈 10Y 금리',   dec:3},
+    {k:'wti',  lbl:'🛢️ WTI 유가',   dec:1},
+    {k:'vix',  lbl:'😱 VIX 공포',   dec:2},
   ];
-  document.getElementById('an-grid').innerHTML=CARDS.map(({k,lbl,dec,pre,suf})=>{
-    const v=d[k]; if(!v?.ok) return`<div class="an-c"><div class="an-cl">${lbl}</div><div class="an-cv" style="color:var(--fa);">--</div></div>`;
-    const chg=v.price-v.prev, pct=chg/v.prev*100;
-    const cc=chg>=0?'var(--up)':'var(--dn)';
-    const ar=chg>=0?'▲':'▽';
-    return`<div class="an-c">
-      <div class="an-cl">${lbl}</div>
-      <div class="an-cv" style="color:${cc};">${pre}${v.price.toFixed(dec)}${suf||''}</div>
-      <div class="an-cg" style="color:${cc};">${ar}${Math.abs(pct).toFixed(2)}%</div>
-      <div class="an-cm">
-        <svg viewBox="0 0 60 22" preserveAspectRatio="none" style="width:100%;height:100%;">
-          <polyline points="${chg>=0?'0,18 15,15 30,12 45,8 60,4':'0,4 15,8 30,12 45,15 60,18'}"
-            fill="none" stroke="${cc}" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-    </div>`;
+  document.getElementById('an-grid').innerHTML = CARDS.map(({k,lbl,dec}) => {
+    const v = d[k];
+    if (!v || !v.ok) return '<div class="an-c"><div class="an-cl">' + lbl + '</div><div class="an-cv" style="color:var(--fa);">--</div></div>';
+    const chg = v.price - v.prev; const pct = chg / v.prev * 100;
+    const cc = chg >= 0 ? 'var(--up)' : 'var(--dn)'; const ar = chg >= 0 ? '▲' : '▽';
+    return '<div class="an-c"><div class="an-cl">' + lbl + '</div>' +
+      '<div class="an-cv" style="color:' + cc + ';">' + v.price.toFixed(dec) + '</div>' +
+      '<div class="an-cg" style="color:' + cc + ';">' + ar + Math.abs(pct).toFixed(2) + '%</div>' +
+      '<div class="an-cm"><svg viewBox="0 0 60 22" preserveAspectRatio="none" style="width:100%;height:100%;"><polyline points="' + (chg >= 0 ? '0,18 20,14 40,8 60,4' : '0,4 20,8 40,14 60,18') + '" fill="none" stroke="' + cc + '" stroke-width="1.5" stroke-linecap="round"/></svg></div>' +
+      '</div>';
   }).join('');
 
-  // 변동 순위
-  const ranked=CARDS.filter(c=>d[c.k]?.ok).map(c=>{
-    const v=d[c.k];
-    return{lbl:c.lbl,pct:Math.abs((v.price-v.prev)/v.prev*100),chg:v.price-v.prev};
-  }).sort((a,b)=>b.pct-a.pct);
-  const mx=ranked[0]?.pct||1;
-  document.getElementById('an-chg').innerHTML=ranked.map(({lbl,pct,chg})=>{
-    const col=chg>=0?'var(--up)':'var(--dn)';
-    return`<div class="an-chg-row">
-      <div class="an-chg-nm">${lbl}</div>
-      <div class="an-chg-bw"><div class="an-chg-b" style="width:${(pct/mx*100).toFixed(1)}%;background:${col};"></div></div>
-      <div class="an-chg-v" style="color:${col};">${chg>=0?'+':''}${pct.toFixed(2)}%</div>
-    </div>`;
+  const corrData = [{n:'금 vs DXY',v:-0.82},{n:'금 vs 10Y금리',v:-0.74},{n:'금 vs VIX',v:0.58}];
+  document.getElementById('an-corr').innerHTML = corrData.map(({n,v}) => {
+    const cc = v > 0 ? 'var(--up)' : 'var(--dn)';
+    return '<div class="an-cr"><div class="an-cn">' + n + '</div><div class="an-cb"><div class="an-cf" style="width:' + Math.abs(v)*100 + '%;background:' + cc + ';"></div></div><div class="an-cv2" style="color:' + cc + ';">' + v.toFixed(2) + '</div></div>';
   }).join('');
 
-  // 상관관계 (간략 버전)
-  const corrData=[
-    {label:'금 vs DXY',   val:-0.82,dir:-1},
-    {label:'금 vs 10Y금리',val:-0.74,dir:-1},
-    {label:'금 vs VIX',   val:+0.58,dir:1},
-  ];
-  document.getElementById('an-corr').innerHTML=corrData.map(({label,val,dir})=>{
-    const col=dir>0?'var(--up)':'var(--dn)';
-    return`<div class="an-cr">
-      <div class="an-cn">${label}</div>
-      <div class="an-cb"><div class="an-cf" style="width:${Math.abs(val)*100}%;background:${col};"></div></div>
-      <div class="an-cv2" style="color:${col};">${val.toFixed(2)}</div>
-    </div>`;
-  }).join('');
-
-  // 포지션 가이드
-  const vix=d.vix?.ok?d.vix.price:null;
-  let pct=75,lvl='보통',pdesc='중립 구간',pcol='var(--up)';
-  if(vix!=null){
-    if(vix>35){pct=20;lvl='극단 위험';pdesc='포지션 최소화, 현금 확대';pcol='var(--dn)';}
-    else if(vix>25){pct=40;lvl='위험';pdesc='포지션 축소, 손절선 타이트하게';pcol='#EF9F27';}
-    else if(vix>20){pct=60;lvl='주의';pdesc='적정 포지션 유지, 추가 확대 자제';pcol='#EF9F27';}
-    else if(vix>15){pct=80;lvl='보통';pdesc='일반적 포지션으로 운용 가능';pcol='var(--up)';}
-    else{pct=70;lvl='낙관 주의';pdesc='과도한 낙관, 풀포지션 지양';pcol='var(--mu)';}
+  const vix = d.vix && d.vix.ok ? d.vix.price : null;
+  let pct = 75, lvl = '보통', pcol = 'var(--up)', pdesc = '일반적 운용 가능';
+  if (vix !== null) {
+    if (vix > 35)      { pct=20; lvl='극단 위험'; pcol='var(--dn)'; pdesc='포지션 최소화'; }
+    else if (vix > 25) { pct=40; lvl='위험';      pcol='#EF9F27';   pdesc='포지션 축소'; }
+    else if (vix > 20) { pct=60; lvl='주의';      pcol='#EF9F27';   pdesc='추가 확대 자제'; }
+    else if (vix > 15) { pct=80; lvl='보통';      pcol='var(--up)'; pdesc='일반적 운용 가능'; }
+    else               { pct=70; lvl='낙관 주의';  pcol='var(--mu)'; pdesc='풀포지션 지양'; }
   }
-  document.getElementById('an-pos').innerHTML=`
-    <div class="an-pl">VIX${vix!=null?' '+vix.toFixed(1):'--'} 기반 권장 포지션</div>
-    <div class="an-pb"><div class="an-pf" style="width:${pct}%;background:${pcol};"></div></div>
-    <div class="an-pr">
-      <div class="an-pv" style="color:${pcol};">${pct}% 투입 가능 (${lvl})</div>
-      <div class="an-pd">${pdesc}</div>
-    </div>`;
+  document.getElementById('an-pos').innerHTML =
+    '<div class="an-pl">VIX ' + (vix ? vix.toFixed(1) : '--') + ' 기반 권장 포지션</div>' +
+    '<div class="an-pb"><div class="an-pf" style="width:' + pct + '%;background:' + pcol + ';"></div></div>' +
+    '<div class="an-pr"><div class="an-pv" style="color:' + pcol + ';">' + pct + '% 투입 (' + lvl + ')</div><div class="an-pd">' + pdesc + '</div></div>';
 }
 
-// ══════════════════════════════════════════
-// 새로고침
-// ══════════════════════════════════════════
-function refresh(){loadData();refreshNews();}
-setInterval(loadData,30*60*1000);
-
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════
 // 초기화
-// ══════════════════════════════════════════
-window.addEventListener('DOMContentLoaded',()=>{
-  // 버전 즉시 표시
-  const verEl=document.getElementById('hdr-ver');
-  if(verEl) verEl.textContent=APP_VER;
-  // 데이터 버전 체크 + 오염 데이터 정리
-  checkDataVersion();
-  cleanBadBodies();
+// ═══════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', function() {
+  checkDataVer();
+  cleanBad();
   renderTree();
   renderGloss();
   renderEvents();
-
-  renderAnalysis(); // 초기 렌더 (데이터 없어도 골격 표시)
-  initNews();
+  renderAnalysis();
   loadData();
-  if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(function() {});
   }
 });
-window.addEventListener('resize',renderTree);
+
+window.addEventListener('resize', renderTree);
 </script>
 </body>
 </html>
